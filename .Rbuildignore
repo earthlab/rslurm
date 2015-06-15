@@ -1,0 +1,3 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^rslurm_test.R$
