@@ -4,7 +4,7 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, nodes = 16)
+slurm_apply(f, params, nodes = 16, data_file = NULL)
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -18,6 +18,11 @@ match) and each row corresponds to a separate function call.}
 over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if
 the parameter set is too small to use all CPUs in the requested nodes.}
+
+\item{data_file}{The name of a R data file (created with
+\code{\link[base]{save}}) that will be loaded on each node prior to
+calling \code{f}. Note that objects in this file \emph{cannot} share one
+of the following names: params, a_id, iend, istart, result.}
 }
 \value{
 A \code{slurm_job} object containing the \code{file_prefix} assigned
@@ -29,12 +34,16 @@ Use \code{slurm_apply} to calculate a function over multiple sets of
 parameters in parallel, using up to 16 nodes of the SLURM cluster.
 }
 \details{
-This function creates temporary files for the parameters data ('slr####.dat'),
-the R script sent to each node ('slr####.dat') and the Bash script
+This function creates temporary files for the parameters data ('slr####.RData'),
+the R script sent to each node ('slr####.R') and the Bash script
 ('slr####.sh') that launches the parallel computation. The set of input
 parameters is divided in chunks sent to each node, and \code{f} is evaluated
 in parallel within each node using functions from the \code{parallel} R
 package.
+
+Any other R objects (besides \code{params}) that \code{f} needs to access
+should be saved in a .RData file (using \code{\link[base]{save}}) and the
+name of this file should be given as the optional \code{data_file} argument.
 
 When processing the computation job, the SLURM cluster will output two types
 of files: those containing the return values of the function for each subset

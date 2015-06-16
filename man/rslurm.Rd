@@ -13,7 +13,7 @@ SESYNC SLURM cluster.
 
 The core function in the package is \code{\link{slurm_apply}}, with two
 essential arguments: a function \code{f} and a data frame of parameters
-\code{params} to apply the function too. It automatically splits the set of
+\code{params} to apply the function to. It automatically splits the set of
 parameters into equal-size chunks, each chunk to be processed by a separate
 cluster node. It uses functions from the \code{\link[parallel]{parallel}}
 package to parallelize computations within each node.
@@ -34,10 +34,12 @@ any number of single value parameters. The names of these parameters must
 match the column names of the \code{params} data frame supplied. It may
 return a single value or a vector.
 
-Note that none of the packages or data loaded into your current environment
-will be sent to the cluster. Therefore, the function should be written to
-load any data it will need and to prefix external functions with their
-package name i.e. \code{pkg_name::func_name}.
+If the function to be parallelized requires knowledge of any R objects (data,
+custom helper functions) besides \code{params}, these should be
+\code{\link[base]{save}}d into a .RData file that is supplied to
+\code{\link{slurm_apply}} as the optional \code{data_file} parameter. Any
+calls to functions from external packages should be prefixed with the
+appropriate package name i.e. \code{pkg_name::func_name}.
 
 Since any error will interrupt all calculations for the current node, it may
 be useful to wrap expressions which may generate errors into a

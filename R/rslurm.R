@@ -6,7 +6,7 @@
 #' @section Overview:
 #' The core function in the package is \code{\link{slurm_apply}}, with two 
 #' essential arguments: a function \code{f} and a data frame of parameters 
-#' \code{params} to apply the function too. It automatically splits the set of
+#' \code{params} to apply the function to. It automatically splits the set of
 #' parameters into equal-size chunks, each chunk to be processed by a separate
 #' cluster node. It uses functions from the \code{\link[parallel]{parallel}}
 #' package to parallelize computations within each node.
@@ -25,10 +25,12 @@
 #' match the column names of the \code{params} data frame supplied. It may 
 #' return a single value or a vector. 
 #' 
-#' Note that none of the packages or data loaded into your current environment
-#' will be sent to the cluster. Therefore, the function should be written to
-#' load any data it will need and to prefix external functions with their 
-#' package name i.e. \code{pkg_name::func_name}.
+#' If the function to be parallelized requires knowledge of any R objects (data, 
+#' custom helper functions) besides \code{params}, these should be 
+#' \code{\link[base]{save}}d into a .RData file that is supplied to 
+#' \code{\link{slurm_apply}} as the optional \code{data_file} parameter. Any
+#' calls to functions from external packages should be prefixed with the 
+#' appropriate package name i.e. \code{pkg_name::func_name}.
 #' 
 #' Since any error will interrupt all calculations for the current node, it may
 #' be useful to wrap expressions which may generate errors into a
@@ -65,12 +67,16 @@ NULL
 #' Use \code{slurm_apply} to calculate a function over multiple sets of 
 #' parameters in parallel, using up to 16 nodes of the SLURM cluster. 
 #' 
-#' This function creates temporary files for the parameters data ('slr####.dat'),
-#' the R script sent to each node ('slr####.dat') and the Bash script 
+#' This function creates temporary files for the parameters data ('slr####.RData'),
+#' the R script sent to each node ('slr####.R') and the Bash script 
 #' ('slr####.sh') that launches the parallel computation. The set of input 
 #' parameters is divided in chunks sent to each node, and \code{f} is evaluated
 #' in parallel within each node using functions from the \code{parallel} R
 #' package. 
+#' 
+#' Any other R objects (besides \code{params}) that \code{f} needs to access
+#' should be saved in a .RData file (using \code{\link[base]{save}}) and the
+#' name of this file should be given as the optional \code{data_file} argument.
 #' 
 #' When processing the computation job, the SLURM cluster will output two types
 #' of files: those containing the return values of the function for each subset
@@ -91,6 +97,10 @@ NULL
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if 
 #'   the parameter set is too small to use all CPUs in the requested nodes.
+#' @param data_file The name of a R data file (created with 
+#'   \code{\link[base]{save}}) that will be loaded on each node prior to
+#'   calling \code{f}. Note that objects in this file \emph{cannot} share one
+#'   of the following names: params, a_id, iend, istart, result.
 #' @return A \code{slurm_job} object containing the \code{file_prefix} assigned
 #'   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
 #'   by the SLURM cluster and the number of \code{nodes} effectively used.
@@ -105,10 +115,12 @@ NULL
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, nodes = 16) {
+slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
   
   # Set number of CPUs per node in cluster
   cpus_per_node <- 8
+  # Names 'reserved' by slurm_apply
+  rsvd_names <- c('params', 'a_id', 'istart', 'iend', 'result')
   
   # Check inputs
   if (!is.function(f)) {
@@ -121,10 +133,22 @@ slurm_apply <- function(f, params, nodes = 16) {
     stop('column names of params must match arguments of f')
   }
   
+  # Ensure that data_file, if present, contains no conflicting names
+  if (!is.null(data_file)) {
+    tmpEnv <- new.env()
+    dnames <- load(data_file, envir = tmpEnv)
+    if (any(rsvd_names %in% dnames)) {
+      rm(tmpEnv, dnames)
+      stop(paste('No data_file objects may have one the following names:',
+                 paste(rsvd_names, collapse = ', ')))
+    }
+    rm(tmpEnv, dnames)
+  }
+  
   # Generate an ID for temporary files
   f_id <- paste0('slr', as.integer(Sys.time()) %% 10000)
   
-  write.table(params, file = paste0(f_id, '.dat'))
+  save(params, file = paste0(f_id, '.RData'))
   
   # Get chunk size (nb. of param. sets by node)
   # Special case if less param. sets than CPUs in cluster (reduce # of nodes)
@@ -137,7 +161,8 @@ slurm_apply <- function(f, params, nodes = 16) {
   
   # Create a temporary R script to run function in parallel on each node
   capture.output({
-    cat(paste0("params <- read.table('", f_id, ".dat') \n",
+    if(!is.null(data_file)) cat(paste0("load('", data_file, "') \n"))
+    cat(paste0("load('", f_id, ".RData') \n",
                "a_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID')) \n",
                "istart <- a_id * ", nchunk, " + 1 \n",
                "iend <- min((a_id + 1) * ", nchunk, ", nrow(params)) \n",
