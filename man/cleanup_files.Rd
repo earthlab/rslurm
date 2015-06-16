@@ -2,7 +2,7 @@
 % Please edit documentation in R/rslurm.R
 \name{cleanup_files}
 \alias{cleanup_files}
-\title{Deletes temporary files associated with a SLURM job.}
+\title{Deletes temporary files associated with a SLURM job}
 \usage{
 cleanup_files(slr_job)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rslurm.R
 \name{get_slurm_out}
 \alias{get_slurm_out}
-\title{Reads the output of a function calculated on the SLURM cluster.}
+\title{Reads the output of a function calculated on the SLURM cluster}
 \usage{
 get_slurm_out(slr_job)
 }
