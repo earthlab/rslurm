@@ -54,7 +54,7 @@
 #' print_job_status(sjob1)
 #' res <- get_slurm_out(sjob1)
 #' all.equal(pars, res) # Confirm correct output
-# 'cleanup_files(sjob1)
+#' cleanup_files(sjob1)
 #' }
 #' 
 #' @docType package
