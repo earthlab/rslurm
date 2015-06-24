@@ -52,25 +52,40 @@ print_job_status <- function(slr_job) {
 #' Reads the output of a function calculated on the SLURM cluster 
 #'
 #' This function reads all function output files (one by cluster node used) from 
-#' the specified SLURM job and returns the result in a single data frame. It 
-#' doesn't record any messages (including warnings or errors) output to the R
-#' console during the computation; these can be consulted by invoking 
+#' the specified SLURM job and returns the result in a single data frame
+#' (if the output was in 'table' format) or list (if the output was in 'raw'
+#' format). It doesn't record any messages (including warnings or errors) output
+#' to the R console during the computation; these can be consulted by invoking 
 #' \code{\link{print_job_status}}.
 #' 
 #' @param slr_job A \code{slurm_job} object output by \code{\link{slurm_apply}}.
-#' @return A data frame with one column by return value of the function passed
-#'   to \code{\link{slurm_apply}}, where each row is the output of the 
-#'   corresponding row in the params data frame passed to 
-#'   \code{\link{slurm_apply}}.
+#' @return If \code{slr_job$output = 'table'}: A data frame with one column by 
+#'   return value of the function passed to \code{slurm_apply}, where 
+#'   each row is the output of the corresponding row in the params data frame 
+#'   passed to \code{slurm_apply}.
+#'   
+#'   If \code{slr_job$output = 'raw'}: A list where each element is the output 
+#'   of the function passed to \code{slurm_apply} for the corresponding
+#'   row in the params data frame passed to \code{slurm_apply}.
 #' @seealso \code{\link{slurm_apply}}, \code{\link{print_job_status}}
 #' @export
 get_slurm_out <- function(slr_job) {
   # Import and combine output files from slurm_job slr_job
   # Output: data frame with one function output by row
   if (!(class(slr_job) == 'slurm_job')) stop('input must be a slurm_job')
-  out_files <- paste0(slr_job$file_prefix, '_', 0:(slr_job$nodes - 1), '.out')
-  slurm_out <- do.call(rbind, lapply(out_files, read.table))
-  rownames(slurm_out) <- NULL
+  if (slr_job$output == 'table') {
+    out_files <- paste0(slr_job$file_prefix, '_', 0:(slr_job$nodes - 1), '.out')
+    slurm_out <- do.call(rbind, lapply(out_files, read.table))
+    rownames(slurm_out) <- NULL
+  } else {  # output == 'raw'
+    slurm_out <- list()
+    tmpEnv <- new.env()
+    for (i in 0:(slr_job$nodes-1)) {
+      load(paste0(slr_job$file_prefix, '_', i, '.RData'), envir = tmpEnv)
+      slurm_out <- c(slurm_out, get('result', envir = tmpEnv))
+    }
+    rm(tmpEnv)
+  }
   slurm_out
 }
 

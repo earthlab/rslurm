@@ -10,16 +10,21 @@ get_slurm_out(slr_job)
 \item{slr_job}{A \code{slurm_job} object output by \code{\link{slurm_apply}}.}
 }
 \value{
-A data frame with one column by return value of the function passed
-  to \code{\link{slurm_apply}}, where each row is the output of the
-  corresponding row in the params data frame passed to
-  \code{\link{slurm_apply}}.
+If \code{slr_job$output = 'table'}: A data frame with one column by
+  return value of the function passed to \code{slurm_apply}, where
+  each row is the output of the corresponding row in the params data frame
+  passed to \code{slurm_apply}.
+
+  If \code{slr_job$output = 'raw'}: A list where each element is the output
+  of the function passed to \code{slurm_apply} for the corresponding
+  row in the params data frame passed to \code{slurm_apply}.
 }
 \description{
 This function reads all function output files (one by cluster node used) from
-the specified SLURM job and returns the result in a single data frame. It
-doesn't record any messages (including warnings or errors) output to the R
-console during the computation; these can be consulted by invoking
+the specified SLURM job and returns the result in a single data frame
+(if the output was in 'table' format) or list (if the output was in 'raw'
+format). It doesn't record any messages (including warnings or errors) output
+to the R console during the computation; these can be consulted by invoking
 \code{\link{print_job_status}}.
 }
 \seealso{

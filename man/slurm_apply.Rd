@@ -4,7 +4,7 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, nodes = 16, data_file = NULL)
+slurm_apply(f, params, nodes = 16, data_file = NULL, output = "table")
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -23,11 +23,18 @@ the parameter set is too small to use all CPUs in the requested nodes.}
 \code{\link[base]{save}}) that will be loaded on each node prior to
 calling \code{f}. Note that objects in this file \emph{cannot} share one
 of the following names: params, a_id, iend, istart, result.}
+
+\item{output}{The output type. If \code{output = 'table'} (default), the
+output of each node is coerced to a data frame and written with
+\code{\link[base]{write.table}}. If \code{f} returns a R object that
+cannot be coerced to a data frame, use \code{output = 'raw'}, which will
+\code{\link[base]{save}} each node's output in .RData format.}
 }
 \value{
 A \code{slurm_job} object containing the \code{file_prefix} assigned
   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
-  by the SLURM cluster and the number of \code{nodes} effectively used.
+  by the SLURM cluster, the number of \code{nodes} effectively used and the
+  type of \code{output} returned.
 }
 \description{
 Use \code{slurm_apply} to calculate a function over multiple sets of

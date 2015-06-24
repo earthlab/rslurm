@@ -37,9 +37,15 @@
 #'   \code{\link[base]{save}}) that will be loaded on each node prior to
 #'   calling \code{f}. Note that objects in this file \emph{cannot} share one
 #'   of the following names: params, a_id, iend, istart, result.
+#' @param output The output type. If \code{output = 'table'} (default), the 
+#'   output of each node is coerced to a data frame and written with
+#'   \code{\link[base]{write.table}}. If \code{f} returns a R object that
+#'   cannot be coerced to a data frame, use \code{output = 'raw'}, which will
+#'   \code{\link[base]{save}} each node's output in .RData format.
 #' @return A \code{slurm_job} object containing the \code{file_prefix} assigned
 #'   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
-#'   by the SLURM cluster and the number of \code{nodes} effectively used.
+#'   by the SLURM cluster, the number of \code{nodes} effectively used and the
+#'   type of \code{output} returned.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
 #'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
 #'   which use the output of this function.    
@@ -51,12 +57,14 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
+slurm_apply <- function(f, params, nodes = 16, data_file = NULL, 
+                        output = 'table') {
   
   # Set number of CPUs per node in cluster
   cpus_per_node <- 8
   # Names 'reserved' by slurm_apply
   rsvd_names <- c('params', 'a_id', 'istart', 'iend', 'result')
+  output_vals <- c('table', 'raw')
   
   # Check inputs
   if (!is.function(f)) {
@@ -67,6 +75,9 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
   }
   if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
     stop('column names of params must match arguments of f')
+  }
+  if (!(output %in% output_vals)) {
+    stop(paste('output should be one of:', paste(output_vals, collapse = ', ')))
   }
   
   # Ensure that data_file, if present, contains no conflicting names
@@ -87,13 +98,14 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
   save(params, file = paste0(f_id, '.RData'))
   
   # Get chunk size (nb. of param. sets by node)
-  # Special case if less param. sets than CPUs in cluster (reduce # of nodes)
+  # Special case if less param. sets than CPUs in cluster
   if (nrow(params) < cpus_per_node * nodes) {
     nchunk <- cpus_per_node
-    nodes <- ceiling(nrow(params) / nchunk)
   } else {
     nchunk <- ceiling(nrow(params) / nodes)
   }
+  # Readjust number of nodes (only matters for small sets)
+  nodes <- ceiling(nrow(params) / nchunk)
   
   # Create a temporary R script to run function in parallel on each node
   capture.output({
@@ -105,13 +117,17 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
                "result <- do.call(parallel::mcmapply, c(")) 
     print(f) 
     cat(paste0(", params[istart:iend, , drop = FALSE], ", 
-               "mc.cores = ", cpus_per_node, ")) \n", 
-               "if (is.null(dim(result))) { \n",
-               "  result <- as.data.frame(result) \n",
-               "} else { \n",
-               "  result <- as.data.frame(t(result)) \n",
-               "} \n",
-               "write.table(result, paste0('", f_id, "_', a_id, '.out'))"))
+               "mc.cores = ", cpus_per_node, ")) \n"))
+    if(output == 'table') {
+      cat(paste0("if (is.null(dim(result))) { \n",
+                 "  result <- as.data.frame(result) \n",
+                 "} else { \n",
+                 "  result <- as.data.frame(t(result)) \n",
+                 "} \n",
+                 "write.table(result, paste0('", f_id, "_', a_id, '.out'))"))
+    } else { # output == 'raw'
+      cat(paste0("save(result, file = paste0('", f_id, "_', a_id, '.RData'))"))
+    }
   }, file = paste0(f_id, '.R'))
   
   # Create temporary bash script
@@ -127,12 +143,13 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL) {
   job_id <- stringr::word(sbatch_ret, -1)
   
   # Return 'slurm_job' object with script file prefix, job_id, number of nodes
-  slurm_job(f_id, job_id, nodes)
+  slurm_job(f_id, job_id, nodes, output)
 }
 
 # Constructor for slurm_job class
-slurm_job <- function(file_prefix, job_id, nodes) {
-  slr_job <- list(file_prefix = file_prefix, job_id = job_id, nodes = nodes)
+slurm_job <- function(file_prefix, job_id, nodes, output) {
+  slr_job <- list(file_prefix = file_prefix, job_id = job_id, 
+                  nodes = nodes, output = output)
   class(slr_job) <- 'slurm_job'
   slr_job
 }

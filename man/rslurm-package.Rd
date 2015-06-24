@@ -31,8 +31,12 @@ Philippe Marchand (pmarchand@sesync.org).
 
 To be compatible with \code{\link{slurm_apply}}, a function may accept
 any number of single value parameters. The names of these parameters must
-match the column names of the \code{params} data frame supplied. It may
-return a single value or a vector.
+match the column names of the \code{params} data frame supplied.
+
+The default output format of \code{slurm_apply} (\code{output = 'table'}) is
+a data frame, which works if the function returns a single value or vector.
+For functions that return a more complex R object, use \code{output = 'raw'}
+and the output produced will be a list of such objects.
 
 If the function to be parallelized requires knowledge of any R objects (data,
 custom helper functions) besides \code{params}, these should be
