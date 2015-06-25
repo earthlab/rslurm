@@ -33,3 +33,7 @@ Read the `rslurm-package` help file in R and each function's help file for more 
 
 * Users may want to wrap their parallelized function in a error handler (i.e. `tryCatch`) to (1) prevent a single bad case to stop the calculation and (2) report the parameter values that caused the error. Adding a function that automatically does that would be useful.
 
+* Currently `slurm_apply` uses `mcmapply`. This makes it incompatible with a function that would return a named list (it would concatenate the lists output by each parameter set rather than return a list of lists). `mcMap` would work better in that case, but we should make sure it doesn't change the behavior for the other output types.
+
+* Instead of requiring users to prefix every function call in exported functions with the package name, `slurm_apply` could accept a list of package names to be loaded in each node (similar to how it accepts a common data file to be loaded). We should check for name conflicts with this option, however.
+
