@@ -35,8 +35,10 @@
 #'   the parameter set is too small to use all CPUs in the requested nodes.
 #' @param data_file The name of a R data file (created with 
 #'   \code{\link[base]{save}}) that will be loaded on each node prior to
-#'   calling \code{f}. Note that objects in this file \emph{cannot} share one
-#'   of the following names: params, a_id, iend, istart, result.
+#'   calling \code{f}.
+#' @param pkgs A character vector containing the names of packages that must
+#'   be loaded on each cluster node. By default, it includes all packages
+#'   loaded by the user when \code{slurm_apply} is called. 
 #' @param output The output type. If \code{output = 'table'} (default), the 
 #'   output of each node is coerced to a data frame and written with
 #'   \code{\link[base]{write.table}}. If \code{f} returns a R object that
@@ -58,12 +60,11 @@
 #' }
 #' @export       
 slurm_apply <- function(f, params, nodes = 16, data_file = NULL, 
-                        output = 'table') {
+                        pkgs = rev(.packages()), output = 'table') {
   
   # Set number of CPUs per node in cluster
   cpus_per_node <- 8
-  # Names 'reserved' by slurm_apply
-  rsvd_names <- c('params', 'a_id', 'istart', 'iend', 'result')
+  # Valid values for 'output' argument
   output_vals <- c('table', 'raw')
   
   # Check inputs
@@ -80,22 +81,11 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL,
     stop(paste('output should be one of:', paste(output_vals, collapse = ', ')))
   }
   
-  # Ensure that data_file, if present, contains no conflicting names
-  if (!is.null(data_file)) {
-    tmpEnv <- new.env()
-    dnames <- load(data_file, envir = tmpEnv)
-    if (any(rsvd_names %in% dnames)) {
-      rm(tmpEnv, dnames)
-      stop(paste('No data_file objects may have one the following names:',
-                 paste(rsvd_names, collapse = ', ')))
-    }
-    rm(tmpEnv, dnames)
-  }
-  
   # Generate an ID for temporary files
   f_id <- paste0('slr', as.integer(Sys.time()) %% 10000)
   
-  save(params, file = paste0(f_id, '.RData'))
+  .rslurm_params <- params
+  save(.rslurm_params, file = paste0(f_id, '.RData'))
   
   # Get chunk size (nb. of param. sets by node)
   # Special case if less param. sets than CPUs in cluster
@@ -109,24 +99,27 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL,
   
   # Create a temporary R script to run function in parallel on each node
   capture.output({
+    cat(paste0(".tmplib <- lapply(c('", paste(pkgs, collapse = "','"), "'), \n",
+               "           library, character.only = TRUE, quietly = TRUE) \n"))
     if(!is.null(data_file)) cat(paste0("load('", data_file, "') \n"))
     cat(paste0("load('", f_id, ".RData') \n",
-               "a_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID')) \n",
-               "istart <- a_id * ", nchunk, " + 1 \n",
-               "iend <- min((a_id + 1) * ", nchunk, ", nrow(params)) \n",
-               "result <- do.call(parallel::mcmapply, c(")) 
+               ".rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID')) \n",
+               ".rslurm_istart <- .rslurm_id * ", nchunk, " + 1 \n",
+               ".rslurm_iend <- min((.rslurm_id + 1) * ", nchunk, ", \n",
+               "                    nrow(.rslurm_params)) \n",
+               ".rslurm_result <- do.call(parallel::mcmapply, c(")) 
     print(f) 
-    cat(paste0(", params[istart:iend, , drop = FALSE], ", 
+    cat(paste0(", .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE], ", 
                "mc.cores = ", cpus_per_node, ")) \n"))
     if(output == 'table') {
-      cat(paste0("if (is.null(dim(result))) { \n",
-                 "  result <- as.data.frame(result) \n",
+      cat(paste0("if (is.null(dim(.rslurm_result))) { \n",
+                 "  .rslurm_result <- as.data.frame(.rslurm_result) \n",
                  "} else { \n",
-                 "  result <- as.data.frame(t(result)) \n",
+                 "  .rslurm_result <- as.data.frame(t(.rslurm_result)) \n",
                  "} \n",
-                 "write.table(result, paste0('", f_id, "_', a_id, '.out'))"))
+                 "write.table(.rslurm_result, paste0('", f_id, "_', .rslurm_id, '.out'))"))
     } else { # output == 'raw'
-      cat(paste0("save(result, file = paste0('", f_id, "_', a_id, '.RData'))"))
+      cat(paste0("save(.rslurm_result, file = paste0('", f_id, "_', .rslurm_id, '.RData'))"))
     }
   }, file = paste0(f_id, '.R'))
   

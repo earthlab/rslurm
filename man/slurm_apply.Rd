@@ -4,7 +4,8 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, nodes = 16, data_file = NULL, output = "table")
+slurm_apply(f, params, nodes = 16, data_file = NULL,
+  pkgs = rev(.packages()), output = "table")
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -21,8 +22,11 @@ the parameter set is too small to use all CPUs in the requested nodes.}
 
 \item{data_file}{The name of a R data file (created with
 \code{\link[base]{save}}) that will be loaded on each node prior to
-calling \code{f}. Note that objects in this file \emph{cannot} share one
-of the following names: params, a_id, iend, istart, result.}
+calling \code{f}.}
+
+\item{pkgs}{A character vector containing the names of packages that must
+be loaded on each cluster node. By default, it includes all packages
+loaded by the user when \code{slurm_apply} is called.}
 
 \item{output}{The output type. If \code{output = 'table'} (default), the
 output of each node is coerced to a data frame and written with

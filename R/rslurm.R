@@ -32,9 +32,7 @@
 #' If the function to be parallelized requires knowledge of any R objects (data, 
 #' custom helper functions) besides \code{params}, these should be 
 #' \code{\link[base]{save}}d into a .RData file that is supplied to 
-#' \code{\link{slurm_apply}} as the optional \code{data_file} parameter. Any
-#' calls to functions from external packages should be prefixed with the 
-#' appropriate package name i.e. \code{pkg_name::func_name}.
+#' \code{\link{slurm_apply}} as the optional \code{data_file} parameter.
 #' 
 #' Since any error will interrupt all calculations for the current node, it may
 #' be useful to wrap expressions which may generate errors into a

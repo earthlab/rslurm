@@ -82,7 +82,7 @@ get_slurm_out <- function(slr_job) {
     tmpEnv <- new.env()
     for (i in 0:(slr_job$nodes-1)) {
       load(paste0(slr_job$file_prefix, '_', i, '.RData'), envir = tmpEnv)
-      slurm_out <- c(slurm_out, get('result', envir = tmpEnv))
+      slurm_out <- c(slurm_out, get('.rslurm_result', envir = tmpEnv))
     }
     rm(tmpEnv)
   }
