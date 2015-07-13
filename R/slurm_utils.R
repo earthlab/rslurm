@@ -1,3 +1,12 @@
+# Constructor for slurm_job class (not exported)
+slurm_job <- function(file_prefix, job_id, nodes, output) {
+  slr_job <- list(file_prefix = file_prefix, job_id = job_id, 
+                  nodes = nodes, output = output)
+  class(slr_job) <- 'slurm_job'
+  slr_job
+}
+
+
 #' Cancels a scheduled SLURM job
 #'
 #' This function cancels the specified SLURM job by invoking the SLURM 
@@ -73,6 +82,7 @@ get_slurm_out <- function(slr_job) {
   # Import and combine output files from slurm_job slr_job
   # Output: data frame with one function output by row
   if (!(class(slr_job) == 'slurm_job')) stop('input must be a slurm_job')
+
   if (slr_job$output == 'table') {
     out_files <- paste0(slr_job$file_prefix, '_', 0:(slr_job$nodes - 1), '.out')
     missing_files <- !(out_files %in% dir())
@@ -83,25 +93,34 @@ get_slurm_out <- function(slr_job) {
     }
     slurm_out <- do.call(rbind, lapply(out_files, read.table))
     rownames(slurm_out) <- NULL
-  } else {  # output == 'raw'
-    slurm_out <- list()
-    missing_files <- c()
+  } 
+  
+  else {    # output == 'raw'
     tmpEnv <- new.env()
-    for (i in 0:(slr_job$nodes-1)) {
-      fname <- paste0(slr_job$file_prefix, '_', i, '.RData')
-      if (fname %in% dir()) {
-        load(fname, envir = tmpEnv)
-        slurm_out <- c(slurm_out, get('.rslurm_result', envir = tmpEnv))
-      } else {
-        missing_files <- c(missing_files, fname)
+    if (slr_job$nodes == 1) {
+      load(paste0(slr_job$file_prefix, '_0.RData'), envir = tmpEnv)
+      slurm_out <- get('.rslurm_result', envir = tmpEnv)
+    } else {
+      slurm_out <- list()
+      missing_files <- c()
+      tmpEnv <- new.env()
+      for (i in 0:(slr_job$nodes-1)) {
+        fname <- paste0(slr_job$file_prefix, '_', i, '.RData')
+        if (fname %in% dir()) {
+          load(fname, envir = tmpEnv)
+          slurm_out <- c(slurm_out, get('.rslurm_result', envir = tmpEnv))
+        } else {
+          missing_files <- c(missing_files, fname)
+        }
       }
-    }
-    if (length(missing_files) > 0) {
-      missing_list <- paste(missing_files, collapse = ', ')
-      warning(paste('The following files are missing:', missing_list))
+      if (length(missing_files) > 0) {
+        missing_list <- paste(missing_files, collapse = ', ')
+        warning(paste('The following files are missing:', missing_list))
+      }
     }
     rm(tmpEnv)
   }
+
   slurm_out
 }
 
@@ -128,5 +147,5 @@ get_slurm_out <- function(slr_job) {
 cleanup_files <- function(slr_job) {
   if (!(class(slr_job) == 'slurm_job')) stop('input must be a slurm_job')  
   unlink(paste0(slr_job$file_prefix, '*'))
-  unlink(paste0('slurm-', slr_job$job_id, '_', 0:(slr_job$nodes - 1), '.out'))
+  unlink(paste0('slurm-', slr_job$job_id, '*.out'))
 }

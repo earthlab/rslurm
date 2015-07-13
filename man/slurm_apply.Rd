@@ -30,7 +30,7 @@ loaded by the user when \code{slurm_apply} is called.}
 
 \item{output}{The output type. If \code{output = 'table'} (default), the
 output of each node is coerced to a data frame and written with
-\code{\link[base]{write.table}}. If \code{f} returns a R object that
+\code{\link[utils]{write.table}}. If \code{f} returns a R object that
 cannot be coerced to a data frame, use \code{output = 'raw'}, which will
 \code{\link[base]{save}} each node's output in .RData format.}
 }
@@ -58,7 +58,8 @@ name of this file should be given as the optional \code{data_file} argument.
 
 When processing the computation job, the SLURM cluster will output two types
 of files: those containing the return values of the function for each subset
-of parameters ('slr####_[node_id].out') and those containing any console or
+of parameters ('slr####_[node_id].out' or 'slr####_[node_id].RData'
+depending on output type) and those containing any console or
 error output produced by R on each node ('slurm-[job_id]_[node_id].out').
 
 After sending the job to the SLURM cluster, \code{slurm_apply} returns a
@@ -75,6 +76,8 @@ cleanup_files(sjob)
 }
 }
 \seealso{
+\code{\link{slurm_call}} to evaluate a single function call.
+
 \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
   \code{\link{get_slurm_out}} and \code{\link{print_job_status}}
   which use the output of this function.

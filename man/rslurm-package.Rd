@@ -4,23 +4,25 @@
 \name{rslurm-package}
 \alias{rslurm}
 \alias{rslurm-package}
-\title{rslurm: Simple parallel calculations using the SLURM cluster}
+\title{rslurm: Single or parallel calculations using the SLURM cluster}
 \description{
-This package automates the process of splitting a R calculation over the
-SESYNC SLURM cluster.
+This package automates the process of sending simple function calls or
+parallel calculations over the SESYNC SLURM cluster.
 }
 \section{Overview}{
 
-The core function in the package is \code{\link{slurm_apply}}, with two
-essential arguments: a function \code{f} and a data frame of parameters
-\code{params} to apply the function to. It automatically splits the set of
-parameters into equal-size chunks, each chunk to be processed by a separate
+This package includes two core functions used to send computations to the
+SLURM cluster. While \code{\link{slurm_call}} executes a function using a
+single set of parameters (passed as a list), \code{\link{slurm_apply}}
+evaluates the function in parallel for multiple sets of parameters grouped
+in a data frame. \code{slurm_apply} automatically splits the parameter
+sets into equal-size chunks, each chunk to be processed by a separate
 cluster node. It uses functions from the \code{\link[parallel]{parallel}}
 package to parallelize computations within each node.
 
-The output of \code{\link{slurm_apply}} is a \code{slurm_job} object that
-serves as an input to the other functions in the package:
-\code{\link{print_job_status}}, \code{\link{cancel_slurm}},
+The output of \code{slurm_apply} or \code{slurm_call} is a
+\code{slurm_job} object that serves as an input to the other functions
+in the package: \code{\link{print_job_status}}, \code{\link{cancel_slurm}},
 \code{\link{get_slurm_out}} and \code{\link{cleanup_files}}.
 
 For bug reports or questions about this package, contact
@@ -31,23 +33,26 @@ Philippe Marchand (pmarchand@sesync.org).
 
 To be compatible with \code{\link{slurm_apply}}, a function may accept
 any number of single value parameters. The names of these parameters must
-match the column names of the \code{params} data frame supplied.
+match the column names of the \code{params} data frame supplied. There are no
+restrictions on the types of parameters passed as a list to
+\code{\link{slurm_call}}.
 
 The default output format of \code{slurm_apply} (\code{output = 'table'}) is
 a data frame, which works if the function returns a single value or vector.
-For functions that return a more complex R object, use \code{output = 'raw'}
-and the output produced will be a list of such objects.
+For functions that return a more complex R object, use \code{output = 'raw'};
+the output produced will be a list of such objects. The output saved by
+\code{slurm_call} is the single object returned by the function.
 
-If the function to be parallelized requires knowledge of any R objects (data,
-custom helper functions) besides \code{params}, these should be
-\code{\link[base]{save}}d into a .RData file that is supplied to
-\code{\link{slurm_apply}} as the optional \code{data_file} parameter.
+If the function passed to \code{slurm_call} or \code{slurm_apply} requires
+knowledge of any R objects (data, custom helper functions) besides \code{params},
+these should be \code{\link[base]{save}}d into a .RData file specified as the
+optional \code{data_file} parameter.
 
-Since any error will interrupt all calculations for the current node, it may
-be useful to wrap expressions which may generate errors into a
-\code{\link[base]{try}} or \code{\link[base]{tryCatch}} function. This will
-ensure the computation continues with the next parameter set after reporting
-the error.
+When parallelizing a function, since any error will interrupt all calculations
+for the current node, it may be useful to wrap expressions which may generate
+errors into a \code{\link[base]{try}} or \code{\link[base]{tryCatch}} function.
+This will ensure the computation continues with the next parameter set after
+reporting the error.
 }
 \examples{
 \dontrun{

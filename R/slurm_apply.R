@@ -16,7 +16,8 @@
 #' 
 #' When processing the computation job, the SLURM cluster will output two types
 #' of files: those containing the return values of the function for each subset
-#' of parameters ('slr####_[node_id].out') and those containing any console or
+#' of parameters ('slr####_[node_id].out' or 'slr####_[node_id].RData'
+#' depending on output type) and those containing any console or
 #' error output produced by R on each node ('slurm-[job_id]_[node_id].out').
 #' 
 #' After sending the job to the SLURM cluster, \code{slurm_apply} returns a
@@ -41,13 +42,14 @@
 #'   loaded by the user when \code{slurm_apply} is called. 
 #' @param output The output type. If \code{output = 'table'} (default), the 
 #'   output of each node is coerced to a data frame and written with
-#'   \code{\link[base]{write.table}}. If \code{f} returns a R object that
+#'   \code{\link[utils]{write.table}}. If \code{f} returns a R object that
 #'   cannot be coerced to a data frame, use \code{output = 'raw'}, which will
 #'   \code{\link[base]{save}} each node's output in .RData format.
 #' @return A \code{slurm_job} object containing the \code{file_prefix} assigned
 #'   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
 #'   by the SLURM cluster, the number of \code{nodes} effectively used and the
 #'   type of \code{output} returned.
+#' @seealso \code{\link{slurm_call}} to evaluate a single function call.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
 #'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
 #'   which use the output of this function.    
@@ -137,12 +139,4 @@ slurm_apply <- function(f, params, nodes = 16, data_file = NULL,
   
   # Return 'slurm_job' object with script file prefix, job_id, number of nodes
   slurm_job(f_id, job_id, nodes, output)
-}
-
-# Constructor for slurm_job class
-slurm_job <- function(file_prefix, job_id, nodes, output) {
-  slr_job <- list(file_prefix = file_prefix, job_id = job_id, 
-                  nodes = nodes, output = output)
-  class(slr_job) <- 'slurm_job'
-  slr_job
 }
