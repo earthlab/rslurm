@@ -75,14 +75,30 @@ get_slurm_out <- function(slr_job) {
   if (!(class(slr_job) == 'slurm_job')) stop('input must be a slurm_job')
   if (slr_job$output == 'table') {
     out_files <- paste0(slr_job$file_prefix, '_', 0:(slr_job$nodes - 1), '.out')
+    missing_files <- !(out_files %in% dir())
+    if (any(missing_files)) {
+      missing_list <- paste(out_files[missing_files], collapse = ', ')
+      warning(paste('The following output files are missing:', missing_list))
+      out_files <- out_files[!missing_files]
+    }
     slurm_out <- do.call(rbind, lapply(out_files, read.table))
     rownames(slurm_out) <- NULL
   } else {  # output == 'raw'
     slurm_out <- list()
+    missing_files <- c()
     tmpEnv <- new.env()
     for (i in 0:(slr_job$nodes-1)) {
-      load(paste0(slr_job$file_prefix, '_', i, '.RData'), envir = tmpEnv)
-      slurm_out <- c(slurm_out, get('.rslurm_result', envir = tmpEnv))
+      fname <- paste0(slr_job$file_prefix, '_', i, '.RData')
+      if (fname %in% dir()) {
+        load(fname, envir = tmpEnv)
+        slurm_out <- c(slurm_out, get('.rslurm_result', envir = tmpEnv))
+      } else {
+        missing_files <- c(missing_files, fname)
+      }
+    }
+    if (length(missing_files) > 0) {
+      missing_list <- paste(missing_files, collapse = ', ')
+      warning(paste('The following files are missing:', missing_list))
     }
     rm(tmpEnv)
   }
