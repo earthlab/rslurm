@@ -61,11 +61,11 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, nodes = 16, data_file = NULL, 
+slurm_apply <- function(f, params, cpus_per_node = 8, nodes = 16, data_file = NULL, 
                         pkgs = rev(.packages()), output = 'table') {
   
   # Set number of CPUs per node in cluster
-  cpus_per_node <- 8
+  # cpus_per_node <- 8
   # Valid values for 'output' argument
   output_vals <- c('table', 'raw')
   
