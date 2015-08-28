@@ -30,6 +30,8 @@
 #' @param params A data frame of parameter values to apply \code{f} to. Each
 #'   column corresponds to a parameter of \code{f} (\emph{Note}: names must 
 #'   match) and each row corresponds to a separate function call.
+#' @param cpus_per_node number of CPUs per node on the cluster; determines how
+#'   many processes are run in parallel per node.
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if 
@@ -64,8 +66,6 @@
 slurm_apply <- function(f, params, cpus_per_node = 8, nodes = 16, data_file = NULL, 
                         pkgs = rev(.packages()), output = 'table') {
   
-  # Set number of CPUs per node in cluster
-  # cpus_per_node <- 8
   # Valid values for 'output' argument
   output_vals <- c('table', 'raw')
   

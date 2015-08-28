@@ -4,7 +4,7 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, nodes = 16, data_file = NULL,
+slurm_apply(f, params, cpus_per_node = 8, nodes = 16, data_file = NULL,
   pkgs = rev(.packages()), output = "table")
 }
 \arguments{
@@ -14,6 +14,9 @@ returns a single value or a vector.}
 \item{params}{A data frame of parameter values to apply \code{f} to. Each
 column corresponds to a parameter of \code{f} (\emph{Note}: names must
 match) and each row corresponds to a separate function call.}
+
+\item{cpus_per_node}{number of CPUs per node on the cluster; determines how
+many processes are run in parallel per node.}
 
 \item{nodes}{The (maximum) number of cluster nodes to spread the calculation
 over. \code{slurm_apply} automatically divides \code{params} in chunks of
