@@ -37,12 +37,6 @@ match the column names of the \code{params} data frame supplied. There are no
 restrictions on the types of parameters passed as a list to
 \code{\link{slurm_call}}.
 
-The default output format of \code{slurm_apply} (\code{output = 'table'}) is
-a data frame, which works if the function returns a single value or vector.
-For functions that return a more complex R object, use \code{output = 'raw'};
-the output produced will be a list of such objects. The output saved by
-\code{slurm_call} is the single object returned by the function.
-
 If the function passed to \code{slurm_call} or \code{slurm_apply} requires
 knowledge of any R objects (data, custom helper functions) besides \code{params},
 these should be \code{\link[base]{save}}d into a .RData file specified as the
@@ -53,6 +47,15 @@ for the current node, it may be useful to wrap expressions which may generate
 errors into a \code{\link[base]{try}} or \code{\link[base]{tryCatch}} function.
 This will ensure the computation continues with the next parameter set after
 reporting the error.
+}
+
+\section{Output Format}{
+
+The default output format for \code{get_slurm_out} (\code{outtype = "raw"})
+is a list where each element is the return value of one function call. If the
+function passed to \code{slurm_apply} produces a vector output, you may use
+\code{outtype = "table"} to collect the output in a single data frame, with
+one row by function call.
 }
 \examples{
 \dontrun{
@@ -68,7 +71,7 @@ ftest <- function(par_m, par_sd) {
 
 sjob1 <- slurm_apply(ftest, pars)
 print_job_status(sjob1)
-res <- get_slurm_out(sjob1)
+res <- get_slurm_out(sjob1, "table")
 all.equal(pars, res) # Confirm correct output
 cleanup_files(sjob1)
 }

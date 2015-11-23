@@ -5,7 +5,7 @@
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
 slurm_apply(f, params, cpus_per_node = 8, nodes = 16, data_file = NULL,
-  pkgs = rev(.packages()), output = "table")
+  pkgs = rev(.packages()))
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -30,27 +30,20 @@ calling \code{f}.}
 \item{pkgs}{A character vector containing the names of packages that must
 be loaded on each cluster node. By default, it includes all packages
 loaded by the user when \code{slurm_apply} is called.}
-
-\item{output}{The output type. If \code{output = 'table'} (default), the
-output of each node is coerced to a data frame and written with
-\code{\link[utils]{write.table}}. If \code{f} returns a R object that
-cannot be coerced to a data frame, use \code{output = 'raw'}, which will
-\code{\link[base]{save}} each node's output in .RData format.}
 }
 \value{
 A \code{slurm_job} object containing the \code{file_prefix} assigned
   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
-  by the SLURM cluster, the number of \code{nodes} effectively used and the
-  type of \code{output} returned.
+  by the SLURM cluster and the number of \code{nodes} effectively used.
 }
 \description{
 Use \code{slurm_apply} to calculate a function over multiple sets of
 parameters in parallel, using up to 16 nodes of the SLURM cluster.
 }
 \details{
-This function creates temporary files for the parameters data ('slr####.RData'),
-the R script sent to each node ('slr####.R') and the Bash script
-('slr####.sh') that launches the parallel computation. The set of input
+This function creates temporary files for the parameters data ("slr####.RData"),
+the R script sent to each node ("slr####.R") and the Bash script
+("slr####.sh") that launches the parallel computation. The set of input
 parameters is divided in chunks sent to each node, and \code{f} is evaluated
 in parallel within each node using functions from the \code{parallel} R
 package.
@@ -61,9 +54,8 @@ name of this file should be given as the optional \code{data_file} argument.
 
 When processing the computation job, the SLURM cluster will output two types
 of files: those containing the return values of the function for each subset
-of parameters ('slr####_[node_id].out' or 'slr####_[node_id].RData'
-depending on output type) and those containing any console or
-error output produced by R on each node ('slurm-[job_id]_[node_id].out').
+of parameters ("slr####_[node_id].RData") and those containing any console or
+error output produced by R on each node ("slurm-[job_id]_[node_id].out").
 
 After sending the job to the SLURM cluster, \code{slurm_apply} returns a
 \code{slurm_job} object which can be used to cancel the job, get the job
@@ -74,7 +66,7 @@ the description of the related functions for more details.
 \dontrun{
 sjob <- slurm_apply(func, pars)
 print_job_status(sjob) # Prints console/error output once job is completed.
-func_result <- get_slurm_out(sjob) # Loads output data into R.
+func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 cleanup_files(sjob)
 }
 }

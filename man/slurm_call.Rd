@@ -21,24 +21,24 @@ loaded by the user when \code{slurm_call} is called.}
 \value{
 A \code{slurm_job} object containing the \code{file_prefix} assigned
   to temporary files created by \code{slurm_call}, a \code{job_id} assigned
-  by the SLURM cluster, the number of \code{nodes} used (always 1 for
-  \code{slurm_call}) and the \code{output} type (always 'raw').
+  by the SLURM cluster and the number of \code{nodes} used (always 1 for
+  \code{slurm_call}).
 }
 \description{
 Use \code{slurm_call} to perform a single function evaluation on the SLURM cluster.
 }
 \details{
-This function creates temporary files for the parameters data ('slr####.RData'),
-the R script evaluating the function ('slr####.R') and the Bash script
-('slr####.sh') that sends the batch run command to the cluster.
+This function creates temporary files for the parameters data ("slr####.RData"),
+the R script evaluating the function ("slr####.R") and the Bash script
+("slr####.sh") that sends the batch run command to the cluster.
 
 Any other R objects (besides \code{params}) that \code{f} needs to access
 should be saved in a .RData file (using \code{\link[base]{save}}) and the
 name of this file should be given as the optional \code{data_file} argument.
 
 When processing the computation job, the SLURM cluster will output two files:
-one .RData file containing the function output ('slr####_0.RData') and one
-containing any console or error output produced by R ('slurm-[job_id].out').
+one .RData file containing the function output ("slr####_0.RData") and one
+containing any console or error output produced by R ("slurm-[job_id].out").
 
 After sending the job to the SLURM cluster, \code{slurm_call} returns a
 \code{slurm_job} object which can be used to cancel the job, get the job

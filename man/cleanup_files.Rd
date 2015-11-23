@@ -12,15 +12,15 @@ cleanup_files(slr_job)
 \description{
 This function deletes all temporary files associated with the specified SLURM
 job, including files created by \code{\link{slurm_apply}} (parameters data, R
-and Bash scripts, all starting with 'slr####'), function output files
-('slr####_[node_id].out') as well as the console and error output files
-(starting with 'slurm-[job_id]').
+and Bash scripts, all starting with "slr####"), function output files
+("slr####_[node_id].out") as well as the console and error output files
+(starting with "slurm-[job_id]").
 }
 \examples{
 \dontrun{
 sjob <- slurm_apply(func, pars)
 print_job_status(sjob) # Prints console/error output once job is completed.
-func_result <- get_slurm_out(sjob) # Loads output data into R.
+func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 cleanup_files(sjob)
 }
 }
