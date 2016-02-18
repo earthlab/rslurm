@@ -1,5 +1,5 @@
 # Constructor for slurm_job class (not exported)
-slurm_job <- function(file_prefix, job_id, nodes, output) {
+slurm_job <- function(file_prefix, job_id, nodes) {
     slr_job <- list(file_prefix = file_prefix, job_id = job_id, nodes = nodes)
     class(slr_job) <- "slurm_job"
     slr_job
