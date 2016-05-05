@@ -1,6 +1,6 @@
 # Constructor for slurm_job class (not exported)
-slurm_job <- function(file_prefix, job_id, nodes) {
-    slr_job <- list(file_prefix = file_prefix, job_id = job_id, nodes = nodes)
+slurm_job <- function(jobname, job_id, nodes) {
+    slr_job <- list(jobname = jobname, job_id = job_id, nodes = nodes)
     class(slr_job) <- "slurm_job"
     slr_job
 }
@@ -18,7 +18,7 @@ slurm_job <- function(file_prefix, job_id, nodes) {
 #' @export
 cancel_slurm <- function(slr_job) {
     if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
-    system(paste("scancel", slr_job$job_id))
+    system(paste("scancel -n", slr_job$jobname))
 }
 
 
@@ -40,14 +40,15 @@ cancel_slurm <- function(slr_job) {
 #' @export
 print_job_status <- function(slr_job) {
     if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")  
-    stat <- suppressWarnings(system2("squeue", args = paste("-j", slr_job$job_id), 
-                                     stdout = TRUE, stderr = TRUE))
+    stat <- suppressWarnings(
+        system(paste("squeue -n", slr_job$jobname), intern = TRUE))
     if (length(stat) > 1) {
         print(c("Job running or in queue. Status:", stat))
     } else {
         print("Job completed or stopped. Printing console output below if any.")
-        out_files <- paste0("slurm-", slr_job$job_id, "_", 
-                            0:(slr_job$nodes - 1), ".out")
+        tmpdir <- paste0(".rslurm_", slr_job$jobname)
+        out_files <- file.path(tmpdir, 
+                               paste0("slurm_", 0:(slr_job$nodes - 1), ".out"))
         slurm_out <- suppressWarnings(
             lapply(out_files, function(x) paste(readLines(x), sep = "\n")))
         for (s in slurm_out) {
@@ -85,33 +86,21 @@ get_slurm_out <- function(slr_job, outtype = "raw") {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
     }
     
-    tmpEnv <- new.env()
-    if (slr_job$nodes == 1) {
-        load(paste0(slr_job$file_prefix, "_0.RData"), envir = tmpEnv)
-        slurm_out <- get(".rslurm_result", envir = tmpEnv)
-    } else {
-        slurm_out <- list()
-        missing_files <- c()
-        tmpEnv <- new.env()
-        for (i in 0:(slr_job$nodes-1)) {
-            fname <- paste0(slr_job$file_prefix, "_", i, ".RData")
-            if (fname %in% dir()) {
-                load(fname, envir = tmpEnv)
-                slurm_out <- c(slurm_out, get(".rslurm_result", envir = tmpEnv))
-            } else {
-                missing_files <- c(missing_files, fname)
-            }
-        }
-        if (length(missing_files) > 0) {
-            missing_list <- paste(missing_files, collapse = ", ")
-            warning(paste("The following files are missing:", missing_list))
-        }
+    res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
+    tmpdir <- paste0(".rslurm_", slr_job$jobname)
+    missing_files <- setdiff(res_files, dir(path = tmpdir))
+    if (length(missing_files) > 0) {
+        missing_list <- paste(missing_files, collapse = ", ")
+        warning(paste("The following files are missing:", missing_list))
     }
-    rm(tmpEnv)
+    res_files <- file.path(tmpdir, setdiff(res_files, missing_files))
+    if (length(res_files) == 0) return(NA)
+    
+    slurm_out <- lapply(res_files, readRDS)
+    slurm_out <- do.call(c, slurm_out)
     
     if (outtype == "table") {
-        slurm_out <- do.call(rbind, lapply(slurm_out, 
-                                         function(x) as.data.frame(as.list(x))))
+        slurm_out <- as.data.frame(do.call(rbind, slurm_out))
     }
     slurm_out
 }
@@ -137,7 +126,7 @@ get_slurm_out <- function(slr_job, outtype = "raw") {
 #'   \code{\link{get_slurm_out}}
 #' @export
 cleanup_files <- function(slr_job) {
-    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")  
-    unlink(paste0(slr_job$file_prefix, "*"))
-    unlink(paste0("slurm-", slr_job$job_id, "*.out"))
+    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
+    tmpdir <- paste0(".rslurm_", slr_job$jobname)
+    unlink(tmpdir, recursive = TRUE)
 }
