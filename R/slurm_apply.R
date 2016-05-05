@@ -106,6 +106,7 @@ slurm_apply <- function(f, params, cpus_per_node = 8, nodes = 16,
     capture.output(
         cat(paste0("#!/bin/bash \n",
                    "# \n",
+                   "#SBATCH -p sesync \n",
                    "#SBATCH --array=0-", nodes - 1, " \n",
                    "Rscript --vanilla ", f_id, ".R")), 
         file = paste0(f_id, ".sh"))
