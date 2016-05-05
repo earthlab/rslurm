@@ -2,13 +2,16 @@ Package: rslurm
 Type: Package
 Title: Submit R calculations to the SLURM cluster
 Version: 0.2.1
-Depends: R (>= 3.2.0)
-Imports: parallel,
+Depends:
+    R (>= 3.2.0)
+Imports:
+    parallel,
     stringr
 Date: 2015-06-24
 Authors@R: person('Philippe', 'Marchand', email = 'pmarchand@sesync.org', 
                 role = c('aut', 'cre'))
-Description: This package was developed to simplify the R interface to 
+Description: This package was developed to simplify the R interface to
     SESYNC's SLURM cluster and automate the process of spreading a calculation
     in parallel over cluster nodes.
 License: GPL-3
+RoxygenNote: 5.0.1
