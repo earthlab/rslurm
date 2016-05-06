@@ -56,7 +56,7 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, jobname = NA, cpus_per_node = 8, nodes = 16, 
+slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16, 
                         data_file = NULL, pkgs = rev(.packages())) {
     # Check inputs
     if (!is.function(f)) {
@@ -77,6 +77,12 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = 8, nodes = 16,
         jobname <- stringr::str_replace_all(jobname, "[^0-9A-Za-z_]", "")
     }
     
+    # Auto-detect number of cores if not provided (if unknown, default to 2)
+    if (is.na(cpus_per_node)) {
+        cpus_per_node <- parallel::detectCores()
+        if (is.na(cpus_per_node)) cpus_per_node <- 2
+    }
+    
     # Create temp folder
     tmpdir <- paste0(".rslurm_", jobname)
     dir.create(tmpdir)
@@ -90,7 +96,7 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = 8, nodes = 16,
     } else {
         nchunk <- ceiling(nrow(params) / nodes)
     }
-    # Readjust number of nodes (only matters for small sets)
+    # Re-adjust number of nodes (only matters for small sets)
     nodes <- ceiling(nrow(params) / nchunk)
     
     # Create a temporary R script to run function in parallel on each node
