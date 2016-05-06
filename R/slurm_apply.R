@@ -132,6 +132,7 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16,
     # Send job to slurm and capture job_id
     sbatch_ret <- system(paste0("sbatch ", file.path(tmpdir, "submit.sh")), 
                                 intern = TRUE)
+    cat(sbatch_ret)
     job_id <- stringr::word(sbatch_ret, -1)
     
     # Return 'slurm_job' object with script file prefix, job_id, number of nodes

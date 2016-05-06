@@ -43,17 +43,16 @@ print_job_status <- function(slr_job) {
     stat <- suppressWarnings(
         system(paste("squeue -n", slr_job$jobname), intern = TRUE))
     if (length(stat) > 1) {
-        print(c("Job running or in queue. Status:", stat))
+        cat(paste(c("Job running or in queue. Status:", stat), collapse = "\n"))
     } else {
-        print("Job completed or stopped. Printing console output below if any.")
+        cat("Job completed or stopped. Printing console output below if any.\n")
         tmpdir <- paste0(".rslurm_", slr_job$jobname)
         out_files <- file.path(tmpdir, 
                                paste0("slurm_", 0:(slr_job$nodes - 1), ".out"))
-        slurm_out <- suppressWarnings(
-            lapply(out_files, function(x) paste(readLines(x), sep = "\n")))
-        for (s in slurm_out) {
-            if (length(s) > 0) print(s)
-        } 
+        for (outf in out_files) {
+            cat("\n--------\n\n")
+            cat(paste(readLines(outf), collapse = "\n"))
+        }
     }
 }  
 
