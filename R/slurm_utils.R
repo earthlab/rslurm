@@ -46,7 +46,7 @@ print_job_status <- function(slr_job) {
         cat(paste(c("Job running or in queue. Status:", stat), collapse = "\n"))
     } else {
         cat("Job completed or stopped. Printing console output below if any.\n")
-        tmpdir <- paste0(".rslurm_", slr_job$jobname)
+        tmpdir <- paste0("_rslurm_", slr_job$jobname)
         out_files <- file.path(tmpdir, 
                                paste0("slurm_", 0:(slr_job$nodes - 1), ".out"))
         for (outf in out_files) {
@@ -86,7 +86,7 @@ get_slurm_out <- function(slr_job, outtype = "raw") {
     }
     
     res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
-    tmpdir <- paste0(".rslurm_", slr_job$jobname)
+    tmpdir <- paste0("_rslurm_", slr_job$jobname)
     missing_files <- setdiff(res_files, dir(path = tmpdir))
     if (length(missing_files) > 0) {
         missing_list <- paste(missing_files, collapse = ", ")
@@ -126,6 +126,6 @@ get_slurm_out <- function(slr_job, outtype = "raw") {
 #' @export
 cleanup_files <- function(slr_job) {
     if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
-    tmpdir <- paste0(".rslurm_", slr_job$jobname)
+    tmpdir <- paste0("_rslurm_", slr_job$jobname)
     unlink(tmpdir, recursive = TRUE)
 }

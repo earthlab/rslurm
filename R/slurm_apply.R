@@ -56,8 +56,9 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16, 
-                        data_file = NULL, pkgs = rev(.packages())) {
+slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,  
+                        add_objects = NULL, pkgs = rev(.packages()), 
+                        submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_apply should be a function")
@@ -84,10 +85,13 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16,
     }
     
     # Create temp folder
-    tmpdir <- paste0(".rslurm_", jobname)
+    tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir)
     
     saveRDS(params, file = file.path(tmpdir, "params.RData"))
+    if (!is.null(add_objects)) {
+        save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
+    }    
     
     # Get chunk size (nb. of param. sets by node)
     # Special case if less param. sets than CPUs in cluster
@@ -103,9 +107,8 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16,
     capture.output({
         cat(paste0(".tmplib <- lapply(c('", paste(pkgs, collapse = "','"), "'), \n",
                    "           library, character.only = TRUE, quietly = TRUE) \n"))
-        if(!is.null(data_file)) cat(paste0("load('", data_file, "') \n"))
-        cat(paste0(".rslurm_params <- readRDS('", 
-                        file.path(tmpdir, "params.RData"), "') \n",
+        if(!is.null(add_objects)) cat(paste0("load('add_objects.RData') \n"))
+        cat(paste0(".rslurm_params <- readRDS('params.RData') \n",
                    ".rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID')) \n",
                    ".rslurm_istart <- .rslurm_id * ", nchunk, " + 1 \n",
                    ".rslurm_iend <- min((.rslurm_id + 1) * ", nchunk, ", \n",
@@ -114,8 +117,8 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16,
         print(f) 
         cat(paste0(", .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE], ", 
                    "mc.cores = ", cpus_per_node, ")) \n",
-                   "saveRDS(.rslurm_result, file = paste0('", 
-                    file.path(tmpdir, "results_"), "', .rslurm_id, '.RData'))"))
+                   "saveRDS(.rslurm_result, \n",
+                   "        file = paste0('results_', .rslurm_id, '.RData'))"))
     }, file = file.path(tmpdir, "slurm_run.R"))
     
     # Create temporary bash script
@@ -125,16 +128,22 @@ slurm_apply <- function(f, params, jobname = NA, cpus_per_node = NA, nodes = 16,
                    "#SBATCH --partition sesync \n",
                    "#SBATCH --array=0-", nodes - 1, " \n",
                    "#SBATCH --job-name=", jobname, " \n",
-                   "#SBATCH --output=", file.path(tmpdir, "slurm_%a.out"), " \n",
-                   "Rscript --vanilla ", file.path(tmpdir, "slurm_run.R"))), 
+                   "#SBATCH --output=slurm_%a.out", " \n",
+                   "Rscript --vanilla slurm_run.R")), 
         file = file.path(tmpdir, "submit.sh"))
     
-    # Send job to slurm and capture job_id
-    sbatch_ret <- system(paste0("sbatch ", file.path(tmpdir, "submit.sh")), 
-                                intern = TRUE)
-    cat(sbatch_ret)
-    job_id <- stringr::word(sbatch_ret, -1)
-    
+    # Send job to slurm and capture job_id (if submit = TRUE)
+    if (submit) {
+        old_wd <- setwd(tmpdir)
+        tryCatch({
+            sbatch_ret <- system(paste0("sbatch submit.sh"), intern = TRUE)
+            cat(sbatch_ret)
+        }, finally = setwd(old_wd))
+#        job_id <- stringr::word(sbatch_ret, -1)        
+    } else {
+        cat(paste("Submission scripts output in directory", tmpdir))
+    }
+
     # Return 'slurm_job' object with script file prefix, job_id, number of nodes
-    slurm_job(jobname, job_id, nodes)
+    slurm_job(jobname, NA, nodes)
 }
