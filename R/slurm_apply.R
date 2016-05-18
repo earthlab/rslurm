@@ -102,35 +102,26 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,
     }
     # Re-adjust number of nodes (only matters for small sets)
     nodes <- ceiling(nrow(params) / nchunk)
+
+        
+    # Create a R script to run function in parallel on each node
+    template_r <- readLines(system.file("templates/slurm_run_R.txt", 
+                                        package = "rslurm"))
+    script_r <- whisker::whisker.render(template_r,
+                    list(pkg_list = paste(pkgs, collapse = "','"),
+                         add_obj = !is.null(add_objects), 
+                         func = paste(capture.output(f), collapse = "\n"),
+                         nchunk = nchunk, 
+                         cpus_per_node = cpus_per_node))
+    writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
-    # Create a temporary R script to run function in parallel on each node
-    capture.output({
-        cat(paste0(".tmplib <- lapply(c('", paste(pkgs, collapse = "','"), "'), \n",
-                   "           library, character.only = TRUE, quietly = TRUE) \n"))
-        if(!is.null(add_objects)) cat(paste0("load('add_objects.RData') \n"))
-        cat(paste0(".rslurm_params <- readRDS('params.RData') \n",
-                   ".rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID')) \n",
-                   ".rslurm_istart <- .rslurm_id * ", nchunk, " + 1 \n",
-                   ".rslurm_iend <- min((.rslurm_id + 1) * ", nchunk, ", \n",
-                   "                    nrow(.rslurm_params)) \n",
-                   ".rslurm_result <- do.call(parallel::mcMap, c(")) 
-        print(f) 
-        cat(paste0(", .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE], ", 
-                   "mc.cores = ", cpus_per_node, ")) \n",
-                   "saveRDS(.rslurm_result, \n",
-                   "        file = paste0('results_', .rslurm_id, '.RData'))"))
-    }, file = file.path(tmpdir, "slurm_run.R"))
+    # Create submission bash script
+    template_sh <- readLines(system.file("templates/submit_sh.txt", 
+                                         package = "rslurm"))
+    script_sh <- whisker::whisker.render(template_sh, 
+                                list(max_node = nodes - 1, jobname = jobname))
+    writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
-    # Create temporary bash script
-    capture.output(
-        cat(paste0("#!/bin/bash \n",
-                   "# \n",
-                   "#SBATCH --partition sesync \n",
-                   "#SBATCH --array=0-", nodes - 1, " \n",
-                   "#SBATCH --job-name=", jobname, " \n",
-                   "#SBATCH --output=slurm_%a.out", " \n",
-                   "Rscript --vanilla slurm_run.R")), 
-        file = file.path(tmpdir, "submit.sh"))
     
     # Send job to slurm and capture job_id (if submit = TRUE)
     if (submit) {
