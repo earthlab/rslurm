@@ -7,14 +7,14 @@
 cleanup_files(slr_job)
 }
 \arguments{
-\item{slr_job}{A \code{slurm_job} object output by \code{\link{slurm_apply}}.}
+\item{slr_job}{A \code{slurm_job} object.}
 }
 \description{
 This function deletes all temporary files associated with the specified SLURM
-job, including files created by \code{\link{slurm_apply}} (parameters data, R
-and Bash scripts, all starting with "slr####"), function output files
-("slr####_[node_id].out") as well as the console and error output files
-(starting with "slurm-[job_id]").
+job, including files created by \code{\link{slurm_apply}} or 
+\code{\link{slurm_call}}, as well as outputs from the cluster. These files
+should be located in the \emph{_rslurm_[jobname]} folder of the current
+working directory.
 }
 \examples{
 \dontrun{
@@ -25,7 +25,6 @@ cleanup_files(sjob)
 }
 }
 \seealso{
-\code{\link{slurm_apply}}, \code{\link{print_job_status}},
-  \code{\link{get_slurm_out}}
+\code{\link{slurm_apply}}, \code{\link{slurm_call}}
 }
 

@@ -123,18 +123,17 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     
-    # Send job to slurm and capture job_id (if submit = TRUE)
+    # Submit job to SLURM if applicable
     if (submit) {
         old_wd <- setwd(tmpdir)
         tryCatch({
             sbatch_ret <- system(paste0("sbatch submit.sh"), intern = TRUE)
             cat(sbatch_ret)
         }, finally = setwd(old_wd))
-#        job_id <- stringr::word(sbatch_ret, -1)        
     } else {
         cat(paste("Submission scripts output in directory", tmpdir))
     }
 
     # Return 'slurm_job' object with script file prefix, job_id, number of nodes
-    slurm_job(jobname, NA, nodes)
+    slurm_job(jobname, nodes)
 }

@@ -7,7 +7,7 @@
 get_slurm_out(slr_job, outtype = "raw")
 }
 \arguments{
-\item{slr_job}{A \code{slurm_job} object output by \code{\link{slurm_apply}}.}
+\item{slr_job}{A \code{slurm_job} object.}
 
 \item{outtype}{Can be "table" or "raw", see "Value" below for details.}
 }
@@ -30,6 +30,6 @@ during the computation; these can be consulted by invoking
 \code{\link{print_job_status}}.
 }
 \seealso{
-\code{\link{slurm_apply}}, \code{\link{print_job_status}}
+\code{\link{slurm_apply}}, \code{\link{slurm_call}}
 }
 

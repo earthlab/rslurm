@@ -7,15 +7,16 @@
 cancel_slurm(slr_job)
 }
 \arguments{
-\item{slr_job}{A \code{slurm_job} object output by \code{\link{slurm_apply}}.}
+\item{slr_job}{A \code{slurm_job} object.}
 }
 \description{
 This function cancels the specified SLURM job by invoking the SLURM 
 \code{scancel} command. It does \emph{not} delete the temporary files 
-(e.g. scripts) created by \code{\link{slurm_apply}}. 
-Use \code{\link{cleanup_files}} to remove those files.
+(e.g. scripts) created by \code{\link{slurm_apply}} or 
+\code{\link{slurm_call}}. Use \code{\link{cleanup_files}} to remove those 
+files.
 }
 \seealso{
-\code{\link{slurm_apply}}, \code{\link{cleanup_files}}
+\code{\link{cleanup_files}}
 }
 
