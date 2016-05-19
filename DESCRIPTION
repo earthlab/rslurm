@@ -5,8 +5,7 @@ Version: 0.2.1
 Depends:
     R (>= 3.2.0)
 Imports:
-    parallel,
-    stringr
+    parallel
 Date: 2015-06-24
 Authors@R: person('Philippe', 'Marchand', email = 'pmarchand@sesync.org', 
                 role = c('aut', 'cre'))

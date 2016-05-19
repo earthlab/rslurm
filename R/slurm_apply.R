@@ -70,12 +70,12 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,
         stop("column names of params must match arguments of f")
     }
 
-    # Generate name for clock, or use provided (removing unallowed chars)
+    # Generate jobname from clock, or use provided (removing unallowed chars)
     if (is.na(jobname)) {
         jobname <- paste0("slr", as.integer(Sys.time()) %% 10000)
     } else {
-        jobname <- stringr::str_replace_all(jobname, "[:space:]+", "_")
-        jobname <- stringr::str_replace_all(jobname, "[^0-9A-Za-z_]", "")
+        jobname <- gsub("[[:space:]]+", "_", jobname)
+        jobname <- gsub("[^0-9A-Za-z_]", "", jobname)
     }
     
     # Auto-detect number of cores if not provided (if unknown, default to 2)
