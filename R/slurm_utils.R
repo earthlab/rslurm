@@ -141,5 +141,6 @@ get_slurm_out <- function(slr_job, outtype = "raw") {
 cleanup_files <- function(slr_job) {
     if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
+    if (!(tmpdir %in% dir())) stop(paste("folder", tmpdir, "not found"))
     unlink(tmpdir, recursive = TRUE)
 }
