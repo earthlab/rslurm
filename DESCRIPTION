@@ -13,5 +13,6 @@ Authors@R: person('Philippe', 'Marchand', email = 'pmarchand@sesync.org',
 Depends:
     R (>= 3.2.0)
 Imports:
-    parallel
+    parallel,
+    whisker (>= 0.3)
 RoxygenNote: 5.0.1

@@ -68,4 +68,6 @@
 #' @docType package
 #' @name rslurm-package
 #' @aliases rslurm
+#' 
+#' @importFrom utils capture.output
 NULL

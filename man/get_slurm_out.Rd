@@ -29,6 +29,11 @@ record any messages (including warnings or errors) output to the R console
 during the computation; these can be consulted by invoking 
 \code{\link{print_job_status}}.
 }
+\details{
+The \code{outtype} option is only relevant for jobs submitted with 
+\code{slurm_apply}. Jobs sent with \code{slurm_call} only return a single
+object, and setting \code{outtype = "table"} creates an error in that case.
+}
 \seealso{
 \code{\link{slurm_apply}}, \code{\link{slurm_call}}
 }
