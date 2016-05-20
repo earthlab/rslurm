@@ -4,58 +4,81 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, jobname = NA, cpus_per_node = 8, nodes = 16,
-  data_file = NULL, pkgs = rev(.packages()))
+slurm_apply(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,
+  add_objects = NULL, pkgs = rev(.packages()), slurm_options = list(),
+  submit = TRUE)
 }
 \arguments{
-\item{f}{A function that accepts one or many single values as parameters and
-returns a single value or a vector.}
+\item{f}{A function that accepts one or many single values as parameters and 
+may return any type of R object.}
 
 \item{params}{A data frame of parameter values to apply \code{f} to. Each
 column corresponds to a parameter of \code{f} (\emph{Note}: names must 
 match) and each row corresponds to a separate function call.}
 
-\item{cpus_per_node}{number of CPUs per node on the cluster; determines how
-many processes are run in parallel per node.}
+\item{jobname}{The name of the SLURM job; if \code{NA}, it is assigned a
+random name of the form "slr####".}
 
 \item{nodes}{The (maximum) number of cluster nodes to spread the calculation
 over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if 
-the parameter set is too small to use all CPUs in the requested nodes.}
+the parameter set is too small to use all CPUs on the requested nodes.}
 
-\item{data_file}{The name of a R data file (created with 
-\code{\link[base]{save}}) that will be loaded on each node prior to
-calling \code{f}.}
+\item{cpus_per_node}{number of CPUs per node on the cluster; determines how
+many processes are run in parallel per node.}
+
+\item{add_objects}{A character vector containing the name of R objects to be
+saved in a .RData file and loaded on each cluster node prior to calling
+\code{f}.}
 
 \item{pkgs}{A character vector containing the names of packages that must
 be loaded on each cluster node. By default, it includes all packages
 loaded by the user when \code{slurm_apply} is called.}
+
+\item{slurm_options}{A named list of options recognized by \code{sbatch}; see
+Details below for more information.}
+
+\item{submit}{Whether or not to submit the job to the cluster with 
+\code{sbatch}; see Details below for more information.}
 }
 \value{
-A \code{slurm_job} object containing the \code{file_prefix} assigned
-  to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
-  by the SLURM cluster and the number of \code{nodes} effectively used.
+A \code{slurm_job} object containing the \code{jobname} and the 
+  number of \code{nodes} effectively used.
 }
 \description{
-Use \code{slurm_apply} to calculate a function over multiple sets of 
-parameters in parallel, using up to 16 nodes of the SLURM cluster.
+Use \code{slurm_apply} to compute function over multiple sets of 
+parameters in parallel, spread across multiple nodes of a SLURM cluster.
 }
 \details{
-This function creates temporary files for the parameters data ("slr####.RData"),
-the R script sent to each node ("slr####.R") and the Bash script 
-("slr####.sh") that launches the parallel computation. The set of input 
-parameters is divided in chunks sent to each node, and \code{f} is evaluated
-in parallel within each node using functions from the \code{parallel} R
-package.
+This function creates a temporary folder ("_rslurm_[jobname]") in the current
+directory, holding the .RData files, the R script and the Bash submission 
+script generated for the SLURM job.
 
-Any other R objects (besides \code{params}) that \code{f} needs to access
-should be saved in a .RData file (using \code{\link[base]{save}}) and the
-name of this file should be given as the optional \code{data_file} argument.
+The set of input parameters is divided in equal chunks sent to each node, and 
+\code{f} is evaluated in parallel within each node using functions from the
+\code{parallel} R package. The names of any other R objects (besides 
+\code{params}) that \code{f} needs to access should be included in 
+\code{add_objects}.
+
+Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
+\code{slurm_options = list(time = "1:00:00", share = TRUE)}. 
+See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
+Note that full names must be used (e.g. "time" rather than "t") and that flags
+(such as "share") must be specified as TRUE. The "array", "job-name", "nodes"
+and "output" options are already determined by \code{slurm_apply} and should 
+not be manually set.
 
 When processing the computation job, the SLURM cluster will output two types
-of files: those containing the return values of the function for each subset
-of parameters ("slr####_[node_id].RData") and those containing any console or
-error output produced by R on each node ("slurm-[job_id]_[node_id].out").
+of files in the temporary folder: those containing the return values of the
+function for each subset of parameters ("results_[node_id].RData") and those
+containing any console or error output produced by R on each node
+("slurm_[node_id].out").
+
+If \code{submit = TRUE}, the job is sent to the cluster and a confirmation
+message (or error) is output to the console. If \code{submit = FALSE},
+a message indicates the location of the saved data and script files; the
+job can be submitted manually by running the shell command 
+\code{sbatch submit.sh} from that directory.
 
 After sending the job to the SLURM cluster, \code{slurm_apply} returns a
 \code{slurm_job} object which can be used to cancel the job, get the job 

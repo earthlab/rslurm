@@ -1,49 +1,68 @@
 #' Parallel execution of a function on the SLURM cluster
 #'
-#' Use \code{slurm_apply} to calculate a function over multiple sets of 
-#' parameters in parallel, using up to 16 nodes of the SLURM cluster. 
+#' Use \code{slurm_apply} to compute function over multiple sets of 
+#' parameters in parallel, spread across multiple nodes of a SLURM cluster. 
 #' 
-#' This function creates temporary files for the parameters data ("slr####.RData"),
-#' the R script sent to each node ("slr####.R") and the Bash script 
-#' ("slr####.sh") that launches the parallel computation. The set of input 
-#' parameters is divided in chunks sent to each node, and \code{f} is evaluated
-#' in parallel within each node using functions from the \code{parallel} R
-#' package. 
+#' This function creates a temporary folder ("_rslurm_[jobname]") in the current
+#' directory, holding the .RData files, the R script and the Bash submission 
+#' script generated for the SLURM job. 
 #' 
-#' Any other R objects (besides \code{params}) that \code{f} needs to access
-#' should be saved in a .RData file (using \code{\link[base]{save}}) and the
-#' name of this file should be given as the optional \code{data_file} argument.
+#' The set of input parameters is divided in equal chunks sent to each node, and 
+#' \code{f} is evaluated in parallel within each node using functions from the
+#' \code{parallel} R package. The names of any other R objects (besides 
+#' \code{params}) that \code{f} needs to access should be included in 
+#' \code{add_objects}.
+#' 
+#' Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
+#' \code{slurm_options = list(time = "1:00:00", share = TRUE)}. 
+#' See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
+#' Note that full names must be used (e.g. "time" rather than "t") and that flags
+#' (such as "share") must be specified as TRUE. The "array", "job-name", "nodes"
+#' and "output" options are already determined by \code{slurm_apply} and should 
+#' not be manually set.
 #' 
 #' When processing the computation job, the SLURM cluster will output two types
-#' of files: those containing the return values of the function for each subset
-#' of parameters ("slr####_[node_id].RData") and those containing any console or
-#' error output produced by R on each node ("slurm-[job_id]_[node_id].out").
+#' of files in the temporary folder: those containing the return values of the
+#' function for each subset of parameters ("results_[node_id].RData") and those
+#' containing any console or error output produced by R on each node
+#' ("slurm_[node_id].out").
+#' 
+#' If \code{submit = TRUE}, the job is sent to the cluster and a confirmation
+#' message (or error) is output to the console. If \code{submit = FALSE},
+#' a message indicates the location of the saved data and script files; the
+#' job can be submitted manually by running the shell command 
+#' \code{sbatch submit.sh} from that directory.
 #' 
 #' After sending the job to the SLURM cluster, \code{slurm_apply} returns a
 #' \code{slurm_job} object which can be used to cancel the job, get the job 
 #' status or output, and delete the temporary files associated with it. See 
 #' the description of the related functions for more details.  
 #'  
-#' @param f A function that accepts one or many single values as parameters and
-#'   returns a single value or a vector.
+#' @param f A function that accepts one or many single values as parameters and 
+#'   may return any type of R object.
 #' @param params A data frame of parameter values to apply \code{f} to. Each
 #'   column corresponds to a parameter of \code{f} (\emph{Note}: names must 
 #'   match) and each row corresponds to a separate function call.
-#' @param cpus_per_node number of CPUs per node on the cluster; determines how
-#'   many processes are run in parallel per node.
+#' @param jobname The name of the SLURM job; if \code{NA}, it is assigned a
+#'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if 
-#'   the parameter set is too small to use all CPUs in the requested nodes.
-#' @param data_file The name of a R data file (created with 
-#'   \code{\link[base]{save}}) that will be loaded on each node prior to
-#'   calling \code{f}.
+#'   the parameter set is too small to use all CPUs on the requested nodes.
+#' @param cpus_per_node number of CPUs per node on the cluster; determines how
+#'   many processes are run in parallel per node.
+#' @param add_objects A character vector containing the name of R objects to be
+#'   saved in a .RData file and loaded on each cluster node prior to calling
+#'   \code{f}.
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
 #'   loaded by the user when \code{slurm_apply} is called.
-#' @return A \code{slurm_job} object containing the \code{file_prefix} assigned
-#'   to temporary files created by \code{slurm_apply}, a \code{job_id} assigned
-#'   by the SLURM cluster and the number of \code{nodes} effectively used.
+#' @param slurm_options A named list of options recognized by \code{sbatch}; see
+#'   Details below for more information. 
+#' @param submit Whether or not to submit the job to the cluster with 
+#'   \code{sbatch}; see Details below for more information.
+#' @return A \code{slurm_job} object containing the \code{jobname} and the 
+#'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
 #'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
@@ -56,9 +75,9 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,  
+slurm_apply <- function(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,  
                         add_objects = NULL, pkgs = rev(.packages()), 
-                        submit = TRUE) {
+                        slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_apply should be a function")
@@ -115,11 +134,28 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,
                          cpus_per_node = cpus_per_node))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
+    # Format flags and other options for sbatch
+    if (length(slurm_options) == 0) {
+        slurm_flags <- slurm_options
+    } else {
+        is_flag <- sapply(slurm_options, isTRUE)
+        slurm_flags <- lapply(names(slurm_options[is_flag]), function(x) {
+            list(name = x)
+        })
+        slurm_options <- slurm_options[!is_flag]
+        slurm_options <- lapply(seq_along(slurm_options), function(i) {
+            list(name = names(slurm_options)[i], value = slurm_options[[i]])
+        })        
+    }
+    
     # Create submission bash script
     template_sh <- readLines(system.file("templates/submit_sh.txt", 
                                          package = "rslurm"))
     script_sh <- whisker::whisker.render(template_sh, 
-                                list(max_node = nodes - 1, jobname = jobname))
+                    list(max_node = nodes - 1, 
+                         jobname = jobname,
+                         flags = slurm_flags, 
+                         options = slurm_options))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     
@@ -127,13 +163,12 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 16, cpus_per_node = NA,
     if (submit) {
         old_wd <- setwd(tmpdir)
         tryCatch({
-            sbatch_ret <- system(paste0("sbatch submit.sh"), intern = TRUE)
-            cat(sbatch_ret)
+            system("sbatch submit.sh")
         }, finally = setwd(old_wd))
     } else {
         cat(paste("Submission scripts output in directory", tmpdir))
     }
 
-    # Return 'slurm_job' object with script file prefix, job_id, number of nodes
+    # Return 'slurm_job' object with jobname, number of nodes
     slurm_job(jobname, nodes)
 }
