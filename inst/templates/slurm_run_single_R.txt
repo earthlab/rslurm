@@ -1,0 +1,12 @@
+.tmplib <- lapply(c('{{{pkg_list}}}'), 
+                  library, character.only = TRUE, quietly = TRUE)
+{{#add_obj}}
+load('add_objects.RData')
+{{/add_obj}}
+
+.rslurm_func <- {{{func}}}
+
+.rslurm_params <- readRDS('params.RData')
+.rslurm_result <- do.call(.rslurm_func, .rslurm_params)
+               
+saveRDS(.rslurm_result, file = 'results_0.RData')

@@ -1,42 +1,63 @@
 #' Execution of a single function call on the SLURM cluster
 #'
-#' Use \code{slurm_call} to perform a single function evaluation on the SLURM cluster. 
+#' Use \code{slurm_call} to perform a single function evaluation a the SLURM 
+#' cluster. 
 #' 
-#' This function creates temporary files for the parameters data ("slr####.RData"),
-#' the R script evaluating the function ("slr####.R") and the Bash script 
-#' ("slr####.sh") that sends the batch run command to the cluster.
+#' This function creates a temporary folder ("_rslurm_[jobname]") in the current
+#' directory, holding the .RData files, the R script and the Bash submission 
+#' script generated for the SLURM job. 
 #' 
-#' Any other R objects (besides \code{params}) that \code{f} needs to access
-#' should be saved in a .RData file (using \code{\link[base]{save}}) and the
-#' name of this file should be given as the optional \code{data_file} argument.
+#' The names of any other R objects (besides \code{params}) that \code{f} needs 
+#' to access should be listed in the \code{add_objects} argument.
 #' 
-#' When processing the computation job, the SLURM cluster will output two files:
-#' one .RData file containing the function output ("slr####_0.RData") and one 
-#' containing any console or error output produced by R ("slurm-[job_id].out").
+#' Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
+#' \code{slurm_options = list(time = "1:00:00", share = TRUE)}. 
+#' See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
+#' Note that full names must be used (e.g. "time" rather than "t") and that flags
+#' (such as "share") must be specified as TRUE. The "job-name", "ntasks"
+#' and "output" options are already determined by \code{slurm_call} and should 
+#' not be manually set.
+#' 
+#' When processing the computation job, the SLURM cluster will output two files 
+#' in the temporary folder: one with the return value of the function 
+#' ("results_0.RData") and one containing any console or error output produced 
+#' by R ("slurm_[node_id].out").
+#' 
+#' If \code{submit = TRUE}, the job is sent to the cluster and a confirmation
+#' message (or error) is output to the console. If \code{submit = FALSE},
+#' a message indicates the location of the saved data and script files; the
+#' job can be submitted manually by running the shell command 
+#' \code{sbatch submit.sh} from that directory.
 #' 
 #' After sending the job to the SLURM cluster, \code{slurm_call} returns a
 #' \code{slurm_job} object which can be used to cancel the job, get the job 
 #' status or output, and delete the temporary files associated with it. See 
-#' the description of the related functions for more details.  
+#' the description of the related functions for more details. 
 #'  
 #' @param f Any R function.
 #' @param params A named list of parameters to pass to \code{f}.
-#' @param data_file The name of a R data file (created with 
-#'   \code{\link[base]{save}}) to be loaded prior to calling \code{f}.
+#' @param jobname The name of the SLURM job; if \code{NA}, it is assigned a
+#'   random name of the form "slr####".
+#' @param add_objects A character vector containing the name of R objects to be
+#'   saved in a .RData file and loaded on each cluster node prior to calling
+#'   \code{f}.
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
 #'   loaded by the user when \code{slurm_call} is called. 
-#' @return A \code{slurm_job} object containing the \code{file_prefix} assigned
-#'   to temporary files created by \code{slurm_call}, a \code{job_id} assigned
-#'   by the SLURM cluster and the number of \code{nodes} used (always 1 for
-#'   \code{slurm_call}).
+#' @param slurm_options A named list of options recognized by \code{sbatch}; see
+#'   Details below for more information. 
+#' @param submit Whether or not to submit the job to the cluster with 
+#'   \code{sbatch}; see Details below for more information.
+#' @return A \code{slurm_job} object containing the \code{jobname} and the 
+#'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_apply}} to parallelize a function over a parameter set.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
 #'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
 #'   which use the output of this function. 
 #' @export    
-slurm_call <- function(f, params, data_file = NULL, pkgs = rev(.packages())) {
-    
+slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
+                       pkgs = rev(.packages()), slurm_options = list(),
+                       submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
@@ -48,36 +69,67 @@ slurm_call <- function(f, params, data_file = NULL, pkgs = rev(.packages())) {
         stop("names of params must match arguments of f")
     }
     
-    # Generate an ID for temporary files
-    f_id <- paste0("slr", as.integer(Sys.time()) %% 10000)
+    # Generate jobname from clock, or use provided (removing unallowed chars)
+    if (is.na(jobname)) {
+        jobname <- paste0("slr", as.integer(Sys.time()) %% 10000)
+    } else {
+        jobname <- gsub("[[:space:]]+", "_", jobname)
+        jobname <- gsub("[^0-9A-Za-z_]", "", jobname)
+    }
     
-    .rslurm_params <- params
-    save(.rslurm_params, file = paste0(f_id, ".RData"))
+    # Create temp folder
+    tmpdir <- paste0("_rslurm_", jobname)
+    dir.create(tmpdir)
     
-    # Create a temporary R script to run function on SLURM cluster
-    capture.output({
-        cat(paste0(".tmplib <- lapply(c('", paste(pkgs, collapse = "','"), "'), \n",
-                   "           library, character.only = TRUE, quietly = TRUE) \n"))
-        if(!is.null(data_file)) cat(paste0("load('", data_file, "') \n"))
-        cat(paste0("load('", f_id, ".RData') \n",
-                   ".rslurm_result <- do.call(")) 
-        print(f) 
-        cat(paste0(", .rslurm_params) \n",
-                   "save(.rslurm_result, file = paste0('", f_id, "_0.RData'))"))
-    }, file = paste0(f_id, ".R"))
+    saveRDS(params, file = file.path(tmpdir, "params.RData"))
+    if (!is.null(add_objects)) {
+        save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
+    }    
     
-    # Create temporary bash script
-    capture.output(
-        cat(paste0("#!/bin/bash \n",
-                   "# \n",
-                   "#SBATCH -n1 \n",
-                   "Rscript --vanilla ", f_id, ".R")), 
-        file = paste0(f_id, ".sh"))
+    # Create a R script to run function on cluster
+    template_r <- readLines(system.file("templates/slurm_run_single_R.txt", 
+                                        package = "rslurm"))
+    script_r <- whisker::whisker.render(template_r,
+                    list(pkg_list = paste(pkgs, collapse = "','"),
+                         add_obj = !is.null(add_objects), 
+                         func = paste(capture.output(f), collapse = "\n")))
+    writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
-    # Send job to slurm and capture job_id
-    sbatch_ret <- system(paste0("sbatch ", f_id, ".sh"), intern = TRUE)
-    job_id <- stringr::word(sbatch_ret, -1)
+    # Format flags and other options for sbatch
+    if (length(slurm_options) == 0) {
+        slurm_flags <- slurm_options
+    } else {
+        is_flag <- sapply(slurm_options, isTRUE)
+        slurm_flags <- lapply(names(slurm_options[is_flag]), function(x) {
+            list(name = x)
+        })
+        slurm_options <- slurm_options[!is_flag]
+        slurm_options <- lapply(seq_along(slurm_options), function(i) {
+            list(name = names(slurm_options)[i], value = slurm_options[[i]])
+        })        
+    }
+    
+    # Create submission bash script
+    template_sh <- readLines(system.file("templates/submit_sh.txt", 
+                                         package = "rslurm"))
+    script_sh <- whisker::whisker.render(template_sh, 
+                                         list(max_node = nodes - 1, 
+                                              jobname = jobname,
+                                              flags = slurm_flags, 
+                                              options = slurm_options))
+    writeLines(script_sh, file.path(tmpdir, "submit.sh"))
+    
+    
+    # Submit job to SLURM if applicable
+    if (submit) {
+        old_wd <- setwd(tmpdir)
+        tryCatch({
+            system("sbatch submit.sh")
+        }, finally = setwd(old_wd))
+    } else {
+        cat(paste("Submission scripts output in directory", tmpdir))
+    }
     
     # Return 'slurm_job' object
-    slurm_job(f_id, job_id, nodes = 1)
+    slurm_job(jobname, nodes = 1)
 }
