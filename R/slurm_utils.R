@@ -81,6 +81,10 @@ print_job_status <- function(slr_job) {
 #' during the computation; these can be consulted by invoking 
 #' \code{\link{print_job_status}}.
 #' 
+#' The \code{outtype} option is only relevant for jobs submitted with 
+#' \code{slurm_apply}. Jobs sent with \code{slurm_call} only return a single
+#' object, and setting \code{outtype = "table"} creates an error in that case.
+#' 
 #' @param slr_job A \code{slurm_job} object.
 #' @param outtype Can be "table" or "raw", see "Value" below for details.
 #' @return If \code{outtype = "table"}: A data frame with one column by 

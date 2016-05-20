@@ -113,8 +113,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     template_sh <- readLines(system.file("templates/submit_sh.txt", 
                                          package = "rslurm"))
     script_sh <- whisker::whisker.render(template_sh, 
-                                         list(max_node = nodes - 1, 
-                                              jobname = jobname,
+                                         list(jobname = jobname,
                                               flags = slurm_flags, 
                                               options = slurm_options))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
