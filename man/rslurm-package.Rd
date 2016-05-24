@@ -39,8 +39,8 @@ restrictions on the types of parameters passed as a list to
 
 If the function passed to \code{slurm_call} or \code{slurm_apply} requires
 knowledge of any R objects (data, custom helper functions) besides \code{params},
-these should be \code{\link[base]{save}}d into a .RData file specified as the
-optional \code{data_file} parameter.
+a character vector corresponding to their names should be passed to the 
+optional \code{add_objects} argument.
 
 When parallelizing a function, since any error will interrupt all calculations
 for the current node, it may be useful to wrap expressions which may generate
