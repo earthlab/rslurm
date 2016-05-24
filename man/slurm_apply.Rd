@@ -4,7 +4,7 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
-slurm_apply(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,
+slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
   add_objects = NULL, pkgs = rev(.packages()), slurm_options = list(),
   submit = TRUE)
 }
@@ -24,7 +24,7 @@ over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if 
 the parameter set is too small to use all CPUs on the requested nodes.}
 
-\item{cpus_per_node}{number of CPUs per node on the cluster; determines how
+\item{cpus_per_node}{The number of CPUs per node on the cluster; determines how
 many processes are run in parallel per node.}
 
 \item{add_objects}{A character vector containing the name of R objects to be

@@ -49,7 +49,7 @@
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if 
 #'   the parameter set is too small to use all CPUs on the requested nodes.
-#' @param cpus_per_node number of CPUs per node on the cluster; determines how
+#' @param cpus_per_node The number of CPUs per node on the cluster; determines how
 #'   many processes are run in parallel per node.
 #' @param add_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
@@ -75,7 +75,7 @@
 #' cleanup_files(sjob)
 #' }
 #' @export       
-slurm_apply <- function(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,  
+slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,  
                         add_objects = NULL, pkgs = rev(.packages()), 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
@@ -88,6 +88,12 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,
     if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
         stop("column names of params must match arguments of f")
     }
+    if (!is.numeric(nodes) || length(nodes) != 1) {
+        stop("nodes should be a single number")
+    }
+    if (!is.numeric(cpus_per_node) || length(cpus_per_node) != 1) {
+        stop("cpus_per_node should be a single number")
+    }
 
     # Generate jobname from clock, or use provided (removing unallowed chars)
     if (is.na(jobname)) {
@@ -95,12 +101,6 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 12, cpus_per_node = NA,
     } else {
         jobname <- gsub("[[:space:]]+", "_", jobname)
         jobname <- gsub("[^0-9A-Za-z_]", "", jobname)
-    }
-    
-    # Auto-detect number of cores if not provided (if unknown, default to 2)
-    if (is.na(cpus_per_node)) {
-        cpus_per_node <- parallel::detectCores()
-        if (is.na(cpus_per_node)) cpus_per_node <- 2
     }
     
     # Create temp folder

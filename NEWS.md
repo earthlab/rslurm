@@ -15,9 +15,6 @@ informative names to SLURM jobs (`jobname`) and set any options understood by
 `add_objects`, which accepts a vector of R object names from the active workspace
 and automatically saves them in a .RData file to be loaded on each node.
 
-* `slurm_apply` now automatically detects the number of cores on each node by
-default (`cpus_per_node = NA`). 
-
 * `slurm_apply` and `slurm_call` now generate R and Bash scripts through
 [whisker](https://github.com/edwindj/whisker) templates. Advanced users may want
 to edit those templates in the `templates` folder of the installed R package 
