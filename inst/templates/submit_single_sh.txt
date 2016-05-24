@@ -1,7 +1,5 @@
 #!/bin/bash
 #
-#SBATCH --partition=sesyncshared
-#SBATCH --share
 #SBATCH --ntasks=1
 #SBATCH --job-name={{{jobname}}}
 #SBATCH --output=slurm_0.out

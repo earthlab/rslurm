@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-#SBATCH --partition=sesync
 #SBATCH --array=0-{{{max_node}}}
 #SBATCH --job-name={{{jobname}}}
 #SBATCH --output=slurm_%a.out
