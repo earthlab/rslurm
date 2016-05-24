@@ -24,10 +24,12 @@ Here's an overview of the workflow using this package:
 Read the `rslurm-package` help file in R and each function's help file for more details.
 
 
-SESYNC users
-------------
+Instructions for SESYNC users
+-----------------------------
 
-When using this package on the SESYNC SLURM cluster, you must specify the correct partition for jobs to be run in serial or parallel mode. This can be done in one of two ways:
+When using the SESYNC SLURM cluster, you should set the `nodes` argument of `slurm_apply` to a value less than the number of nodes available on the cluster (there are 20 nodes in total). You should set `cpus_per_node = 8` unless your job requires a large amount of memory (i.e. when running 8 copies would exceed the 60 Gb available by node).
+
+You must also specify the correct partition for jobs to be run in serial or parallel mode. This can be done in one of two ways:
 
 *As an option set in each call to the `rslurm` functions*
 
