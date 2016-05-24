@@ -1,9 +1,9 @@
 rslurm
 ======
 
-This R package simplifies the process of splitting a R calculation over a SLURM cluster. 
+This R package simplifies the process of splitting a R calculation over a computing cluster that uses the [SLURM](http://slurm.schedmd.com/) workload manager.
 
-Currently, it is possible to use existing R packages like `parallel` to split a calculation over the 8 CPUs in a single cluster node. The functions in this package automate the process of dividing the parameter sets over multiple cluster nodes (using a slurm array), applying the function in parallel in each node using `parallel`, and recombining the output.
+Currently, it is possible to use existing R packages like `parallel` to split a calculation over multiple CPUs in a single cluster node. The functions in this package automate the process of dividing the parameter sets over multiple cluster nodes (using a slurm array), applying the function in parallel in each node using `parallel`, and recombining the output.
 
 
 How to install / use
@@ -29,14 +29,14 @@ SESYNC users
 
 When using this package on the SESYNC SLURM cluster, you must specify the correct partition for jobs to be run in serial or parallel mode. This can be done in one of two ways:
 
-1. As an option set in each call to the `rslurm` functions
+*As an option set in each call to the `rslurm` functions*
 
 * For `slurm_apply`, set `slurm_options = list(partition = "sesync")`.
 * For `slurm_call`, set `slurm_options = list(partition = "sesyncshared", share = TRUE)`.
 
-2. By editing the template scripts
+*By editing the template scripts*
 
-*Note*: We recommend saving a backup copy of the original templates before editing them.
+Note: We recommend saving a backup copy of the original templates before editing them.
 
 * Go to the `rslurm` folder in your R library (generally located at `~/R/x86_64-pc-linux-gnu-library/3.3/`, with "3.3" replaced with the latest version of R). Open the `templates` subfolder.
 
