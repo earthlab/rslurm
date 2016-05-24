@@ -1,10 +1,10 @@
-#' rslurm: Single or parallel calculations using the SLURM cluster
+#' rslurm: Submit R calculations to a SLURM cluster
 #'
 #' This package automates the process of sending simple function calls or 
-#' parallel calculations over the SESYNC SLURM cluster. 
+#' parallel calculations to a cluster using the SLURM workload manager.
 #' 
 #' @section Overview:
-#' This package includes two core functions used to send computations to the 
+#' This package includes two core functions used to send computations to a 
 #' SLURM cluster. While \code{\link{slurm_call}} executes a function using a
 #' single set of parameters (passed as a list), \code{\link{slurm_apply}}
 #' evaluates the function in parallel for multiple sets of parameters grouped

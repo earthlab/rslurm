@@ -1,15 +1,13 @@
 rslurm
 ======
 
-This R package simplifies the process of splitting a R calculation over the SESYNC SLURM cluster. 
+This R package simplifies the process of splitting a R calculation over a SLURM cluster. 
 
 Currently, it is possible to use existing R packages like `parallel` to split a calculation over the 8 CPUs in a single cluster node. The functions in this package automate the process of dividing the parameter sets over multiple cluster nodes (using a slurm array), applying the function in parallel in each node using `parallel`, and recombining the output.
 
 
 How to install / use
 --------------------
-
-*Note*: This package must be installed and run from a SESYNC RStudio server account to access the SLURM cluster.
 
 Install the package from GitHub using the following code:
 ```R
