@@ -68,14 +68,8 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
         stop("names of params must match arguments of f")
     }
-    
-    # Generate jobname from clock, or use provided (removing unallowed chars)
-    if (is.na(jobname)) {
-        jobname <- paste0("slr", as.integer(Sys.time()) %% 10000)
-    } else {
-        jobname <- gsub("[[:space:]]+", "_", jobname)
-        jobname <- gsub("[^0-9A-Za-z_]", "", jobname)
-    }
+        
+    jobname <- make_jobname(jobname)
     
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
@@ -92,30 +86,17 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     script_r <- whisker::whisker.render(template_r,
                     list(pkg_list = paste(pkgs, collapse = "','"),
                          add_obj = !is.null(add_objects), 
-                         func = paste(capture.output(f), collapse = "\n")))
+                         func = func_to_str(f)))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
-    
-    # Format flags and other options for sbatch
-    if (length(slurm_options) == 0) {
-        slurm_flags <- slurm_options
-    } else {
-        is_flag <- sapply(slurm_options, isTRUE)
-        slurm_flags <- lapply(names(slurm_options[is_flag]), function(x) {
-            list(name = x)
-        })
-        slurm_options <- slurm_options[!is_flag]
-        slurm_options <- lapply(seq_along(slurm_options), function(i) {
-            list(name = names(slurm_options)[i], value = slurm_options[[i]])
-        })        
-    }
     
     # Create submission bash script
     template_sh <- readLines(system.file("templates/submit_sh.txt", 
                                          package = "rslurm"))
+    slurm_options <- format_option_list(slurm_options)
     script_sh <- whisker::whisker.render(template_sh, 
                                          list(jobname = jobname,
-                                              flags = slurm_flags, 
-                                              options = slurm_options))
+                                              flags = slurm_options$flags, 
+                                              options = slurm_options$options))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     
