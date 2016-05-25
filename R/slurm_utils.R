@@ -6,6 +6,7 @@ func_to_str <- function(f) {
     gsub("<environment: [A-Za-z0-9]+>", "", fstr)
 }
 
+
 # Make jobname by cleaning user-provided name or (if NA) generate one from clock
 make_jobname <- function(name) {
     if (is.na(name)) {
@@ -15,6 +16,7 @@ make_jobname <- function(name) {
         gsub("[^0-9A-Za-z_]", "", jobname)
     }
 }
+
 
 # Format sbatch options into nested list for templates
 format_option_list <- function(slurm_options) {
@@ -31,4 +33,16 @@ format_option_list <- function(slurm_options) {
         })        
     }
     list(flags = slurm_flags, options = slurm_options)
+}
+
+
+# Run an array job (output of slurm_apply) locally; used in package tests
+local_slurm_array <- function(slr_job) {
+    setwd(paste0("_rslurm_", slr_job$jobname))
+    tryCatch({
+        writeLines(c(paste0("for (i in 1:", slr_job$nodes, " - 1) {"),
+                     "Sys.setenv(SLURM_ARRAY_TASK_ID = i)",
+                     "source('slurm_run.R')", "}"), "local_run.R")
+        system("Rscript --vanilla local_run.R")
+    }, finally = setwd(".."))
 }

@@ -16,3 +16,4 @@ Imports:
     parallel,
     whisker (>= 0.3)
 RoxygenNote: 5.0.1
+Suggests: testthat
