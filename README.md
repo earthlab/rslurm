@@ -1,8 +1,6 @@
 rslurm
 ======
 
-[![Travis-CI Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
-
 This R package simplifies the process of splitting a R calculation over a computing cluster that uses the [SLURM](http://slurm.schedmd.com/) workload manager.
 
 Currently, it is possible to use existing R packages like `parallel` to split a calculation over multiple CPUs in a single cluster node. The functions in this package automate the process of dividing the parameter sets over multiple cluster nodes (using a slurm array), applying the function in parallel in each node using `parallel`, and recombining the output.
