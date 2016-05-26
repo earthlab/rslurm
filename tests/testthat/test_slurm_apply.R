@@ -1,6 +1,7 @@
 library(rslurm)
 context("slurm_apply")
 
+Sys.setenv(R_TESTS = "")
 if (Sys.getenv("NOT_CRAN") == "true") {
     
     set.seed(123)
@@ -10,7 +11,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
                        par_sd = seq(0.1, 1, length.out = 10))
     
     # Create a function to parallelize
-    ftest <- function(par_m, par_sd = 1) {
+    ftest <- function(par_m, par_sd = 1, ...) {
         samp <- rnorm(10^6, par_m, par_sd)
         c(s_m = mean(samp), s_sd = sd(samp))
     }
@@ -20,7 +21,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     
     msg <- capture.output(
         sjob1 <- slurm_apply(ftest, pars, jobname = "test1", nodes = 2, 
-                             cpus_per_node = 2, submit = FALSE)
+                             cpus_per_node = 1, submit = FALSE)
     )
     local_slurm_array(sjob1)
     res <- get_slurm_out(sjob1, "table")
@@ -36,7 +37,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     
     msg <- capture.output(
         sjob2 <- slurm_apply(ftest, pars[, 1, drop = FALSE], jobname = "test2", 
-                             nodes = 2, cpus_per_node = 2, submit = FALSE)
+                             nodes = 2, cpus_per_node = 1, submit = FALSE)
     )
     local_slurm_array(sjob2)
     res <- get_slurm_out(sjob2, "table")
@@ -46,7 +47,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     
     msg <- capture.output(
         sjob3 <- slurm_apply(ftest, pars[1, ], nodes = 2, jobname = "test3",
-                             cpus_per_node = 2, submit = FALSE)
+                             cpus_per_node = 1, submit = FALSE)
     )
     local_slurm_array(sjob3)
     res <- get_slurm_out(sjob3, "table")
@@ -57,7 +58,7 @@ if (Sys.getenv("NOT_CRAN") == "true") {
     
     msg <- capture.output(
         sjob4 <- slurm_apply(ftest, pars[1, 1, drop = FALSE], jobname = "test4",
-                             nodes = 2, cpus_per_node = 2, submit = FALSE)
+                             nodes = 2, cpus_per_node = 1, submit = FALSE)
     )
     local_slurm_array(sjob4)
     res <- get_slurm_out(sjob4, "table")

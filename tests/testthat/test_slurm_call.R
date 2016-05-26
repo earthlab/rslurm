@@ -1,6 +1,7 @@
 library(rslurm)
 context("slurm_call")
 
+Sys.setenv(R_TESTS = "")
 if (Sys.getenv("NOT_CRAN") == "true") {
     
     # Test slurm_call locally
