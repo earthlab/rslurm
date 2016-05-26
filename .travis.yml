@@ -4,7 +4,6 @@ sudo: required
 
 env:
  global:
-   - NOT_CRAN=false
    - CRAN: http://cran.rstudio.com
  
 

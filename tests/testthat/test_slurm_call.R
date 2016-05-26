@@ -14,8 +14,9 @@ if (Sys.getenv("NOT_CRAN") == "true") {
         expect_equal(sjob$jobname, "test_call")
     })
     
+    olddir <- getwd()
     setwd(paste0("_rslurm_", sjob$jobname))
-    tryCatch(system("Rscript --vanilla slurm_run.R"), finally = setwd(".."))
+    tryCatch(system("Rscript --vanilla slurm_run.R"), finally = setwd(olddir))
     res <- get_slurm_out(sjob)
     
     test_that("slurm_call returns correct output", {
