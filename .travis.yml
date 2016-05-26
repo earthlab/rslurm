@@ -3,8 +3,10 @@ warnings_are_errors: true
 sudo: required
 
 env:
+ - NOT_CRAN=false
  global:
    - CRAN: http://cran.rstudio.com
+ 
 
 notifications:
   email:
