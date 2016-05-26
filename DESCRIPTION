@@ -1,6 +1,6 @@
 Package: rslurm
 Type: Package
-Title: Submit R calculations to a 'SLURM' cluster
+Title: Submit R Calculations to a 'SLURM' Cluster
 Description: Functions that simplify the R interface the 'SLURM' cluster workload 
     manager, and automate the process of dividing a parallel calculation across 
     cluster nodes.
