@@ -1,7 +1,11 @@
-rslurm
-======
-
-[![Travis-CI Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
+---
+title: "Parallelize R code on a SLURM cluster"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rslurm-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 Many computing-intensive processes in R involve the repeated evaluation of 
 a function over many items or parameter sets. These so-called 
@@ -15,9 +19,6 @@ workload manager. Its main function, `slurm_apply`, automatically divides the
 computation over multiple nodes and writes the necessary submission scripts.
 It also includes functions to retrieve and combine the output from different nodes,
 as well as wrappers for common SLURM commands.
-
-*Development of this R package was supported by the National Socio-Environmental Synthesis Center (SESYNC) under funding received from the National Science Foundation DBI-1052875.*
-
 
 ### Table of contents
 
@@ -230,7 +231,3 @@ While you should avoid changing any existing lines in the template scripts, you
 may want to add `#SBATCH` lines to the `submit.sh` templates in order to
 permanently set certain SLURM command line options and thus customize the package
 to your particular cluster setup.
-
-
-
-

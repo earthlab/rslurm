@@ -8,12 +8,16 @@ Version: 0.3.0
 License: GPL-3
 URL: https://github.com/SESYNC-ci/rslurm
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
-Authors@R: person('Philippe', 'Marchand', email = 'pmarchand@sesync.org', 
-                role = c('aut', 'cre'))
+Authors@R: c(person('Philippe', 'Marchand', email = 'pmarchand@sesync.org', 
+             role = c('aut', 'cre')), 
+             person('Mike', 'Smorul', role = 'ctb'))
 Depends:
     R (>= 3.2.0)
 Imports:
     parallel,
     whisker (>= 0.3)
 RoxygenNote: 5.0.1
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

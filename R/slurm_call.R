@@ -90,7 +90,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
     # Create submission bash script
-    template_sh <- readLines(system.file("templates/submit_sh.txt", 
+    template_sh <- readLines(system.file("templates/submit_single_sh.txt", 
                                          package = "rslurm"))
     slurm_options <- format_option_list(slurm_options)
     script_sh <- whisker::whisker.render(template_sh, 
