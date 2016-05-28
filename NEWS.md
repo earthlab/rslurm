@@ -1,6 +1,10 @@
 rslurm 0.3.0
 ============
 
+*2016-05-27*
+
+*First version on CRAN*
+
 Major update to the package interface and implementation:
 
 * Added a `submit` argument to `slurm_apply` and `slurm_call`. If `submit = FALSE`,
