@@ -131,11 +131,13 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     template_sh <- readLines(system.file("templates/submit_sh.txt", 
                                          package = "rslurm"))
     slurm_options <- format_option_list(slurm_options)
+    rscript_path <- file.path(R.home("bin"), "Rscript")
     script_sh <- whisker::whisker.render(template_sh, 
                     list(max_node = nodes - 1, 
                          jobname = jobname,
                          flags = slurm_options$flags, 
-                         options = slurm_options$options))
+                         options = slurm_options$options,
+                         rscript = rscript_path))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     

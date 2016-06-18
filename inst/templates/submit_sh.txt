@@ -9,4 +9,4 @@
 {{#options}}
 #SBATCH --{{{name}}}={{{value}}}
 {{/options}}
-Rscript --vanilla slurm_run.R
+{{{rscript}}} --vanilla slurm_run.R
