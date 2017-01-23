@@ -30,8 +30,9 @@ Details below for more information.}
 \code{sbatch}; see Details below for more information.}
 }
 \value{
-A \code{slurm_job} object containing the \code{jobname} and the 
-  number of \code{nodes} effectively used.
+A \code{slurm_job} object containing the \code{jobname}, the 
+  number of \code{nodes} effectively used, and if \code{submit = TRUE}
+  the \code{jobid}.
 }
 \description{
 Use \code{slurm_call} to perform a single function evaluation a the SLURM 

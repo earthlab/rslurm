@@ -4,12 +4,14 @@
 \alias{get_slurm_out}
 \title{Reads the output of a function calculated on the SLURM cluster}
 \usage{
-get_slurm_out(slr_job, outtype = "raw")
+get_slurm_out(slr_job, outtype = "raw", wait = TRUE)
 }
 \arguments{
 \item{slr_job}{A \code{slurm_job} object.}
 
 \item{outtype}{Can be "table" or "raw", see "Value" below for details.}
+
+\item{wait}{Specify whether to block until slr_job completes.}
 }
 \value{
 If \code{outtype = "table"}: A data frame with one column by 

@@ -48,3 +48,14 @@ local_slurm_array <- function(slr_job) {
         system(paste(rscript_path, "--vanilla local_run.R"))
     }, finally = setwd(olddir))
 }
+
+# Submit job capturing jobid
+submit_slurm_job <- function(tmpdir, jobid) {
+    old_wd <- setwd(tmpdir)
+    tryCatch({
+        submission <- system("sbatch submit.sh", intern = TRUE)
+        cat(submission, sep = '\n')
+        jobid <- regmatches(submission, regexpr('\\d*$', submission))
+    }, finally = setwd(old_wd))
+    return(jobid)
+}

@@ -4,7 +4,7 @@
 \alias{slurm_job}
 \title{Create a slurm_job object}
 \usage{
-slurm_job(jobname, nodes)
+slurm_job(jobname, nodes, jobid)
 }
 \arguments{
 \item{jobname}{The name of the SLURM job. The rslurm-generated scripts and 
@@ -12,6 +12,8 @@ output files associated with a job should be found in the
 \emph{_rslurm_[jobname]} folder.}
 
 \item{nodes}{The number of cluster nodes used by that job.}
+
+\item{jobid}{The job ID assigned to a job on submission.}
 }
 \value{
 A \code{slurm_job} object.
