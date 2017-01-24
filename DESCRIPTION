@@ -4,7 +4,7 @@ Title: Submit R Calculations to a 'SLURM' Cluster
 Description: Functions that simplify the R interface the 'SLURM' cluster workload 
     manager, and automate the process of dividing a parallel calculation across 
     cluster nodes.
-Version: 0.3.1
+Version: 0.3.1.9000
 License: GPL-3
 URL: https://github.com/SESYNC-ci/rslurm
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
