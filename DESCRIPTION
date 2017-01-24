@@ -10,7 +10,8 @@ URL: https://github.com/SESYNC-ci/rslurm
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', role = 'aut'), 
              person('Mike', 'Smorul', role = 'ctb'),
-             person('Ian', 'Carroll', email = 'icarroll@sesync.org', role = c('ctb', 'cre'))
+             person('Ian', 'Carroll',
+                    email = 'icarroll@sesync.org', role = c('ctb', 'cre')))
 Depends:
     R (>= 3.2.0)
 Imports:
