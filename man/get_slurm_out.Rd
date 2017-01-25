@@ -11,7 +11,7 @@ get_slurm_out(slr_job, outtype = "raw", wait = TRUE)
 
 \item{outtype}{Can be "table" or "raw", see "Value" below for details.}
 
-\item{wait}{Specify whether to block until slr_job completes.}
+\item{wait}{Specify whether to block until \code{slr_job} completes.}
 }
 \value{
 If \code{outtype = "table"}: A data frame with one column by 

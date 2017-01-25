@@ -59,3 +59,11 @@ submit_slurm_job <- function(tmpdir, jobid) {
     }, finally = setwd(old_wd))
     return(as.integer(jobid))
 }
+
+# Submit a dummy job with dependency to block R script
+wait_for_job <- function(slr_job) {
+    srun <- sprintf(
+        'srun -n1 -t0:1 -o/dev/null -Q -dafterany:%d /bin/hostname',
+        slr_job$jobid)
+    system(srun)
+}

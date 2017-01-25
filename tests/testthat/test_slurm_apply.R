@@ -69,4 +69,4 @@ test_that("slurm_apply works with single parameter and single row", {
 # Cleanup all temporary files at the end
 # Pause to make sure folders are free to be deleted
 Sys.sleep(1)
-lapply(list(sjob1, sjob2, sjob3, sjob4), cleanup_files)
+lapply(list(sjob1, sjob2, sjob3, sjob4), cleanup_files, wait = FALSE)

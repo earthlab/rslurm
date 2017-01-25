@@ -4,10 +4,12 @@
 \alias{cleanup_files}
 \title{Deletes temporary files associated with a SLURM job}
 \usage{
-cleanup_files(slr_job)
+cleanup_files(slr_job, wait = TRUE)
 }
 \arguments{
 \item{slr_job}{A \code{slurm_job} object.}
+
+\item{wait}{Specify whether to block until \code{slr_job} completes.}
 }
 \description{
 This function deletes all temporary files associated with the specified SLURM

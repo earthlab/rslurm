@@ -27,4 +27,4 @@ test_that("slurm_call returns correct output", {
 
 # Pause to make sure temporary folder is free to be deleted
 Sys.sleep(1)
-cleanup_files(sjob)
+cleanup_files(sjob, wait = FALSE)

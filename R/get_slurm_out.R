@@ -13,7 +13,7 @@
 #' 
 #' @param slr_job A \code{slurm_job} object.
 #' @param outtype Can be "table" or "raw", see "Value" below for details.
-#' @param wait Specify whether to block until slr_job completes.
+#' @param wait Specify whether to block until \code{slr_job} completes.
 #' @return If \code{outtype = "table"}: A data frame with one column by 
 #'   return value of the function passed to \code{slurm_apply}, where 
 #'   each row is the output of the corresponding row in the params data frame 
@@ -37,12 +37,7 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     }
     
     # Wait for slr_job using SLURM dependency
-    if (wait) {
-        srun <- sprintf(
-            'srun -n1 -t0:1 -o/dev/null -Q -dafterany:%d /bin/hostname',
-            slr_job$jobid)
-        system(srun)
-    }
+    if (wait) wait_for_job(slr_job)
     
     res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
