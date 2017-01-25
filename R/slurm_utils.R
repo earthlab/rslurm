@@ -57,5 +57,5 @@ submit_slurm_job <- function(tmpdir, jobid) {
         cat(submission, sep = '\n')
         jobid <- regmatches(submission, regexpr('\\d*$', submission))
     }, finally = setwd(old_wd))
-    return(jobid)
+    return(as.integer(jobid))
 }

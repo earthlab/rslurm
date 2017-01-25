@@ -38,9 +38,10 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     
     # Wait for slr_job using SLURM dependency
     if (wait) {
-        system(sprintf(
+        srun <- sprintf(
             'srun -n1 -t0:1 -o/dev/null -Q -dafterany:%d /bin/hostname',
-            slr_job$jobid))
+            slr_job$jobid)
+        system(srun)
     }
     
     res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
