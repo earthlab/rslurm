@@ -10,7 +10,8 @@ func_to_str <- function(f) {
 # Make jobname by cleaning user-provided name or (if NA) generate one from clock
 make_jobname <- function(name) {
     if (is.na(name)) {
-        paste0("slr", as.integer(Sys.time()) %% 10000)
+        tmpfile <- tempfile("_rslurm_", tmpdir=".")
+        strsplit(tmpfile, '_rslurm_', TRUE)[[1]][[2]]
     } else {
         jobname <- gsub("[[:space:]]+", "_", name)
         gsub("[^0-9A-Za-z_]", "", jobname)

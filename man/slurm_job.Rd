@@ -28,4 +28,3 @@ In general, \code{slurm_job} objects are created automatically as the output of
 \code{\link{slurm_apply}} or \code{\link{slurm_call}}, but it may be necessary 
 to manually recreate one if the job was submitted in a different R session.
 }
-

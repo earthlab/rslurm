@@ -101,4 +101,3 @@ cleanup_files(sjob)
   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
   which use the output of this function.
 }
-

@@ -77,4 +77,3 @@ the description of the related functions for more details.
   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
   which use the output of this function.
 }
-
