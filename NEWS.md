@@ -1,3 +1,15 @@
+rslurm 0.3.2
+============
+
+*2017-03-07*
+
+Minor update to include new feature and bug fixes:
+
+* 'Wait' feature: adds option to slurm_apply and slurm_call to block the
+calling script until the submitted job completes. This option can be used to
+allow immediate processing of a submitted job's output.
+
+
 rslurm 0.3.1
 ============
 
