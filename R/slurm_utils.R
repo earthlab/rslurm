@@ -10,7 +10,8 @@ func_to_str <- function(f) {
 # Make jobname by cleaning user-provided name or (if NA) generate one from clock
 make_jobname <- function(name) {
     if (is.na(name)) {
-        paste0("slr", as.integer(Sys.time()) %% 10000)
+        tmpfile <- tempfile("_rslurm_", tmpdir=".")
+        strsplit(tmpfile, '_rslurm_', TRUE)[[1]][[2]]
     } else {
         jobname <- gsub("[[:space:]]+", "_", name)
         gsub("[^0-9A-Za-z_]", "", jobname)
@@ -47,4 +48,29 @@ local_slurm_array <- function(slr_job) {
                      "source('slurm_run.R')", "}"), "local_run.R")
         system(paste(rscript_path, "--vanilla local_run.R"))
     }, finally = setwd(olddir))
+}
+
+# Submit job capturing jobid
+submit_slurm_job <- function(tmpdir, jobid) {
+    old_wd <- setwd(tmpdir)
+    tryCatch({
+        submission <- system("sbatch submit.sh", intern = TRUE)
+        cat(submission, sep = '\n')
+        jobid <- regmatches(submission, regexpr('\\d*$', submission))
+    }, finally = setwd(old_wd))
+    return(as.integer(jobid))
+}
+
+# Submit dummy job with a dependency via srun to block R process
+wait_for_job <- function(slr_job) {
+    srun <- sprintf(paste(
+        'srun',
+        '--nodes=1',
+        '--time=0:1',
+        '--output=/dev/null',
+        '--quiet',
+        '--dependency=afterany:%d',
+        'echo 0'),
+        slr_job$jobid)
+    system(srun)
 }

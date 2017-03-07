@@ -61,8 +61,9 @@
 #'   Details below for more information. 
 #' @param submit Whether or not to submit the job to the cluster with 
 #'   \code{sbatch}; see Details below for more information.
-#' @return A \code{slurm_job} object containing the \code{jobname} and the 
-#'   number of \code{nodes} effectively used.
+#' @return A \code{slurm_job} object containing the \code{jobname}, the 
+#'   number of \code{nodes} effectively used, and if \code{submit = TRUE} the
+#'   \code{jobid}.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
 #'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
@@ -140,17 +141,14 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
                          rscript = rscript_path))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
-    
     # Submit job to SLURM if applicable
     if (submit) {
-        old_wd <- setwd(tmpdir)
-        tryCatch({
-            system("sbatch submit.sh")
-        }, finally = setwd(old_wd))
+        jobid <- submit_slurm_job(tmpdir)
     } else {
+        jobid <- NULL
         cat(paste("Submission scripts output in directory", tmpdir))
     }
-
-    # Return 'slurm_job' object with jobname, number of nodes
-    slurm_job(jobname, nodes)
+    
+    # Return 'slurm_job' object
+    slurm_job(jobname, nodes, jobid)
 }

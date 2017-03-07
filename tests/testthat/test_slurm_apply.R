@@ -23,8 +23,8 @@ msg <- capture.output(
                          cpus_per_node = 1, submit = FALSE)
 )
 local_slurm_array(sjob1)
-res <- get_slurm_out(sjob1, "table")
-res_raw <- get_slurm_out(sjob1, "raw")
+res <- get_slurm_out(sjob1, "table", wait = FALSE)
+res_raw <- get_slurm_out(sjob1, "raw", wait = FALSE)
 test_that("slurm_apply gives correct output", {
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
     expect_equal(pars, as.data.frame(do.call(rbind, res_raw)),
@@ -39,7 +39,7 @@ msg <- capture.output(
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
 local_slurm_array(sjob2)
-res <- get_slurm_out(sjob2, "table")
+res <- get_slurm_out(sjob2, "table", wait = FALSE)
 test_that("slurm_apply works with single parameter", {
     expect_equal(pars$par_m, res$s_m, tolerance = 0.01)  
 })
@@ -49,7 +49,7 @@ msg <- capture.output(
                          cpus_per_node = 1, submit = FALSE)
 )
 local_slurm_array(sjob3)
-res <- get_slurm_out(sjob3, "table")
+res <- get_slurm_out(sjob3, "table", wait = FALSE)
 test_that("slurm_apply works with single row", {
     expect_equal(sjob3$nodes, 1)
     expect_equal(pars[1, ], res, tolerance = 0.01, check.attributes = FALSE)  
@@ -60,7 +60,7 @@ msg <- capture.output(
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
 local_slurm_array(sjob4)
-res <- get_slurm_out(sjob4, "table")
+res <- get_slurm_out(sjob4, "table", wait = FALSE)
 test_that("slurm_apply works with single parameter and single row", {
     expect_equal(pars$par_m[1], res$s_m, tolerance = 0.01)  
 })
@@ -69,4 +69,4 @@ test_that("slurm_apply works with single parameter and single row", {
 # Cleanup all temporary files at the end
 # Pause to make sure folders are free to be deleted
 Sys.sleep(1)
-lapply(list(sjob1, sjob2, sjob3, sjob4), cleanup_files)
+lapply(list(sjob1, sjob2, sjob3, sjob4), cleanup_files, wait = FALSE)

@@ -13,6 +13,7 @@
 #' 
 #' @param slr_job A \code{slurm_job} object.
 #' @param outtype Can be "table" or "raw", see "Value" below for details.
+#' @param wait Specify whether to block until \code{slr_job} completes.
 #' @return If \code{outtype = "table"}: A data frame with one column by 
 #'   return value of the function passed to \code{slurm_apply}, where 
 #'   each row is the output of the corresponding row in the params data frame 
@@ -23,12 +24,20 @@
 #'   row in the params data frame passed to \code{slurm_apply}.
 #' @seealso \code{\link{slurm_apply}}, \code{\link{slurm_call}}
 #' @export
-get_slurm_out <- function(slr_job, outtype = "raw") {
+get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
+    
+    # Check arguments
     if (!(class(slr_job) == "slurm_job")) stop("slr_job must be a slurm_job")
     outtypes <- c("table", "raw")
     if (!(outtype %in% outtypes)) {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
     }
+    if (is.null(slr_job$jobid)) {
+        stop("slr_job has not been submitted")
+    }
+    
+    # Wait for slr_job using SLURM dependency
+    if (wait) wait_for_job(slr_job)
     
     res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
     tmpdir <- paste0("_rslurm_", slr_job$jobname)

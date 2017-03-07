@@ -4,7 +4,7 @@
 \alias{slurm_job}
 \title{Create a slurm_job object}
 \usage{
-slurm_job(jobname, nodes)
+slurm_job(jobname, nodes, jobid)
 }
 \arguments{
 \item{jobname}{The name of the SLURM job. The rslurm-generated scripts and 
@@ -12,6 +12,8 @@ output files associated with a job should be found in the
 \emph{_rslurm_[jobname]} folder.}
 
 \item{nodes}{The number of cluster nodes used by that job.}
+
+\item{jobid}{The job ID assigned to a job on submission.}
 }
 \value{
 A \code{slurm_job} object.
@@ -26,4 +28,3 @@ In general, \code{slurm_job} objects are created automatically as the output of
 \code{\link{slurm_apply}} or \code{\link{slurm_call}}, but it may be necessary 
 to manually recreate one if the job was submitted in a different R session.
 }
-

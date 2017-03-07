@@ -12,10 +12,14 @@
 #' output files associated with a job should be found in the 
 #' \emph{_rslurm_[jobname]} folder.
 #' @param nodes The number of cluster nodes used by that job.
+#' @param jobid The job ID assigned to a job on submission.
 #' @return A \code{slurm_job} object.
 #' @export
-slurm_job <- function(jobname, nodes) {
+slurm_job <- function(jobname, nodes, jobid) {
     slr_job <- list(jobname = jobname, nodes = nodes)
+    if (!missing(jobid)) {
+        slr_job$jobid <- as.integer(jobid)
+    }
     class(slr_job) <- "slurm_job"
     slr_job
 }
