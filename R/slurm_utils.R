@@ -61,10 +61,16 @@ submit_slurm_job <- function(tmpdir, jobid) {
     return(as.integer(jobid))
 }
 
-# Submit a dummy job with dependency to block R script
+# Submit dummy job with a dependency via srun to block R process
 wait_for_job <- function(slr_job) {
-    srun <- sprintf(
-        'srun -n1 -t0:1 -o/dev/null -Q -dafterany:%d /bin/hostname',
+    srun <- sprintf(paste(
+        'srun',
+        '--nodes=1',
+        '--time=0:1',
+        '--output=/dev/null',
+        '--quiet',
+        '--dependency=afterany:%d',
+        'echo 0'),
         slr_job$jobid)
     system(srun)
 }
