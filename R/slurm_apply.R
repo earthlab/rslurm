@@ -4,8 +4,8 @@
 #' parameters in parallel, spread across multiple nodes of a SLURM cluster. 
 #' 
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
-#' directory, holding the .RData files, the R script and the Bash submission 
-#' script generated for the SLURM job. 
+#' directory, holding .RData and .RDS data files, the R script to run and the Bash
+#' submission script generated for the SLURM job. 
 #' 
 #' The set of input parameters is divided in equal chunks sent to each node, and 
 #' \code{f} is evaluated in parallel within each node using functions from the
@@ -23,7 +23,7 @@
 #' 
 #' When processing the computation job, the SLURM cluster will output two types
 #' of files in the temporary folder: those containing the return values of the
-#' function for each subset of parameters ("results_[node_id].RData") and those
+#' function for each subset of parameters ("results_[node_id].RDS") and those
 #' containing any console or error output produced by R on each node
 #' ("slurm_[node_id].out").
 #' 
@@ -102,7 +102,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir)
     
-    saveRDS(params, file = file.path(tmpdir, "params.RData"))
+    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
     }    

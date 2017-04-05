@@ -6,7 +6,7 @@ load('add_objects.RData')
 
 .rslurm_func <- {{{func}}}
 
-.rslurm_params <- readRDS('params.RData')
+.rslurm_params <- readRDS('params.RDS')
 .rslurm_result <- do.call(.rslurm_func, .rslurm_params)
                
-saveRDS(.rslurm_result, file = 'results_0.RData')
+saveRDS(.rslurm_result, file = 'results_0.RDS')

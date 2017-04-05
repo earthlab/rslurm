@@ -19,7 +19,7 @@
 #' \code{\link{get_slurm_out}} and \code{\link{cleanup_files}}.
 #' 
 #' For bug reports or questions about this package, contact 
-#' Philippe Marchand (pmarchand@@sesync.org).
+#' Ian Carroll(icarroll@sesync.org).
 #' 
 #' @section Function Specification:
 #' To be compatible with \code{\link{slurm_apply}}, a function may accept

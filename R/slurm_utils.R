@@ -7,7 +7,8 @@ func_to_str <- function(f) {
 }
 
 
-# Make jobname by cleaning user-provided name or (if NA) generate one from clock
+# Make jobname by cleaning user-provided name or (if NA) generate one
+# from base::tempfile
 make_jobname <- function(name) {
     if (is.na(name)) {
         tmpfile <- tempfile("_rslurm_", tmpdir=".")

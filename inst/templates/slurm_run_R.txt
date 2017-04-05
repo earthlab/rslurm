@@ -6,7 +6,7 @@ load('add_objects.RData')
 
 .rslurm_func <- {{{func}}}
 
-.rslurm_params <- readRDS('params.RData')
+.rslurm_params <- readRDS('params.RDS')
 .rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 .rslurm_istart <- .rslurm_id * {{{nchunk}}} + 1
 .rslurm_iend <- min((.rslurm_id + 1) * {{{nchunk}}}, nrow(.rslurm_params))
@@ -14,4 +14,4 @@ load('add_objects.RData')
     .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE],
     mc.cores = {{{cpus_per_node}}}))
                
-saveRDS(.rslurm_result, file = paste0('results_', .rslurm_id, '.RData'))
+saveRDS(.rslurm_result, file = paste0('results_', .rslurm_id, '.RDS'))
