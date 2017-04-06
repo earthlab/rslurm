@@ -7,7 +7,7 @@ The 'overview.Rmd' vignette (formerly 'rslurm-vignette.Rmd') now only builds on 
 Ubuntu 14.04 with R 3.3 (rstudio.sesync.org, SLURM head node)
 Ubuntu 12.04 with R 3.3 (travis-ci)
 macOS 10.12 with R 3.3 (local machine, R CMD build with '--no-build-vignettes', R CMD check with '--no-vignettes')
-?win-builder (release and devel, after manual removal of 'overview.Rmd' vignette)
+win-builder (release and devel, after manual removal of 'overview.Rmd' vignette)
 
 ## R CMD check
 
