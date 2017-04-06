@@ -2,8 +2,8 @@
 % Please edit documentation in R/rslurm.R
 \docType{package}
 \name{rslurm-package}
-\alias{rslurm-package}
 \alias{rslurm}
+\alias{rslurm-package}
 \title{rslurm: Submit R calculations to a SLURM cluster}
 \description{
 This package automates the process of sending simple function calls or 
@@ -57,7 +57,6 @@ function passed to \code{slurm_apply} produces a vector output, you may use
 \code{outtype = "table"} to collect the output in a single data frame, with
 one row by function call.
 }
-
 \examples{
 \dontrun{
 # Create a data frame of mean/sd values for normal distributions 
@@ -78,3 +77,4 @@ cleanup_files(sjob1)
 }
 
 }
+

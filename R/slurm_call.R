@@ -74,7 +74,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
-    dir.create(tmpdir)
+    dir.create(tmpdir, showWarnings = FALSE)
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {

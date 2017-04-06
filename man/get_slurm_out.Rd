@@ -39,3 +39,4 @@ object, and setting \code{outtype = "table"} creates an error in that case.
 \seealso{
 \code{\link{slurm_apply}}, \code{\link{slurm_call}}
 }
+

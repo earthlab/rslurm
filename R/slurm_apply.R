@@ -100,7 +100,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
-    dir.create(tmpdir)
+    dir.create(tmpdir, showWarnings = FALSE)
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {
@@ -142,7 +142,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     # Submit job to SLURM if applicable
-    if (system('squeue', ignore.stdout = TRUE)) {
+    if (submit && system('squeue', ignore.stdout = TRUE)) {
         submit <- FALSE
         cat("Cannot submit; no SLURM workload manager on path\n")
     }

@@ -29,3 +29,4 @@ cleanup_files(sjob)
 \seealso{
 \code{\link{slurm_apply}}, \code{\link{slurm_call}}
 }
+

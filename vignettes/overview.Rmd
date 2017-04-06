@@ -81,7 +81,7 @@ execution. These functions are R wrappers for the SLURM command line functions
 Once the job completes, `get_slurm_out` reads and combines the output from all
 nodes.
 ```{r}
-res <- get_slurm_out(sjob, outtype = "table", wait = TRUE)
+res <- get_slurm_out(sjob, outtype = "table")
 head(res, 3)
 ```
 
