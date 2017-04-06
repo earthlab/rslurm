@@ -26,7 +26,7 @@ in the package: \code{\link{print_job_status}}, \code{\link{cancel_slurm}},
 \code{\link{get_slurm_out}} and \code{\link{cleanup_files}}.
 
 For bug reports or questions about this package, contact 
-Philippe Marchand (pmarchand@sesync.org).
+Ian Carroll(icarroll@sesync.org).
 }
 
 \section{Function Specification}{

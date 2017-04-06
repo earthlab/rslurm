@@ -2,7 +2,7 @@
 title: "Parallelize R code on a SLURM cluster"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rslurm-vignette}
+  %\VignetteIndexEntry{overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -81,7 +81,7 @@ execution. These functions are R wrappers for the SLURM command line functions
 Once the job completes, `get_slurm_out` reads and combines the output from all
 nodes.
 ```{r}
-res <- get_slurm_out(sjob, outtype = "table")
+res <- get_slurm_out(sjob, outtype = "table", wait = TRUE)
 head(res, 3)
 ```
 
@@ -91,7 +91,7 @@ function returns a simple vector. The default `outtype = "raw"` combines the
 outputs into a list and can thus handle arbitrarily complex return objects.
 
 ```{r}
-res_raw <- get_slurm_out(sjob, outtype = "raw")
+res_raw <- get_slurm_out(sjob, outtype = "raw", wait = FALSE)
 res_raw[1:3]
 ```
 
@@ -129,6 +129,10 @@ within a data frame. Suppose we want instead to apply a function `func` to a lis
 of complex R objects, `obj_list`. To use `slurm_apply` in this case, we can wrap 
 `func` in an inline function that takes an integer parameter.
 
+```{r echo=FALSE}
+obj_list <- list(NULL)
+func <- function(obj) {}
+```
 ```{r}
 sjob <- slurm_apply(function(i) func(obj_list[[i]]), 
                     data.frame(i = seq_along(obj_list)),

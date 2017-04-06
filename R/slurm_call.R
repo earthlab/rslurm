@@ -103,6 +103,10 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     # Submit job to SLURM if applicable
+    if (system('squeue', ignore.stdout = TRUE)) {
+        submit <- FALSE
+        cat("Cannot submit; no SLURM workload manager on path\n")
+    }
     if (submit) {
         jobid <- submit_slurm_job(tmpdir)
     } else {
