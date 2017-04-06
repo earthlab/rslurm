@@ -3,13 +3,15 @@ rslurm 0.3.2
 
 *2017-04-06*
 
-Minor update to include new feature and bug fix:
+Minor update to include new feature and bug fixes:
 
 * 'Wait' feature: adds option to slurm_apply and slurm_call to block the
 calling script until the submitted job completes. This option can be used to
 allow immediate processing of a submitted job's output.
 
 * Use '.RDS' file extension, rather than '.RData', for serialized objects.
+
+* Minor bug fixes.
 
 
 rslurm 0.3.1
