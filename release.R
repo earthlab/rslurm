@@ -2,6 +2,7 @@ library(tools)
 library(rmarkdown)
 library(devtools)
 library(xml2)
+library(R.rsp)
 
 # Document from R/*.R
 document()
@@ -22,6 +23,16 @@ unlink('README.html')
 # Remove duplicate documentation for rslurm and rslurm-package from index and search
 system('sed -i "/alias{rslurm-package}/d" man/rslurm-package.Rd')
 
+# Build vignettes
+build_vignettes()
+template_name <- 'index.html.rsp'
+template <- file.path(system.file("doc/templates", package="R.rsp"), template_name)
+file.copy(template, to='inst/doc')
+setwd('inst/doc')
+rfile(template_name)
+unlink(template_name)
+setwd('../../')
+
 # Build
-pkg <- build()
+pkg <- build(path='~/tmp/')
 check_built(pkg)
