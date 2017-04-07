@@ -3,19 +3,27 @@
 \newcommand{\ghpr}{\href{https://github.com/sesync-ci/rslurm/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/sesync-ci/rslurm/issues/#1}{##1}}
 
+\section{Changes in version 0.3.3 from 2017-04-07}{
+Minor update to repair README.
+  \itemize{
+    \item Modify DESCRIPTION with "BuildVignette: no".
+    \item Create README from R/slurm.R.
+  }
+}
+
 \section{Changes in version 0.3.2 from 2017-04-06}{
 Minor update to include new feature and bug fixes.
   \itemize{
-    \item 'wait' argument adds option to slurm_apply and slurm_call to block the
+    \item "wait" argument adds option to slurm_apply and slurm_call to block the
       calling script until the submitted job completes. This option can be used to allow immediate processing of a submitted job's output (\ghpr{2}).
-    \item Use '.RDS' file extension, rather than '.RData', for serialized objects (\ghpr{4}).
+    \item Use ".RDS" file extension, rather than ".RData", for serialized objects (\ghpr{4}).
     \item Minor bug fixes (\ghpr{4}).
   }
 }
 \section{Changes in version 0.3.1 from 2016-06-18}{
 Minor bug fix.
   \itemize{
-    \item specify full path of 'Rscript' when running batch scripts.
+    \item specify full path of `Rscript` when running batch scripts.
   }
 }
 \section{Changes in version 0.3.0 from 2016-05-27}{

@@ -3,4 +3,4 @@
 ^\.travis\.yml$
 ^cran-comments\.md
 ^document\.R
-^vignettes
+^vignettes\rslurm\.Rmd
