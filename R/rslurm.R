@@ -65,9 +65,14 @@
 #' cleanup_files(sjob1)
 #' }
 #' 
+#' @section Acknowledgement:
+#' Development of this R package was supported by the National
+#' Socio-Environmental Synthesis Center (SESYNC) under funding received
+#' from the National Science Foundation DBI-1052875.
+#' 
 #' @docType package
 #' @name rslurm-package
 #' @aliases rslurm
 #' 
 #' @importFrom utils capture.output
-NULL
+"_PACKAGE"
