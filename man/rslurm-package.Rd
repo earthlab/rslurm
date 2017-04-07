@@ -5,10 +5,11 @@
 \alias{rslurm-package}
 \alias{_PACKAGE}
 \alias{rslurm}
-\title{rslurm: Submit R calculations to a SLURM cluster}
+\title{rslurm: Submit R Calculations to a 'SLURM' Cluster}
 \description{
-This package automates the process of sending simple function calls or 
-parallel calculations to a cluster using the SLURM workload manager.
+Functions that simplify submitting R scripts to a 'SLURM' cluster
+workload manager, in part by automating the division of emarassingly parallel
+calculations across cluster nodes.
 }
 \section{Overview}{
 
