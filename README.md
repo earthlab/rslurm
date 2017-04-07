@@ -2,12 +2,12 @@
 |----------------|-----------------|
 | rslurm-package | R Documentation |
 
-rslurm: Submit R calculations to a SLURM cluster
-------------------------------------------------
+rslurm: Submit R Calculations to a 'SLURM' Cluster
+--------------------------------------------------
 
 ### Description
 
-This package automates the process of sending simple function calls or parallel calculations to a cluster using the SLURM workload manager.
+Functions that simplify submitting R scripts to a 'SLURM' cluster workload manager, in part by automating the division of emarassingly parallel calculations across cluster nodes.
 
 ### Overview
 
@@ -28,6 +28,30 @@ When parallelizing a function, since any error will interrupt all calculations f
 ### Output Format
 
 The default output format for `get_slurm_out` (`outtype = "raw"`) is a list where each element is the return value of one function call. If the function passed to `slurm_apply` produces a vector output, you may use `outtype = "table"` to collect the output in a single data frame, with one row by function call.
+
+### Acknowledgement
+
+Development of this R package was supported by the National Socio-Environmental Synthesis Center (SESYNC) under funding received from the National Science Foundation DBI-1052875.
+
+### Author(s)
+
+**Maintainer**: Ian Carroll <icarroll@sesync.org> \[contributor\]
+
+Authors:
+
+-   Philippe Marchand
+
+Other contributors:
+
+-   Mike Smorul \[contributor\]
+
+### See Also
+
+Useful links:
+
+-   <https://github.com/SESYNC-ci/rslurm>
+
+-   Report bugs at <https://github.com/SESYNC-ci/rslurm/issues>
 
 ### Examples
 

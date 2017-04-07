@@ -2,9 +2,8 @@
 % Please edit documentation in R/rslurm.R
 \docType{package}
 \name{rslurm-package}
-\alias{rslurm-package}
-\alias{_PACKAGE}
 \alias{rslurm}
+\alias{rslurm-package}
 \title{rslurm: Submit R Calculations to a 'SLURM' Cluster}
 \description{
 Functions that simplify submitting R scripts to a 'SLURM' cluster

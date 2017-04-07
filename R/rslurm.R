@@ -65,9 +65,5 @@
 #' Socio-Environmental Synthesis Center (SESYNC) under funding received
 #' from the National Science Foundation DBI-1052875.
 #' 
-#' @docType package
-#' @name rslurm-package
-#' @aliases rslurm
-#' 
 #' @importFrom utils capture.output
 "_PACKAGE"

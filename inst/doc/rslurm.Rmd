@@ -2,7 +2,7 @@
 title: "Parallelize R code on a SLURM cluster"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{overview}
+  %\VignetteIndexEntry{Parallelize R code on a SLURM cluster}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
