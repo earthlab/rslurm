@@ -2,5 +2,5 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^cran-comments\.md
-^document\.R
-^vignettes\rslurm\.Rmd
+^release\.R
+^vignettes/rslurm\.Rmd

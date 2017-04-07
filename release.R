@@ -22,5 +22,6 @@ unlink('README.html')
 # Remove duplicate documentation for rslurm and rslurm-package from index and search
 system('sed -i "/alias{rslurm-package}/d" man/rslurm-package.Rd')
 
-# Build vignettes
-build_vignettes()
+# Build
+pkg <- build()
+check_built(pkg)

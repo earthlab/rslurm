@@ -1,6 +1,6 @@
-This is a minor update to the package to add a new feature, update the vignette, and fix structure and bugs.
+This is a minor update to the package to update the README.
 
-The 'rslurm.Rmd' vignette (formerly 'rslurm-vignette.Rmd') now only builds on a SLURM head node. The built vignette in inst/doc can be used as is. To prevent build errors, 'BuildVignette: no' is in the description and vignettes are matched in .Buildignore. This gives the Note, but I see no way around it.
+The 'rslurm.Rmd' vignette (formerly 'rslurm-vignette.Rmd') now only builds on a SLURM head node. The built vignette in inst/doc can be used as is. To prevent build errors, 'BuildVignette: no' is in the description and vignettes are matched in .Buildignore. The source for the vignette is copied into 'inst/doc' for FOSS compliance. This gives the NOTE, but I see no way around it.
 
 ## Tested on
 
