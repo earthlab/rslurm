@@ -2,5 +2,3 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 cran-comments.md
-vignettes/rslurm.Rmd
-inst/doc/rslurm.Rmd
