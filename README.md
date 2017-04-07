@@ -1,13 +1,11 @@
-|                |                 |
-|----------------|-----------------|
-| rslurm-package | R Documentation |
-
 rslurm: Submit R Calculations to a 'SLURM' Cluster
 --------------------------------------------------
 
+![](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)
+
 ### Description
 
-Functions that simplify submitting R scripts to a 'SLURM' cluster workload manager, in part by automating the division of emarassingly parallel calculations across cluster nodes.
+Functions that simplify submitting R scripts to a 'SLURM' cluster workload manager, in part by automating the division of embarrassingly parallel calculations across cluster nodes.
 
 ### Overview
 

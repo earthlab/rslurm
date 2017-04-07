@@ -7,7 +7,7 @@
 \title{rslurm: Submit R Calculations to a 'SLURM' Cluster}
 \description{
 Functions that simplify submitting R scripts to a 'SLURM' cluster
-workload manager, in part by automating the division of emarassingly parallel
+workload manager, in part by automating the division of embarrassingly parallel
 calculations across cluster nodes.
 }
 \section{Overview}{
