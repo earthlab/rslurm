@@ -29,7 +29,7 @@ setwd('inst/doc')
 template_name <- 'index.html.rsp'
 template <- file.path(system.file("doc/templates", package="R.rsp"), template_name)
 file.copy(template, to='.')
-system(paste('sed -i "s|web/packages/R\\.rsp/|package=R\\.rsp|"', template_name))
+system(paste('sed -i "s|http://\\([^/]*\\)/web/packages/R\\.rsp/|https://\\1/package=R\\.rsp|"', template_name))
 rfile(template_name)
 unlink(template_name)
 setwd('../../')
