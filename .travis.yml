@@ -2,6 +2,7 @@ language: r
 warnings_are_errors: true
 sudo: required
 r_build_args: "--no-build-vignettes"
+r_check_args: "--no-vignettes --as-cran"
 
 env:
  global:

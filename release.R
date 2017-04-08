@@ -2,7 +2,6 @@ library(tools)
 library(rmarkdown)
 library(devtools)
 library(xml2)
-library(R.rsp)
 
 # Document from R/*.R
 document()
@@ -25,14 +24,6 @@ system('sed -i "/alias{rslurm-package}/d" man/rslurm-package.Rd')
 
 # Build vignettes
 build_vignettes()
-setwd('inst/doc')
-template_name <- 'index.html.rsp'
-template <- file.path(system.file("doc/templates", package="R.rsp"), template_name)
-file.copy(template, to='.')
-system(paste('sed -i "s|http://\\([^/]*\\)/web/packages/R\\.rsp/|https://\\1/package=R\\.rsp|"', template_name))
-rfile(template_name)
-unlink(template_name)
-setwd('../../')
 
 # Build
 pkg <- build(path='~/tmp/')
