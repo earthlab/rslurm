@@ -6,7 +6,6 @@
 \section{Changes in version 0.3.3 from 2017-04-07}{
 Minor update to repair README.
   \itemize{
-    \item Modify DESCRIPTION with "BuildVignette: no".
     \item Create README from R/slurm.R.
   }
 }

@@ -25,10 +25,11 @@ system('sed -i "/alias{rslurm-package}/d" man/rslurm-package.Rd')
 
 # Build vignettes
 build_vignettes()
+setwd('inst/doc')
 template_name <- 'index.html.rsp'
 template <- file.path(system.file("doc/templates", package="R.rsp"), template_name)
-file.copy(template, to='inst/doc')
-setwd('inst/doc')
+file.copy(template, to='.')
+system(paste('sed -i "s|web/packages/R\\.rsp/|package=R\\.rsp|"', template_name))
 rfile(template_name)
 unlink(template_name)
 setwd('../../')
