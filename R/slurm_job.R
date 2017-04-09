@@ -16,10 +16,7 @@
 #' @return A \code{slurm_job} object.
 #' @export
 slurm_job <- function(jobname, nodes, jobid) {
-    slr_job <- list(jobname = jobname, nodes = nodes)
-    if (!missing(jobid)) {
-        slr_job$jobid <- as.integer(jobid)
-    }
+    slr_job <- list(jobname = jobname, nodes = nodes, jobid = jobid)
     class(slr_job) <- "slurm_job"
     slr_job
 }

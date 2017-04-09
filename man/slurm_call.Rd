@@ -40,8 +40,8 @@ cluster.
 }
 \details{
 This function creates a temporary folder ("_rslurm_[jobname]") in the current
-directory, holding the .RData files, the R script and the Bash submission 
-script generated for the SLURM job.
+directory, holding .RData and .RDS data files, the R script to run and the Bash
+submission script generated for the SLURM job.
 
 The names of any other R objects (besides \code{params}) that \code{f} needs 
 to access should be listed in the \code{add_objects} argument.
@@ -56,7 +56,7 @@ not be manually set.
 
 When processing the computation job, the SLURM cluster will output two files 
 in the temporary folder: one with the return value of the function 
-("results_0.RData") and one containing any console or error output produced 
+("results_0.RDS") and one containing any console or error output produced 
 by R ("slurm_[node_id].out").
 
 If \code{submit = TRUE}, the job is sent to the cluster and a confirmation

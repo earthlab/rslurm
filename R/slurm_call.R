@@ -4,8 +4,8 @@
 #' cluster. 
 #' 
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
-#' directory, holding the .RData files, the R script and the Bash submission 
-#' script generated for the SLURM job. 
+#' directory, holding .RData and .RDS data files, the R script to run and the Bash
+#' submission script generated for the SLURM job. 
 #' 
 #' The names of any other R objects (besides \code{params}) that \code{f} needs 
 #' to access should be listed in the \code{add_objects} argument.
@@ -20,7 +20,7 @@
 #' 
 #' When processing the computation job, the SLURM cluster will output two files 
 #' in the temporary folder: one with the return value of the function 
-#' ("results_0.RData") and one containing any console or error output produced 
+#' ("results_0.RDS") and one containing any console or error output produced 
 #' by R ("slurm_[node_id].out").
 #' 
 #' If \code{submit = TRUE}, the job is sent to the cluster and a confirmation
@@ -74,9 +74,9 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
-    dir.create(tmpdir)
+    dir.create(tmpdir, showWarnings = FALSE)
     
-    saveRDS(params, file = file.path(tmpdir, "params.RData"))
+    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
     }    
@@ -103,6 +103,10 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
     # Submit job to SLURM if applicable
+    if (system('squeue', ignore.stdout = TRUE)) {
+        submit <- FALSE
+        cat("Cannot submit; no SLURM workload manager on path\n")
+    }
     if (submit) {
         jobid <- submit_slurm_job(tmpdir)
     } else {

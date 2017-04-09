@@ -27,7 +27,9 @@
 get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     
     # Check arguments
-    if (!(class(slr_job) == "slurm_job")) stop("slr_job must be a slurm_job")
+    if (!(class(slr_job) == "slurm_job")) {
+        stop("slr_job must be a slurm_job")
+    }
     outtypes <- c("table", "raw")
     if (!(outtype %in% outtypes)) {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
@@ -37,9 +39,11 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     }
     
     # Wait for slr_job using SLURM dependency
-    if (wait) wait_for_job(slr_job)
+    if (wait) {
+        wait_for_job(slr_job)
+    }
     
-    res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RData")
+    res_files <- paste0("results_", 0:(slr_job$nodes - 1), ".RDS")
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
     missing_files <- setdiff(res_files, dir(path = tmpdir))
     if (length(missing_files) > 0) {

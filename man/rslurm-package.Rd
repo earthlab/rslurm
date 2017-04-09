@@ -2,12 +2,12 @@
 % Please edit documentation in R/rslurm.R
 \docType{package}
 \name{rslurm-package}
-\alias{rslurm-package}
 \alias{rslurm}
-\title{rslurm: Submit R calculations to a SLURM cluster}
+\title{rslurm: Submit R Calculations to a 'SLURM' Cluster}
 \description{
-This package automates the process of sending simple function calls or 
-parallel calculations to a cluster using the SLURM workload manager.
+Functions that simplify submitting R scripts to a 'SLURM' cluster
+workload manager, in part by automating the division of embarrassingly parallel
+calculations across cluster nodes.
 }
 \section{Overview}{
 
@@ -26,7 +26,7 @@ in the package: \code{\link{print_job_status}}, \code{\link{cancel_slurm}},
 \code{\link{get_slurm_out}} and \code{\link{cleanup_files}}.
 
 For bug reports or questions about this package, contact 
-Philippe Marchand (pmarchand@sesync.org).
+Ian Carroll(icarroll@sesync.org).
 }
 
 \section{Function Specification}{
@@ -58,6 +58,13 @@ function passed to \code{slurm_apply} produces a vector output, you may use
 one row by function call.
 }
 
+\section{Acknowledgement}{
+
+Development of this R package was supported by the National
+Socio-Environmental Synthesis Center (SESYNC) under funding received
+from the National Science Foundation DBI-1052875.
+}
+
 \examples{
 \dontrun{
 # Create a data frame of mean/sd values for normal distributions 
@@ -75,6 +82,28 @@ print_job_status(sjob1)
 res <- get_slurm_out(sjob1, "table")
 all.equal(pars, res) # Confirm correct output
 cleanup_files(sjob1)
+}
+
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/SESYNC-ci/rslurm}
+  \item Report bugs at \url{https://github.com/SESYNC-ci/rslurm/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Ian Carroll \email{icarroll@sesync.org} [contributor]
+
+Authors:
+\itemize{
+  \item Philippe Marchand
+}
+
+Other contributors:
+\itemize{
+  \item Mike Smorul [contributor]
 }
 
 }

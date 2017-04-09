@@ -7,7 +7,8 @@ func_to_str <- function(f) {
 }
 
 
-# Make jobname by cleaning user-provided name or (if NA) generate one from clock
+# Make jobname by cleaning user-provided name or (if NA) generate one
+# from base::tempfile
 make_jobname <- function(name) {
     if (is.na(name)) {
         tmpfile <- tempfile("_rslurm_", tmpdir=".")
@@ -47,7 +48,9 @@ local_slurm_array <- function(slr_job) {
                      "Sys.setenv(SLURM_ARRAY_TASK_ID = i)",
                      "source('slurm_run.R')", "}"), "local_run.R")
         system(paste(rscript_path, "--vanilla local_run.R"))
+        slr_job$jobid = 0L
     }, finally = setwd(olddir))
+    return(slr_job)
 }
 
 # Submit job capturing jobid
