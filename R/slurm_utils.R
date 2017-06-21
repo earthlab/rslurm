@@ -3,7 +3,7 @@
 # Convert a function to string
 func_to_str <- function(f) {
     fstr <- paste(capture.output(f), collapse = "\n")
-    gsub("<environment: [A-Za-z0-9]+>", "", fstr)
+    gsub("<environment: [A-Za-z0-9]*:[A-Za-z0-9]*>", "", fstr)
 }
 
 
