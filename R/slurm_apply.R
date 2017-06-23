@@ -122,7 +122,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     nodes <- ceiling(nrow(params) / nchunk)
 
     # Manipulate lib.loc quoting for whisker
-    if (!is.null(lib.loc)) lib.loc <- paste0("'", lib.loc, "'")
+    if (!is.null(lib.loc)) lib.loc <- paste0(", lib.loc = '", lib.loc, "'")
 
     # Create a R script to run function in parallel on each node
     template_r <- readLines(system.file("templates/slurm_run_R.txt",

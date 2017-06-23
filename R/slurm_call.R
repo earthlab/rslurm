@@ -44,6 +44,10 @@
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
 #'   loaded by the user when \code{slurm_call} is called. 
+#' @param lib.loc a character vector describing the location of R library trees
+#'   to search through, or NULL. The default value of NULL corresponds to all
+#'   libraries currently known to \code{.libPaths()}. Non-existent library trees
+#'   are silently ignored.
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information. 
 #' @param submit Whether or not to submit the job to the cluster with 
@@ -57,8 +61,8 @@
 #'   which use the output of this function. 
 #' @export    
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
-                       pkgs = rev(.packages()), slurm_options = list(),
-                       submit = TRUE) {
+                       pkgs = rev(.packages()), lib.loc = NULL,
+                       slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
@@ -81,13 +85,17 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
         save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
     }    
     
+    # Manipulate lib.loc quoting for whisker
+    if (!is.null(lib.loc)) lib.loc <- paste0(", lib.loc = '", lib.loc, "'")
+    
     # Create a R script to run function on cluster
     template_r <- readLines(system.file("templates/slurm_run_single_R.txt", 
                                         package = "rslurm"))
     script_r <- whisker::whisker.render(template_r,
                     list(pkg_list = paste(pkgs, collapse = "','"),
                          add_obj = !is.null(add_objects), 
-                         func = func_to_str(f)))
+                         func = func_to_str(f),
+                         libloc = lib.loc))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
     # Create submission bash script

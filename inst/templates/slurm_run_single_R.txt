@@ -1,5 +1,5 @@
 .tmplib <- lapply(c('{{{pkg_list}}}'), 
-                  library, character.only = TRUE, quietly = TRUE)
+                  library, character.only = TRUE, quietly = TRUE{{libloc}})
 {{#add_obj}}
 load('add_objects.RData')
 {{/add_obj}}
