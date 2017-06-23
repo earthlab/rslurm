@@ -5,7 +5,8 @@
 \title{Execution of a single function call on the SLURM cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
-  pkgs = rev(.packages()), slurm_options = list(), submit = TRUE)
+  pkgs = rev(.packages()), lib.loc = NULL, slurm_options = list(),
+  submit = TRUE)
 }
 \arguments{
 \item{f}{Any R function.}
@@ -22,6 +23,11 @@ saved in a .RData file and loaded on each cluster node prior to calling
 \item{pkgs}{A character vector containing the names of packages that must
 be loaded on each cluster node. By default, it includes all packages
 loaded by the user when \code{slurm_call} is called.}
+
+\item{lib.loc}{a character vector describing the location of R library trees
+to search through, or NULL. The default value of NULL corresponds to all
+libraries currently known to \code{.libPaths()}. Non-existent library trees
+are silently ignored.}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}
