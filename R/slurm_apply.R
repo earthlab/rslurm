@@ -57,10 +57,10 @@
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
 #'   loaded by the user when \code{slurm_apply} is called.
-#' @param lib.loc a character vector describing the location of R library trees
-#'   to search through, or NULL. The default value of NULL corresponds to all
-#'   libraries currently known to \code{.libPaths()}. Non-existent library trees
-#'   are silently ignored.
+#' @param libPaths A character vector describing the location of additional R
+#'   library trees to search through, or NULL. The default value of NULL
+#'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
+#'   Non-existent library trees are silently ignored.
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with
@@ -82,7 +82,7 @@
 #' @export
 slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
                         add_objects = NULL, pkgs = rev(.packages()),
-                        lib.loc = NULL, slurm_options = list(), submit = TRUE) {
+                        libPaths = NULL, slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_apply should be a function")
@@ -121,19 +121,16 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     # Re-adjust number of nodes (only matters for small sets)
     nodes <- ceiling(nrow(params) / nchunk)
 
-    # Manipulate lib.loc quoting for whisker
-    if (!is.null(lib.loc)) lib.loc <- paste0(", lib.loc = '", lib.loc, "'")
-
     # Create a R script to run function in parallel on each node
     template_r <- readLines(system.file("templates/slurm_run_R.txt",
                                         package = "rslurm"))
     script_r <- whisker::whisker.render(template_r,
-                    list(pkg_list = paste(pkgs, collapse = "','"),
+                    list(pkgs = pkgs,
                          add_obj = !is.null(add_objects),
                          func = func_to_str(f),
                          nchunk = nchunk,
                          cpus_per_node = cpus_per_node,
-                         libloc = lib.loc))
+                         libPaths = libPaths))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
 
     # Create submission bash script

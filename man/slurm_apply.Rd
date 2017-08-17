@@ -5,7 +5,7 @@
 \title{Parallel execution of a function on the SLURM cluster}
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
-  add_objects = NULL, pkgs = rev(.packages()), lib.loc = NULL,
+  add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
   slurm_options = list(), submit = TRUE)
 }
 \arguments{
@@ -35,10 +35,10 @@ saved in a .RData file and loaded on each cluster node prior to calling
 be loaded on each cluster node. By default, it includes all packages
 loaded by the user when \code{slurm_apply} is called.}
 
-\item{lib.loc}{a character vector describing the location of R library trees
-to search through, or NULL. The default value of NULL corresponds to all
-libraries currently known to \code{.libPaths()}. Non-existent library trees
-are silently ignored.}
+\item{libPaths}{A character vector describing the location of additional R
+library trees to search through, or NULL. The default value of NULL
+corresponds to libraries returned by \code{.libPaths()} on a cluster node.
+Non-existent library trees are silently ignored.}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}

@@ -5,7 +5,7 @@
 \title{Execution of a single function call on the SLURM cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
-  pkgs = rev(.packages()), lib.loc = NULL, slurm_options = list(),
+  pkgs = rev(.packages()), libPaths = NULL, slurm_options = list(),
   submit = TRUE)
 }
 \arguments{
@@ -13,21 +13,21 @@ slurm_call(f, params, jobname = NA, add_objects = NULL,
 
 \item{params}{A named list of parameters to pass to \code{f}.}
 
-\item{jobname}{The name of the SLURM job; if \code{NA}, it is assigned a
+\item{jobname}{The name of the SLURM job; if \code{NA}, it is assigned a 
 random name of the form "slr####".}
 
-\item{add_objects}{A character vector containing the name of R objects to be
-saved in a .RData file and loaded on each cluster node prior to calling
+\item{add_objects}{A character vector containing the name of R objects to be 
+saved in a .RData file and loaded on each cluster node prior to calling 
 \code{f}.}
 
-\item{pkgs}{A character vector containing the names of packages that must
-be loaded on each cluster node. By default, it includes all packages
-loaded by the user when \code{slurm_call} is called.}
+\item{pkgs}{A character vector containing the names of packages that must be
+loaded on each cluster node. By default, it includes all packages loaded by
+the user when \code{slurm_call} is called.}
 
-\item{lib.loc}{a character vector describing the location of R library trees
-to search through, or NULL. The default value of NULL corresponds to all
-libraries currently known to \code{.libPaths()}. Non-existent library trees
-are silently ignored.}
+\item{libPaths}{A character vector describing the location of additional R
+library trees to search through, or NULL. The default value of NULL
+corresponds to libraries returned by \code{.libPaths()} on a cluster node.
+Non-existent library trees are silently ignored.}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}
@@ -36,9 +36,9 @@ Details below for more information.}
 \code{sbatch}; see Details below for more information.}
 }
 \value{
-A \code{slurm_job} object containing the \code{jobname}, the 
-  number of \code{nodes} effectively used, and if \code{submit = TRUE}
-  the \code{jobid}.
+A \code{slurm_job} object containing the \code{jobname}, the number
+  of \code{nodes} effectively used, and if \code{submit = TRUE} the
+  \code{jobid}.
 }
 \description{
 Use \code{slurm_call} to perform a single function evaluation a the SLURM 
@@ -46,40 +46,41 @@ cluster.
 }
 \details{
 This function creates a temporary folder ("_rslurm_[jobname]") in the current
-directory, holding .RData and .RDS data files, the R script to run and the Bash
-submission script generated for the SLURM job.
+directory, holding .RData and .RDS data files, the R script to run and the
+Bash submission script generated for the SLURM job.
 
 The names of any other R objects (besides \code{params}) that \code{f} needs 
 to access should be listed in the \code{add_objects} argument.
 
-Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
-\code{slurm_options = list(time = "1:00:00", share = TRUE)}. 
-See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
-Note that full names must be used (e.g. "time" rather than "t") and that flags
-(such as "share") must be specified as TRUE. The "job-name", "ntasks"
+Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g. 
+\code{slurm_options = list(time = "1:00:00", share = TRUE)}. See
+\url{http://slurm.schedmd.com/sbatch.html} for details on possible options. 
+Note that full names must be used (e.g. "time" rather than "t") and that
+flags (such as "share") must be specified as TRUE. The "job-name", "ntasks" 
 and "output" options are already determined by \code{slurm_call} and should 
 not be manually set.
 
 When processing the computation job, the SLURM cluster will output two files 
 in the temporary folder: one with the return value of the function 
-("results_0.RDS") and one containing any console or error output produced 
-by R ("slurm_[node_id].out").
+("results_0.RDS") and one containing any console or error output produced by
+R ("slurm_[node_id].out").
 
-If \code{submit = TRUE}, the job is sent to the cluster and a confirmation
-message (or error) is output to the console. If \code{submit = FALSE},
-a message indicates the location of the saved data and script files; the
-job can be submitted manually by running the shell command 
-\code{sbatch submit.sh} from that directory.
+If \code{submit = TRUE}, the job is sent to the cluster and a confirmation 
+message (or error) is output to the console. If \code{submit = FALSE}, a
+message indicates the location of the saved data and script files; the job
+can be submitted manually by running the shell command \code{sbatch
+submit.sh} from that directory.
 
-After sending the job to the SLURM cluster, \code{slurm_call} returns a
+After sending the job to the SLURM cluster, \code{slurm_call} returns a 
 \code{slurm_job} object which can be used to cancel the job, get the job 
-status or output, and delete the temporary files associated with it. See 
-the description of the related functions for more details.
+status or output, and delete the temporary files associated with it. See the
+description of the related functions for more details.
 }
 \seealso{
-\code{\link{slurm_apply}} to parallelize a function over a parameter set.
+\code{\link{slurm_apply}} to parallelize a function over a parameter
+  set.
 
 \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
-  \code{\link{get_slurm_out}} and \code{\link{print_job_status}} 
-  which use the output of this function.
+  \code{\link{get_slurm_out}} and \code{\link{print_job_status}} which use
+  the output of this function.
 }
