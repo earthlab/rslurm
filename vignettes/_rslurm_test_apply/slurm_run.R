@@ -1,4 +1,4 @@
-.tmplib <- lapply(c('base','methods','datasets','utils','grDevices','graphics','stats','tools','rmarkdown','devtools','xml2','rslurm'), 
+.tmplib <- lapply(c('base','methods','datasets','utils','grDevices','graphics','stats','rslurm','devtools'), 
                   library, character.only = TRUE, quietly = TRUE)
 .rslurm_func <- function(par_mu, par_sd) {
     samp <- rnorm(10^6, par_mu, par_sd)
