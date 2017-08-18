@@ -72,8 +72,9 @@ wait_for_job <- function(slr_job) {
         '--time=0:1',
         '--output=/dev/null',
         '--quiet',
-        '--dependency=afterany:%d',
+        '--dependency=singleton',
+        '--job-name=%s',
         'echo 0'),
-        slr_job$jobid)
+        slr_job$jobname)
     system(srun)
 }
