@@ -78,7 +78,9 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {
-        save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
+        save(list = add_objects,
+             file = file.path(tmpdir, "add_objects.RData"),
+             envir = environment(f))
     }    
     
     # Create a R script to run function on cluster

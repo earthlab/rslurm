@@ -5,10 +5,12 @@ Sys.setenv(R_TESTS = "")
 
 # Test slurm_call locally
 
-msg <- capture.output(
-    sjob <- slurm_call(function(x, y) x * 2 + y, list(x = 5, y = 6), 
+msg <- capture.output({
+    z <- 0
+    sjob <- slurm_call(function(x, y) x * 2 + y + z, list(x = 5, y = 6),
+                       add_objects = c('z'),
                        jobname = "test^\\* call", submit = FALSE)
-)
+})
 
 test_that("slurm_job name is correctly edited", {
     expect_equal(sjob$jobname, "test_call")

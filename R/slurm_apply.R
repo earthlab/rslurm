@@ -104,7 +104,9 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     if (!is.null(add_objects)) {
-        save(list = add_objects, file = file.path(tmpdir, "add_objects.RData"))
+        save(list = add_objects,
+             file = file.path(tmpdir, "add_objects.RData"),
+             envir = environment(f))
     }    
     
     # Get chunk size (nb. of param. sets by node)
