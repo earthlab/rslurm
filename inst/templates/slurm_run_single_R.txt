@@ -4,8 +4,7 @@
 load('add_objects.RData')
 {{/add_obj}}
 
-.rslurm_func <- {{{func}}}
-
+.rslurm_func <- readRDS('f.RDS')
 .rslurm_params <- readRDS('params.RDS')
 .rslurm_result <- do.call(.rslurm_func, .rslurm_params)
                

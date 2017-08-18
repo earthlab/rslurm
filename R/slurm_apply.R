@@ -103,6 +103,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     dir.create(tmpdir, showWarnings = FALSE)
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
+    saveRDS(f, file = file.path(tmpdir, "f.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects,
              file = file.path(tmpdir, "add_objects.RData"),
@@ -125,7 +126,6 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     script_r <- whisker::whisker.render(template_r,
                     list(pkg_list = paste(pkgs, collapse = "','"),
                          add_obj = !is.null(add_objects), 
-                         func = func_to_str(f),
                          nchunk = nchunk, 
                          cpus_per_node = cpus_per_node))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))

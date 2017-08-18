@@ -4,8 +4,7 @@
 load('add_objects.RData')
 {{/add_obj}}
 
-.rslurm_func <- {{{func}}}
-
+.rslurm_func <- readRDS('f.RDS')
 .rslurm_params <- readRDS('params.RDS')
 .rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 .rslurm_istart <- .rslurm_id * {{{nchunk}}} + 1

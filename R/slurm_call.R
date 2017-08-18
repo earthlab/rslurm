@@ -77,6 +77,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     dir.create(tmpdir, showWarnings = FALSE)
     
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
+    saveRDS(f, file = file.path(tmpdir, "f.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects,
              file = file.path(tmpdir, "add_objects.RData"),
@@ -88,8 +89,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
                                         package = "rslurm"))
     script_r <- whisker::whisker.render(template_r,
                     list(pkg_list = paste(pkgs, collapse = "','"),
-                         add_obj = !is.null(add_objects), 
-                         func = func_to_str(f)))
+                         add_obj = !is.null(add_objects)))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
     # Create submission bash script
