@@ -1,11 +1,5 @@
 # Utility functions for rslurm package (not exported)
 
-# Convert a function to string
-func_to_str <- function(f) {
-    fstr <- paste(capture.output(f), collapse = "\n")
-    gsub("<environment: [A-Za-z0-9]+>", "", fstr)
-}
-
 
 # Make jobname by cleaning user-provided name or (if NA) generate one
 # from base::tempfile

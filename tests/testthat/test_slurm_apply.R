@@ -65,8 +65,22 @@ test_that("slurm_apply works with single parameter and single row", {
     expect_equal(pars$par_m[1], res$s_m, tolerance = 0.01)  
 })
 
+# Test slurm_apply with add_objects
+
+msg <- capture.output(
+    sjob5 <- slurm_apply(function(i) ftest(pars[i, 1], pars[i, 2]),
+                         data.frame(i = 1:nrow(pars)),
+                         add_objects = c('ftest', 'pars'), jobname = "test5",
+                         nodes = 2, cpus_per_node = 1, submit = FALSE)
+)
+sjob5 <- local_slurm_array(sjob5)
+res <- get_slurm_out(sjob5, "table", wait = FALSE)
+test_that("slurm_apply correctly handles add_objects", {
+    expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
+})
+
 
 # Cleanup all temporary files at the end
 # Pause to make sure folders are free to be deleted
 Sys.sleep(1)
-lapply(list(sjob1, sjob2, sjob3, sjob4), cleanup_files, wait = FALSE)
+lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files, wait = FALSE)

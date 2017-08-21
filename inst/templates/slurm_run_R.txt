@@ -1,11 +1,13 @@
-.tmplib <- lapply(c('{{{pkg_list}}}'), 
-                  library, character.only = TRUE, quietly = TRUE)
+{{#libPaths}}.libPaths(c('{{.}}', .libPaths()))
+{{/libPaths}}
+{{#pkgs}}library({{.}}, quietly = TRUE)
+{{/pkgs}}
+
 {{#add_obj}}
 load('add_objects.RData')
 {{/add_obj}}
 
-.rslurm_func <- {{{func}}}
-
+.rslurm_func <- readRDS('f.RDS')
 .rslurm_params <- readRDS('params.RDS')
 .rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 .rslurm_istart <- .rslurm_id * {{{nchunk}}} + 1
@@ -13,5 +15,5 @@ load('add_objects.RData')
 .rslurm_result <- do.call(parallel::mcMap, c(.rslurm_func,
     .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE],
     mc.cores = {{{cpus_per_node}}}))
-               
+
 saveRDS(.rslurm_result, file = paste0('results_', .rslurm_id, '.RDS'))
