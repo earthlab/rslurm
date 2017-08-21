@@ -86,7 +86,7 @@ back into R with the `get_slurm_out()` function. Note that, if the job was
 submitted manually, the job ID must also be added manually.
 
 ```{r}
-sjob$jobid <- 1849 # unnecessary with `submit = TRUE` in `slurm_apply`
+sjob$jobid <- 14283 # unnecessary with `submit = TRUE` in `slurm_apply`
 res <- get_slurm_out(sjob, outtype = 'table')
 head(res, 3)
 ```
@@ -129,7 +129,7 @@ Because `slurm_call` involves a single process on a single node, it does not
 recognize the `nodes` and `cpus_per_node` arguments; otherwise, it accepts the
 same additional arguments (detailed in the sections below) as `slurm_apply`.
 
-```{r eval=FALSE}
+```{r eval = FALSE}
 cleanup_files(sjob)
 ```
 

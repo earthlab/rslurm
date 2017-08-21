@@ -1,10 +1,13 @@
-.tmplib <- lapply(c('base','methods','datasets','utils','grDevices','graphics','stats','rslurm','devtools'), 
-                  library, character.only = TRUE, quietly = TRUE)
-.rslurm_func <- function(par_mu, par_sd) {
-    samp <- rnorm(10^6, par_mu, par_sd)
-    c(s_mu = mean(samp), s_sd = sd(samp))
-}
-
+library(base, quietly = TRUE)
+library(methods, quietly = TRUE)
+library(datasets, quietly = TRUE)
+library(utils, quietly = TRUE)
+library(grDevices, quietly = TRUE)
+library(graphics, quietly = TRUE)
+library(stats, quietly = TRUE)
+library(rslurm, quietly = TRUE)
+library(devtools, quietly = TRUE)
+.rslurm_func <- readRDS('f.RDS')
 .rslurm_params <- readRDS('params.RDS')
 .rslurm_result <- do.call(.rslurm_func, .rslurm_params)
                
