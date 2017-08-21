@@ -1,6 +1,6 @@
 # rslurm
 
-## Submit R Calculations to a 'SLURM' Cluster
+## Submit R Calculations to a Slurm Cluster
 
 ### Status
 
@@ -24,7 +24,7 @@ maintainer) and Mike Smorul contributing.
 Install the package from R with `install.packages('rslurm')`. Note that job
 submission is only possible on a system with access to a SLRUM workload manager
 (i.e a system where the command line utilities `squeue` or `sinfo` return
-information from a SLURM head node).
+information from a Slurm head node).
 
 ### Documentation
 

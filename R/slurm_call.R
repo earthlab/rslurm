@@ -1,11 +1,11 @@
-#' Execution of a single function call on the SLURM cluster
+#' Execution of a single function call on the Slurm cluster
 #' 
-#' Use \code{slurm_call} to perform a single function evaluation a the SLURM 
+#' Use \code{slurm_call} to perform a single function evaluation a the Slurm 
 #' cluster.
 #' 
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
 #' directory, holding .RData and .RDS data files, the R script to run and the
-#' Bash submission script generated for the SLURM job.
+#' Bash submission script generated for the Slurm job.
 #' 
 #' The names of any other R objects (besides \code{params}) that \code{f} needs 
 #' to access should be listed in the \code{add_objects} argument.
@@ -18,7 +18,7 @@
 #' and "output" options are already determined by \code{slurm_call} and should 
 #' not be manually set.
 #' 
-#' When processing the computation job, the SLURM cluster will output two files 
+#' When processing the computation job, the Slurm cluster will output two files 
 #' in the temporary folder: one with the return value of the function 
 #' ("results_0.RDS") and one containing any console or error output produced by
 #' R ("slurm_[node_id].out").
@@ -29,14 +29,14 @@
 #' can be submitted manually by running the shell command \code{sbatch
 #' submit.sh} from that directory.
 #' 
-#' After sending the job to the SLURM cluster, \code{slurm_call} returns a 
+#' After sending the job to the Slurm cluster, \code{slurm_call} returns a 
 #' \code{slurm_job} object which can be used to cancel the job, get the job 
 #' status or output, and delete the temporary files associated with it. See the
 #' description of the related functions for more details.
 #' 
 #' @param f Any R function.
 #' @param params A named list of parameters to pass to \code{f}.
-#' @param jobname The name of the SLURM job; if \code{NA}, it is assigned a 
+#' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a 
 #'   random name of the form "slr####".
 #' @param add_objects A character vector containing the name of R objects to be 
 #'   saved in a .RData file and loaded on each cluster node prior to calling 
@@ -110,10 +110,10 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
                                               rscript = rscript_path))
     writeLines(script_sh, file.path(tmpdir, "submit.sh"))
     
-    # Submit job to SLURM if applicable
+    # Submit job to Slurm if applicable
     if (system('squeue', ignore.stdout = TRUE)) {
         submit <- FALSE
-        cat("Cannot submit; no SLURM workload manager on path\n")
+        cat("Cannot submit; no Slurm workload manager on path\n")
     }
     if (submit) {
         jobid <- submit_slurm_job(tmpdir)

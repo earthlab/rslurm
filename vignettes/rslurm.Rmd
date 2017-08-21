@@ -1,8 +1,8 @@
 ---
-title: Parallelize R code on a SLURM cluster
+title: Parallelize R code on a Slurm cluster
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Parallelize R code on a SLURM cluster}
+  %\VignetteIndexEntry{Parallelize R code on a Slurm cluster}
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,18 +15,18 @@ single machine with `mclapply` or `mcMap` (from the [`parallel`](https://cran.r-
 
 The rslurm package simplifies the process of distributing this type of
 calculation across a computing cluster that uses the
-[SLURM](http://slurm.schedmd.com/) workload manager. Its main function,
+[Slurm](http://slurm.schedmd.com/) workload manager. Its main function,
 `slurm_apply`, automatically divides the computation over multiple nodes and
 writes the necessary submission scripts. It also includes functions to retrieve
 and combine the output from different nodes, as well as wrappers for common
-SLURM commands.
+Slurm commands.
 
 ### Table of contents
 
 - [Basic example](#basic-example)
 - [Single function evaluation](#single-function-evaluation)
 - [Adding auxiliary data and functions](#adding-auxiliary-data-and-functions)
-- [Configuring SLURM options](#configuring-slurm-options)
+- [Configuring Slurm options](#configuring-slurm-options)
 - [Generating scripts for later submission](#generating-scripts-for-later-submission)
 - [How it works / advanced customization](#how-it-works-advanced-customization)
 
@@ -67,13 +67,13 @@ information (job name, job ID, and the number of nodes) needed to retrieve the
 job's output.
 
 The default argument `submit = TRUE` would submit a generated script to the 
-SLURM cluster and print a message confirming the job has been submitted to 
-SLURM, assuming your are running R on a SLURM head node. When working from a R 
+Slurm cluster and print a message confirming the job has been submitted to 
+Slurm, assuming your are running R on a Slurm head node. When working from a R 
 session without direct access to the cluster, you can set `submit = FALSE`. 
 Either way, the function creates a folder called `\_rslurm\_[jobname]` in the 
 working directory that contains scripts and data files, but nothing is sent to 
 the cluster with `submit = FALSE`. In the latter case, the generated folder may
-be moved to a SLURM head node, the shell command `sbatch submit.sh` run from
+be moved to a Slurm head node, the shell command `sbatch submit.sh` run from
 within the folder, and the folder copied back with new `results_*.RDS` files
 (one for each node):
 
@@ -94,7 +94,7 @@ head(res, 3)
 The utility function `print_job_status` displays the status of a submitted job
 (i.e. in queue, running or completed), and `cancel_slurm` will remove a job from
 the queue, aborting its execution if necessary. These functions are R wrappers
-for the SLURM command line functions `squeue` and `scancel`, respectively.
+for the Slurm command line functions `squeue` and `scancel`, respectively.
 
 When `outtype = 'table'`, the outputs from each function evaluation are 
 row-bound into a single data frame; this is an appropriate format when the 
@@ -107,7 +107,7 @@ res_raw[1:3]
 ```
 
 The utility function `cleanup_files` deletes the temporary folder for the
-specified SLURM job.
+specified Slurm job.
 
 ```{r eval = FALSE}
 cleanup_files(sjob)
@@ -156,12 +156,12 @@ By default, all R packages attached to the current R session will also be
 attached (with `library`) on each cluster node, though this can be modified with
 the optional `pkgs` argument.
 
-## Configuring SLURM options
+## Configuring Slurm options
 
-Particular clusters may require the specification of additional SLURM options, 
+Particular clusters may require the specification of additional Slurm options, 
 such as time and memory limits for the job. The `slurm_options` argument allows
 you to set any of the command line options ([view
-list](http://slurm.schedmd.com/sbatch.html)) recognized by the SLURM `sbatch`
+list](http://slurm.schedmd.com/sbatch.html)) recognized by the Slurm `sbatch`
 command. It should be formatted as a named list, using the long names of each
 option (e.g. "time" rather than "t"). Flags, i.e. command line options that are
 toggled rather than set to a particular value, should be set to `TRUE` in
@@ -179,11 +179,11 @@ As mentioned above, the `slurm_apply` function creates a job-specific folder.
 This folder contains the parameters as a RDS file and (if applicable) the
 objects specified as `add_objects` saved together in a RData file. The function
 also generates a R script (`slurm_run.R`) to be run on each cluster node, as
-well as a Bash script (`submit.sh`) to submit the job to SLURM.
+well as a Bash script (`submit.sh`) to submit the job to Slurm.
 
-More specifically, the Bash script tells SLURM to create a job array and the R
+More specifically, the Bash script tells Slurm to create a job array and the R
 script takes advantage of the unique `SLURM\_ARRAY\_TASK\_ID` environment
-variable that SLURM will set on each cluster node. This variable is read by
+variable that Slurm will set on each cluster node. This variable is read by
 `slurm_run.R`, which allows each instance of the script to operate on a
 different parameter subset and write its output to a different results file. The
 R script calls `parallel::mcMap` to parallelize calculations on each node.
@@ -196,5 +196,5 @@ There are two templates for each script, one for `slurm_apply` and the other
 
 While you should avoid changing any existing lines in the template scripts, you 
 may want to add `#SBATCH` lines to the `submit.sh` templates in order to 
-permanently set certain SLURM command line options and thus customize the
+permanently set certain Slurm command line options and thus customize the
 package to your particular cluster setup.

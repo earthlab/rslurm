@@ -1,6 +1,6 @@
-#' Cancels a scheduled SLURM job
+#' Cancels a scheduled Slurm job
 #'
-#' This function cancels the specified SLURM job by invoking the SLURM 
+#' This function cancels the specified Slurm job by invoking the Slurm 
 #' \code{scancel} command. It does \emph{not} delete the temporary files 
 #' (e.g. scripts) created by \code{\link{slurm_apply}} or 
 #' \code{\link{slurm_call}}. Use \code{\link{cleanup_files}} to remove those 
@@ -15,12 +15,12 @@ cancel_slurm <- function(slr_job) {
 }
 
 
-#' Prints the status of a SLURM job and, if completed, its console/error output
+#' Prints the status of a Slurm job and, if completed, its console/error output
 #'
-#' Prints the status of a SLURM job and, if completed, its console/error output.
+#' Prints the status of a Slurm job and, if completed, its console/error output.
 #'
-#' If the specified SLURM job is still in the queue or running, this function
-#' prints its current status (as output by the SLURM \code{squeue} command).
+#' If the specified Slurm job is still in the queue or running, this function
+#' prints its current status (as output by the Slurm \code{squeue} command).
 #' The output displays one row by node currently running part of the job ("R" in
 #' the "ST" column) and how long it has been running ("TIME"). One row indicates
 #' the portions of the job still in queue ("PD" in the "ST" column), if any. 
@@ -49,9 +49,9 @@ print_job_status <- function(slr_job) {
 }  
 
 
-#' Deletes temporary files associated with a SLURM job 
+#' Deletes temporary files associated with a Slurm job 
 #'
-#' This function deletes all temporary files associated with the specified SLURM
+#' This function deletes all temporary files associated with the specified Slurm
 #' job, including files created by \code{\link{slurm_apply}} or 
 #' \code{\link{slurm_call}}, as well as outputs from the cluster. These files
 #' should be located in the \emph{_rslurm_[jobname]} folder of the current

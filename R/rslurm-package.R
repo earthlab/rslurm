@@ -1,12 +1,12 @@
 #' Introduction to the \code{rslurm} Package
 #' 
-#' Send long-running or parallel jobs to a SLURM workload manager (i.e. cluster)
+#' Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
 #' using the \code{\link{slurm_call}} or \code{\link{slurm_apply}} functions.
 #' 
 #' @section Job submission:
 #'   
 #'   This package includes two core functions used to send computations to a 
-#'   SLURM cluster. While \code{\link{slurm_call}} executes a function using a 
+#'   Slurm cluster. While \code{\link{slurm_call}} executes a function using a 
 #'   single set of parameters (passed as a list), \code{\link{slurm_apply}} 
 #'   evaluates the function in parallel for multiple sets of parameters grouped 
 #'   in a data frame. \code{slurm_apply} automatically splits the parameter sets

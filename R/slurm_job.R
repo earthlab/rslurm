@@ -8,7 +8,7 @@
 #' \code{\link{slurm_apply}} or \code{\link{slurm_call}}, but it may be necessary 
 #' to manually recreate one if the job was submitted in a different R session.
 #' 
-#' @param jobname The name of the SLURM job. The rslurm-generated scripts and 
+#' @param jobname The name of the Slurm job. The rslurm-generated scripts and 
 #' output files associated with a job should be found in the 
 #' \emph{_rslurm_[jobname]} folder.
 #' @param nodes The number of cluster nodes used by that job.
