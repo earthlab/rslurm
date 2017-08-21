@@ -130,7 +130,6 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     script_r <- whisker::whisker.render(template_r,
                     list(pkgs = pkgs,
                          add_obj = !is.null(add_objects),
-                         func = func_to_str(f),
                          nchunk = nchunk,
                          cpus_per_node = cpus_per_node,
                          libPaths = libPaths))

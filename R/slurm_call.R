@@ -94,8 +94,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
                                         package = "rslurm"))
     script_r <- whisker::whisker.render(template_r,
                     list(pkgs = pkgs,
-                         add_obj = !is.null(add_objects), 
-                         func = func_to_str(f),
+                         add_obj = !is.null(add_objects),
                          libPaths = libPaths))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
