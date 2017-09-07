@@ -1,7 +1,3 @@
-# rslurm
-
-## Submit R Calculations to a Slurm Cluster
-
 ### Status
 
 Pre-release:
