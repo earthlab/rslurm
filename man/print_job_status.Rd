@@ -2,7 +2,7 @@
 % Please edit documentation in R/cancel_print_cleanup.R
 \name{print_job_status}
 \alias{print_job_status}
-\title{Prints the status of a SLURM job and, if completed, its console/error output}
+\title{Prints the status of a Slurm job and, if completed, its console/error output}
 \usage{
 print_job_status(slr_job)
 }
@@ -10,11 +10,11 @@ print_job_status(slr_job)
 \item{slr_job}{A \code{slurm_job} object.}
 }
 \description{
-Prints the status of a SLURM job and, if completed, its console/error output.
+Prints the status of a Slurm job and, if completed, its console/error output.
 }
 \details{
-If the specified SLURM job is still in the queue or running, this function
-prints its current status (as output by the SLURM \code{squeue} command).
+If the specified Slurm job is still in the queue or running, this function
+prints its current status (as output by the Slurm \code{squeue} command).
 The output displays one row by node currently running part of the job ("R" in
 the "ST" column) and how long it has been running ("TIME"). One row indicates
 the portions of the job still in queue ("PD" in the "ST" column), if any.

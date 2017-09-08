@@ -2,7 +2,7 @@
 % Please edit documentation in R/slurm_call.R
 \name{slurm_call}
 \alias{slurm_call}
-\title{Execution of a single function call on the SLURM cluster}
+\title{Execution of a single function call on the Slurm cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
   pkgs = rev(.packages()), libPaths = NULL, slurm_options = list(),
@@ -13,7 +13,7 @@ slurm_call(f, params, jobname = NA, add_objects = NULL,
 
 \item{params}{A named list of parameters to pass to \code{f}.}
 
-\item{jobname}{The name of the SLURM job; if \code{NA}, it is assigned a 
+\item{jobname}{The name of the Slurm job; if \code{NA}, it is assigned a 
 random name of the form "slr####".}
 
 \item{add_objects}{A character vector containing the name of R objects to be 
@@ -36,18 +36,17 @@ Details below for more information.}
 \code{sbatch}; see Details below for more information.}
 }
 \value{
-A \code{slurm_job} object containing the \code{jobname}, the number
-  of \code{nodes} effectively used, and if \code{submit = TRUE} the
-  \code{jobid}.
+A \code{slurm_job} object containing the \code{jobname} and the number
+  of \code{nodes} effectively used.
 }
 \description{
-Use \code{slurm_call} to perform a single function evaluation a the SLURM 
+Use \code{slurm_call} to perform a single function evaluation a the Slurm 
 cluster.
 }
 \details{
 This function creates a temporary folder ("_rslurm_[jobname]") in the current
 directory, holding .RData and .RDS data files, the R script to run and the
-Bash submission script generated for the SLURM job.
+Bash submission script generated for the Slurm job.
 
 The names of any other R objects (besides \code{params}) that \code{f} needs 
 to access should be listed in the \code{add_objects} argument.
@@ -60,7 +59,7 @@ flags (such as "share") must be specified as TRUE. The "job-name", "ntasks"
 and "output" options are already determined by \code{slurm_call} and should 
 not be manually set.
 
-When processing the computation job, the SLURM cluster will output two files 
+When processing the computation job, the Slurm cluster will output two files 
 in the temporary folder: one with the return value of the function 
 ("results_0.RDS") and one containing any console or error output produced by
 R ("slurm_[node_id].out").
@@ -71,7 +70,7 @@ message indicates the location of the saved data and script files; the job
 can be submitted manually by running the shell command \code{sbatch
 submit.sh} from that directory.
 
-After sending the job to the SLURM cluster, \code{slurm_call} returns a 
+After sending the job to the Slurm cluster, \code{slurm_call} returns a 
 \code{slurm_job} object which can be used to cancel the job, get the job 
 status or output, and delete the temporary files associated with it. See the
 description of the related functions for more details.

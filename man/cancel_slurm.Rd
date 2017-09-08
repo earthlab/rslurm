@@ -2,7 +2,7 @@
 % Please edit documentation in R/cancel_print_cleanup.R
 \name{cancel_slurm}
 \alias{cancel_slurm}
-\title{Cancels a scheduled SLURM job}
+\title{Cancels a scheduled Slurm job}
 \usage{
 cancel_slurm(slr_job)
 }
@@ -10,7 +10,7 @@ cancel_slurm(slr_job)
 \item{slr_job}{A \code{slurm_job} object.}
 }
 \description{
-This function cancels the specified SLURM job by invoking the SLURM 
+This function cancels the specified Slurm job by invoking the Slurm 
 \code{scancel} command. It does \emph{not} delete the temporary files 
 (e.g. scripts) created by \code{\link{slurm_apply}} or 
 \code{\link{slurm_call}}. Use \code{\link{cleanup_files}} to remove those 

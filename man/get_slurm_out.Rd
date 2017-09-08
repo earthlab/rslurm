@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slurm_out.R
 \name{get_slurm_out}
 \alias{get_slurm_out}
-\title{Reads the output of a function calculated on the SLURM cluster}
+\title{Reads the output of a function calculated on the Slurm cluster}
 \usage{
 get_slurm_out(slr_job, outtype = "raw", wait = TRUE)
 }
@@ -25,7 +25,7 @@ If \code{outtype = "table"}: A data frame with one column by
 }
 \description{
 This function reads all function output files (one by cluster node used) from 
-the specified SLURM job and returns the result in a single data frame
+the specified Slurm job and returns the result in a single data frame
 (if "table" format selected) or list (if "raw" format selected). It doesn't 
 record any messages (including warnings or errors) output to the R console
 during the computation; these can be consulted by invoking 

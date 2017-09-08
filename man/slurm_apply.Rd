@@ -2,7 +2,7 @@
 % Please edit documentation in R/slurm_apply.R
 \name{slurm_apply}
 \alias{slurm_apply}
-\title{Parallel execution of a function on the SLURM cluster}
+\title{Parallel execution of a function on the Slurm cluster}
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
   add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
@@ -16,7 +16,7 @@ may return any type of R object.}
 column corresponds to a parameter of \code{f} (\emph{Note}: names must
 match) and each row corresponds to a separate function call.}
 
-\item{jobname}{The name of the SLURM job; if \code{NA}, it is assigned a
+\item{jobname}{The name of the Slurm job; if \code{NA}, it is assigned a
 random name of the form "slr####".}
 
 \item{nodes}{The (maximum) number of cluster nodes to spread the calculation
@@ -47,18 +47,17 @@ Details below for more information.}
 \code{sbatch}; see Details below for more information.}
 }
 \value{
-A \code{slurm_job} object containing the \code{jobname}, the
-  number of \code{nodes} effectively used, and if \code{submit = TRUE} the
-  \code{jobid}.
+A \code{slurm_job} object containing the \code{jobname} and the
+  number of \code{nodes} effectively used.
 }
 \description{
 Use \code{slurm_apply} to compute function over multiple sets of
-parameters in parallel, spread across multiple nodes of a SLURM cluster.
+parameters in parallel, spread across multiple nodes of a Slurm cluster.
 }
 \details{
 This function creates a temporary folder ("_rslurm_[jobname]") in the current
 directory, holding .RData and .RDS data files, the R script to run and the Bash
-submission script generated for the SLURM job.
+submission script generated for the Slurm job.
 
 The set of input parameters is divided in equal chunks sent to each node, and
 \code{f} is evaluated in parallel within each node using functions from the
@@ -74,7 +73,7 @@ Note that full names must be used (e.g. "time" rather than "t") and that flags
 and "output" options are already determined by \code{slurm_apply} and should
 not be manually set.
 
-When processing the computation job, the SLURM cluster will output two types
+When processing the computation job, the Slurm cluster will output two types
 of files in the temporary folder: those containing the return values of the
 function for each subset of parameters ("results_[node_id].RDS") and those
 containing any console or error output produced by R on each node
@@ -86,7 +85,7 @@ a message indicates the location of the saved data and script files; the
 job can be submitted manually by running the shell command
 \code{sbatch submit.sh} from that directory.
 
-After sending the job to the SLURM cluster, \code{slurm_apply} returns a
+After sending the job to the Slurm cluster, \code{slurm_apply} returns a
 \code{slurm_job} object which can be used to cancel the job, get the job
 status or output, and delete the temporary files associated with it. See
 the description of the related functions for more details.

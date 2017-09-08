@@ -34,10 +34,7 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     if (!(outtype %in% outtypes)) {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
     }
-    if (is.null(slr_job$jobid)) {
-        stop("slr_job has not been submitted")
-    }
-    
+
     # Wait for slr_job using Slurm dependency
     if (wait) {
         wait_for_job(slr_job)

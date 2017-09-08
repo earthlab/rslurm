@@ -1,6 +1,8 @@
 library(rslurm)
 context("slurm_apply")
 
+skip_if_not(system('sinfo') == 0, 'Cannot run test with Slurm workload manager.')
+
 Sys.setenv(R_TESTS = "")
     
 set.seed(123)
@@ -15,6 +17,10 @@ ftest <- function(par_m, par_sd = 1, ...) {
     c(s_m = mean(samp), s_sd = sd(samp))
 }
 
+
+# slurm libraries
+test0 <- function(i) Sys.getenv()
+slurm_apply(test0, data.frame(i = c(0)), pkgs = c(), jobname = 'test0', nodes = 1, cpus_per_node = 1)
 
 # Test slurm_apply
 
@@ -66,4 +72,4 @@ test_that("slurm_apply correctly handles add_objects", {
 
 
 # Cleanup all temporary files at the end
-lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files)
+#lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files)

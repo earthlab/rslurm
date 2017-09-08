@@ -2,7 +2,7 @@
 % Please edit documentation in R/cancel_print_cleanup.R
 \name{cleanup_files}
 \alias{cleanup_files}
-\title{Deletes temporary files associated with a SLURM job}
+\title{Deletes temporary files associated with a Slurm job}
 \usage{
 cleanup_files(slr_job, wait = TRUE)
 }
@@ -12,7 +12,7 @@ cleanup_files(slr_job, wait = TRUE)
 \item{wait}{Specify whether to block until \code{slr_job} completes.}
 }
 \description{
-This function deletes all temporary files associated with the specified SLURM
+This function deletes all temporary files associated with the specified Slurm
 job, including files created by \code{\link{slurm_apply}} or 
 \code{\link{slurm_call}}, as well as outputs from the cluster. These files
 should be located in the \emph{_rslurm_[jobname]} folder of the current
