@@ -23,7 +23,7 @@ ftest <- function(par_m, par_sd = 1, ...) {
 #slurm_apply(test0, data.frame(i = c(0)), pkgs = c(), jobname = 'test0', nodes = 1, cpus_per_node = 1)
 
 test_that("slurm_apply gives correct output", {
-    skip_if_not(SLURM, SLURM_MSG)
+    if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(ftest, pars, jobname = "test1", nodes = 2, 
                         cpus_per_node = 1)
     res <- get_slurm_out(sjob, "table")
@@ -35,7 +35,7 @@ test_that("slurm_apply gives correct output", {
 })
 
 test_that("slurm_apply works with single parameter", {
-    skip_if_not(SLURM, SLURM_MSG)
+    if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(ftest, pars[, 1, drop = FALSE], jobname = "test2", 
                         nodes = 2, cpus_per_node = 1)
     res <- get_slurm_out(sjob, "table")
@@ -44,7 +44,7 @@ test_that("slurm_apply works with single parameter", {
 })
 
 test_that("slurm_apply works with single row", {
-    skip_if_not(SLURM, SLURM_MSG)
+    if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(ftest, pars[1, ], nodes = 2, jobname = "test3",
                         cpus_per_node = 1)
     res <- get_slurm_out(sjob, "table")
@@ -54,7 +54,7 @@ test_that("slurm_apply works with single row", {
 })
 
 test_that("slurm_apply works with single parameter and single row", {
-    skip_if_not(SLURM, SLURM_MSG)
+    if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(ftest, pars[1, 1, drop = FALSE], jobname = "test4",
                         nodes = 2, cpus_per_node = 1)
     res <- get_slurm_out(sjob, "table")
@@ -63,7 +63,7 @@ test_that("slurm_apply works with single parameter and single row", {
 })
 
 test_that("slurm_apply correctly handles add_objects", {
-    skip_if_not(SLURM, SLURM_MSG)
+    if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(function(i) ftest(pars[i, 1], pars[i, 2]),
                         data.frame(i = 1:nrow(pars)),
                         add_objects = c('ftest', 'pars'), jobname = "test5",
