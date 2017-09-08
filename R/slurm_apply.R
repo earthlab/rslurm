@@ -150,7 +150,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     # Submit job to Slurm if applicable
     if (submit && system('squeue', ignore.stdout = TRUE)) {
         submit <- FALSE
-        cat("Cannot submit; no Slurm workload manager on path\n")
+        cat("Cannot submit; no Slurm workload manager found\n")
     }
     if (submit) {
         submit_slurm_job(tmpdir)
