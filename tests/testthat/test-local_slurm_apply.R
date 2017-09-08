@@ -1,5 +1,5 @@
 library(rslurm)
-context("slurm_apply")
+context("local slurm_apply")
 
 Sys.setenv(R_TESTS = "")
     

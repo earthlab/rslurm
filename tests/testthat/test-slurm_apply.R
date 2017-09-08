@@ -1,7 +1,7 @@
 library(rslurm)
 context("slurm_apply")
 
-skip_if_not(system('sinfo') == 0, 'Cannot run test with Slurm workload manager.')
+if (system('sinfo')) skip('Only run test on a Slurm head node.')
 
 Sys.setenv(R_TESTS = "")
     
@@ -72,4 +72,4 @@ test_that("slurm_apply correctly handles add_objects", {
 
 
 # Cleanup all temporary files at the end
-#lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files)
+lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files)

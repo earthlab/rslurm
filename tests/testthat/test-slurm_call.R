@@ -1,7 +1,7 @@
 library(rslurm)
 context("slurm_call")
 
-skip_if_not(system('sinfo') == 0, 'Cannot run test with Slurm workload manager.')
+if (system('sinfo')) skip('Only run test on a Slurm head node.')
 
 Sys.setenv(R_TESTS = "")
 
