@@ -17,3 +17,18 @@ test_that("slurm_job name is correctly edited and output is correct", {
     expect_equal(sjob$jobname, "test_call")
     expect_equal(res, 16)
 })
+
+test_that("slurm_call will handle a bytecoded function", {
+    # generated in response to issue #14
+    if (SLURM) skip(SLURM_MSG)
+    params <- list(
+        data = data.frame(
+            x = seq(0, 1, by = 0.01),
+            y = 0:100),
+        formula = y ~ x)
+    result_local <- do.call(lm, params)
+    sjob <- slurm_call(lm, params, slurm_options = list(partition = 'sesynctest'))
+    result_slurm <- get_slurm_out(sjob)
+    cleanup_files(sjob)
+    expect_equal(result_slurm$coeficients, result_local$coeficients)
+})
