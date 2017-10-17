@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.Renviron$
 ^\.travis\.yml$
 ^cran-comments\.md
 ^release\.R
