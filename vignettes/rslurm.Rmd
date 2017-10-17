@@ -11,7 +11,7 @@ Many computing-intensive processes in R involve the repeated evaluation of a
 function over many items or parameter sets. These so-called [embarrassingly
 parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel) calculations
 can be run serially with the `lapply` or `Map` function, or in parallel on a
-single machine with `mclapply` or `mcMap` (from the [`parallel`](https://cran.r-project.org/package=parallel) package).
+single machine with `mclapply` or `mcMap` (from the `parallel` package).
 
 The rslurm package simplifies the process of distributing this type of
 calculation across a computing cluster that uses the
@@ -69,24 +69,25 @@ job's output.
 The default argument `submit = TRUE` would submit a generated script to the 
 Slurm cluster and print a message confirming the job has been submitted to 
 Slurm, assuming your are running R on a Slurm head node. When working from a R 
-session without direct access to the cluster, you can set `submit = FALSE`. 
+session without direct access to the cluster, you must set `submit = FALSE`. 
 Either way, the function creates a folder called `\_rslurm\_[jobname]` in the 
-working directory that contains scripts and data files, but nothing is sent to 
-the cluster with `submit = FALSE`. In the latter case, the generated folder may
-be moved to a Slurm head node, the shell command `sbatch submit.sh` run from
-within the folder, and the folder copied back with new `results_*.RDS` files
-(one for each node):
+working directory that contains scripts and data files. This folder may be moved
+to a Slurm head node, the shell command `sbatch submit.sh` run from within the 
+folder, and the folder moved back to your working directory. The contents of the
+`\_rslurm\_[jobname]` folder after completion of the `test_apply` job, i.e.
+following either manual or automatic (i.e. with `submit = TRUE`) submission to
+the cluster, includes one `results_*.RDS` file for each node:
 
 ```{r}
 dir('_rslurm_test_apply')
 ```
 
-Having now been run on the cluster, the results from all the nodes can be read
-back into R with the `get_slurm_out()` function. Note that, if the job was
-submitted manually, the job ID must also be added manually.
+The results from all the nodes can be read back into R with the
+`get_slurm_out()` function. However, if the job was submitted manually, the job
+ID must also be added manually.
 
 ```{r}
-sjob$jobid <- 14283 # unnecessary with `submit = TRUE` in `slurm_apply`
+sjob$jobid <- 14283 # unnecessary with `submit = TRUE` in `slurm_apply` ## FIXME really?
 res <- get_slurm_out(sjob, outtype = 'table')
 head(res, 3)
 ```
