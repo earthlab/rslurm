@@ -79,15 +79,13 @@ following either manual or automatic (i.e. with `submit = TRUE`) submission to
 the cluster, includes one `results_*.RDS` file for each node:
 
 ```{r}
-dir('_rslurm_test_apply')
+list.files('_rslurm_test_apply', 'results')
 ```
 
 The results from all the nodes can be read back into R with the
-`get_slurm_out()` function. However, if the job was submitted manually, the job
-ID must also be added manually.
+`get_slurm_out()` function.
 
 ```{r}
-sjob$jobid <- 14283 # unnecessary with `submit = TRUE` in `slurm_apply` ## FIXME really?
 res <- get_slurm_out(sjob, outtype = 'table')
 head(res, 3)
 ```
