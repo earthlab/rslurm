@@ -56,15 +56,19 @@ submit_slurm_job <- function(tmpdir) {
 
 # Submit dummy job with a dependency via srun to block R process
 wait_for_job <- function(slr_job) {
-    srun <- sprintf(paste(
-        'srun',
-        '--nodes=1',
-        '--time=0:1',
-        '--output=/dev/null',
-        '--quiet',
-        '--dependency=singleton',
-        '--job-name=%s',
-        'echo 0'),
-        slr_job$jobname)
-    system(srun)
+    queue <- system(paste('squeue -hn', slr_job$jobname), intern = TRUE,
+        ignore.stderr = TRUE)
+    if (length(queue)) {
+        srun <- sprintf(paste('srun',
+            '--nodes=1',
+            '--time=0:1',
+            '--output=/dev/null',
+            '--quiet',
+            '--dependency=singleton',
+            '--job-name=%s',
+            'echo 0'),
+            slr_job$jobname)
+        system(srun)
+    }
+    return()
 }
