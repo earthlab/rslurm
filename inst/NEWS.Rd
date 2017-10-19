@@ -17,6 +17,8 @@
         \itemize{
             \item README now separate from package documentation.
             \item Vignette can be built on CRAN tests again (no slurm submissions).
+            \item Returned to parallel::mcmapply, without SIMPLIFY, to prevent
+            mc.cores error when checking on Windows.
         }
     }
 }
