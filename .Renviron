@@ -1,2 +1,2 @@
 # the check directory must be available to the Slurm nodes:
-TEMP=/nfs/scratch/
+TEMP=/nfs/scratch

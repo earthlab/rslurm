@@ -38,6 +38,8 @@ local_slurm_array <- function(slr_job) {
     rscript_path <- file.path(R.home("bin"), "Rscript")
     setwd(paste0("_rslurm_", slr_job$jobname))
     tryCatch({
+        #FIXME simplify with system('SLURM_ARRAY_TASK_ID=1 Rscript path/to/slurm_run.R')
+        # and loop in this code
         writeLines(c(paste0("for (i in 1:", slr_job$nodes, " - 1) {"),
                      "Sys.setenv(SLURM_ARRAY_TASK_ID = i)",
                      "source('slurm_run.R')", "}"), "local_run.R")
