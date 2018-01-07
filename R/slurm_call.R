@@ -125,6 +125,10 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
         cat(paste("Submission scripts output in directory", tmpdir))
     }
 
-    # Return 'slurm_job' object
-    slurm_job(jobname, 1)
+	# Save slurm_job object:
+	slr_job <- slurm_job(jobname, 1)	
+	save(slr_job,file=file.path(tmpdir,"slurm_job.Rdata"))
+	
+	# Return 'slurm_job' object
+	return(slr_job)
 }

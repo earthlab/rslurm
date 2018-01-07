@@ -162,6 +162,10 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
 		cat(paste("Submission scripts output in directory", tmpdir))
 	}
 	
+	# Save slurm_job object:
+	slr_job <- slurm_job(jobname, nodes)	
+	save(slr_job,file=file.path(tmpdir,"slurm_job.Rdata"))
+	
 	# Return 'slurm_job' object
-	slurm_job(jobname, nodes)
+	return(slr_job)
 }
