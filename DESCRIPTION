@@ -15,7 +15,7 @@ Authors@R: c(person('Philippe', 'Marchand', role = 'aut'),
              person('Mike', 'Smorul', role = 'ctb'),
              person('Ian', 'Carroll',
                     email = 'icarroll@sesync.org', role = c('ctb', 'cre')),
-                     person('Jonathan', 'Greenberg', role = 'ctb'),)
+             person('Jonathan', 'Greenberg', role = 'ctb'))
 Depends:
     R (>= 3.2.0)
 Imports:
