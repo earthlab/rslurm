@@ -7,14 +7,15 @@ Description: Functions that simplify submitting R scripts to a Slurm
 Acknowledgements: Development of this R package was supported by the National
     Socio-Environmental Synthesis Center (SESYNC) under funding received from
     the National Science Foundation DBI-1052875.
-Version: 0.4.0.9000
+Version: 0.4.0.9001
 License: GPL-3
 URL: https://github.com/SESYNC-ci/rslurm
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', role = 'aut'), 
              person('Mike', 'Smorul', role = 'ctb'),
              person('Ian', 'Carroll',
-                    email = 'icarroll@sesync.org', role = c('ctb', 'cre')))
+                    email = 'icarroll@sesync.org', role = c('ctb', 'cre')),
+                     person('Jonathan', 'Greenberg', role = 'ctb'),)
 Depends:
     R (>= 3.2.0)
 Imports:
