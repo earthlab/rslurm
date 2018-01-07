@@ -65,6 +65,8 @@
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with
 #'   \code{sbatch}; see Details below for more information.
+#' @param rscript_path Path to Rscript -- defaults to the bin directory of the current R
+#' @param submit_sh_fname Path to the submit_sh.txt template.  Defaults to the templates directory.  
 #' @return A \code{slurm_job} object containing the \code{jobname} and the
 #'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
@@ -80,84 +82,86 @@
 #' }
 #' @export
 slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
-                        add_objects = NULL, pkgs = rev(.packages()),
-                        libPaths = NULL, slurm_options = list(), submit = TRUE) {
-    # Check inputs
-    if (!is.function(f)) {
-        stop("first argument to slurm_apply should be a function")
-    }
-    if (!is.data.frame(params)) {
-        stop("second argument to slurm_apply should be a data.frame")
-    }
-    if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
-        stop("column names of params must match arguments of f")
-    }
-    if (!is.numeric(nodes) || length(nodes) != 1) {
-        stop("nodes should be a single number")
-    }
-    if (!is.numeric(cpus_per_node) || length(cpus_per_node) != 1) {
-        stop("cpus_per_node should be a single number")
-    }
-
-    jobname <- make_jobname(jobname)
-
-    # Create temp folder
-    tmpdir <- paste0("_rslurm_", jobname)
-    dir.create(tmpdir, showWarnings = FALSE)
-
-    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
-    saveRDS(f, file = file.path(tmpdir, "f.RDS"))
-    if (!is.null(add_objects)) {
-        save(list = add_objects,
-             file = file.path(tmpdir, "add_objects.RData"),
-             envir = environment(f))
-    }    
-    
-    # Get chunk size (nb. of param. sets by node)
-    # Special case if less param. sets than CPUs in cluster
-    if (nrow(params) < cpus_per_node * nodes) {
-        nchunk <- cpus_per_node
-    } else {
-        nchunk <- ceiling(nrow(params) / nodes)
-    }
-    # Re-adjust number of nodes (only matters for small sets)
-    nodes <- ceiling(nrow(params) / nchunk)
-
-    # Create a R script to run function in parallel on each node
-    template_r <- readLines(system.file("templates/slurm_run_R.txt",
-                                        package = "rslurm"))
-    script_r <- whisker::whisker.render(template_r,
-                    list(pkgs = pkgs,
-                         add_obj = !is.null(add_objects),
-                         nchunk = nchunk,
-                         cpus_per_node = cpus_per_node,
-                         libPaths = libPaths))
-    writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
-
-    # Create submission bash script
-    template_sh <- readLines(system.file("templates/submit_sh.txt",
-                                         package = "rslurm"))
-    slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
-    script_sh <- whisker::whisker.render(template_sh,
-                    list(max_node = nodes - 1,
-                         jobname = jobname,
-                         flags = slurm_options$flags,
-                         options = slurm_options$options,
-                         rscript = rscript_path))
-    writeLines(script_sh, file.path(tmpdir, "submit.sh"))
-
-    # Submit job to Slurm if applicable
-    if (submit && system('squeue', ignore.stdout = TRUE)) {
-        submit <- FALSE
-        cat("Cannot submit; no Slurm workload manager found\n")
-    }
-    if (submit) {
-        submit_slurm_job(tmpdir)
-    } else {
-        cat(paste("Submission scripts output in directory", tmpdir))
-    }
-
-    # Return 'slurm_job' object
-    slurm_job(jobname, nodes)
+		add_objects = NULL, pkgs = rev(.packages()),
+		libPaths = NULL, slurm_options = list(), submit = TRUE,
+		rscript_path = file.path(R.home("bin"), "Rscript"),
+		submit_sh_fname=system.file("templates/submit_sh.txt",
+				package = "rslurm")) {
+	# Check inputs
+	if (!is.function(f)) {
+		stop("first argument to slurm_apply should be a function")
+	}
+	if (!is.data.frame(params)) {
+		stop("second argument to slurm_apply should be a data.frame")
+	}
+	if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
+		stop("column names of params must match arguments of f")
+	}
+	if (!is.numeric(nodes) || length(nodes) != 1) {
+		stop("nodes should be a single number")
+	}
+	if (!is.numeric(cpus_per_node) || length(cpus_per_node) != 1) {
+		stop("cpus_per_node should be a single number")
+	}
+	
+	jobname <- make_jobname(jobname)
+	
+	# Create temp folder
+	tmpdir <- paste0("_rslurm_", jobname)
+	dir.create(tmpdir, showWarnings = FALSE)
+	
+	saveRDS(params, file = file.path(tmpdir, "params.RDS"))
+	saveRDS(f, file = file.path(tmpdir, "f.RDS"))
+	if (!is.null(add_objects)) {
+		save(list = add_objects,
+				file = file.path(tmpdir, "add_objects.RData"),
+				envir = environment(f))
+	}    
+	
+	# Get chunk size (nb. of param. sets by node)
+	# Special case if less param. sets than CPUs in cluster
+	if (nrow(params) < cpus_per_node * nodes) {
+		nchunk <- cpus_per_node
+	} else {
+		nchunk <- ceiling(nrow(params) / nodes)
+	}
+	# Re-adjust number of nodes (only matters for small sets)
+	nodes <- ceiling(nrow(params) / nchunk)
+	
+	# Create a R script to run function in parallel on each node
+	template_r <- readLines(system.file("templates/slurm_run_R.txt",
+					package = "rslurm"))
+	script_r <- whisker::whisker.render(template_r,
+			list(pkgs = pkgs,
+					add_obj = !is.null(add_objects),
+					nchunk = nchunk,
+					cpus_per_node = cpus_per_node,
+					libPaths = libPaths))
+	writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
+	
+	# Create submission bash script
+	template_sh <- readLines(submit_sh_fname)
+	slurm_options <- format_option_list(slurm_options)
+	#   rscript_path <- file.path(R.home("bin"), "Rscript")
+	script_sh <- whisker::whisker.render(template_sh,
+			list(max_node = nodes - 1,
+					jobname = jobname,
+					flags = slurm_options$flags,
+					options = slurm_options$options,
+					rscript = rscript_path))
+	writeLines(script_sh, file.path(tmpdir, "submit.sh"))
+	
+	# Submit job to Slurm if applicable
+	if (submit && system('squeue', ignore.stdout = TRUE)) {
+		submit <- FALSE
+		cat("Cannot submit; no Slurm workload manager found\n")
+	}
+	if (submit) {
+		submit_slurm_job(tmpdir)
+	} else {
+		cat(paste("Submission scripts output in directory", tmpdir))
+	}
+	
+	# Return 'slurm_job' object
+	slurm_job(jobname, nodes)
 }

@@ -52,6 +52,9 @@
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with 
 #'   \code{sbatch}; see Details below for more information.
+#' @param rscript_path Path to Rscript -- defaults to the bin directory of the current R
+#' @param submit_single_sh_fname Path to the submit_single_sh.txt template.  Defaults to the templates directory.  
+
 #' @return A \code{slurm_job} object containing the \code{jobname} and the number
 #'   of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_apply}} to parallelize a function over a parameter
@@ -62,7 +65,10 @@
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
                        pkgs = rev(.packages()), libPaths = NULL,
-                       slurm_options = list(), submit = TRUE) {
+                       slurm_options = list(), submit = TRUE,
+					   rscript_path = file.path(R.home("bin"), "Rscript"),
+					   submit_single_sh_fname=system.file("templates/submit_single_sh.txt", 
+							   package = "rslurm")) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
@@ -98,10 +104,9 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
     # Create submission bash script
-    template_sh <- readLines(system.file("templates/submit_single_sh.txt", 
-                                         package = "rslurm"))
+    template_sh <- readLines(slurm_run_single_fname)
     slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
+#    rscript_path <- file.path(R.home("bin"), "Rscript")
     script_sh <- whisker::whisker.render(template_sh, 
                                          list(jobname = jobname,
                                               flags = slurm_options$flags, 

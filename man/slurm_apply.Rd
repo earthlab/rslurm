@@ -6,7 +6,10 @@
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
   add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  slurm_options = list(), submit = TRUE)
+  slurm_options = list(), submit = TRUE,
+  rscript_path = file.path(R.home("bin"), "Rscript"),
+  submit_sh_fname = system.file("templates/submit_sh.txt", package =
+  "rslurm"))
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -45,6 +48,10 @@ Details below for more information.}
 
 \item{submit}{Whether or not to submit the job to the cluster with
 \code{sbatch}; see Details below for more information.}
+
+\item{rscript_path}{Path to Rscript -- defaults to the bin directory of the current R}
+
+\item{submit_sh_fname}{Path to the submit_sh.txt template.  Defaults to the templates directory.}
 }
 \value{
 A \code{slurm_job} object containing the \code{jobname} and the
