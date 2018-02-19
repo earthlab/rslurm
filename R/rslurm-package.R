@@ -49,7 +49,7 @@
 #' @section Slurm Configuration:
 #'   
 #'   Advanced options for the Slurm workload manager may accompany job submission
-#'   by both \code{\link{slrum_call}} and \code{\link{slrum_apply}} through the 
+#'   by both \code{\link{slurm_call}} and \code{\link{slurm_apply}} through the 
 #'   optional \code{slurm_options} argument. For example, passing
 #'   \code{list(time = '1:30')} for this options limits the job to 1 hour and 30
 #'   minutes. Some advanced configuration must be set through environment 
