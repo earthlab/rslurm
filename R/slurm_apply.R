@@ -141,6 +141,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     rscript_path <- file.path(R.home("bin"), "Rscript")
     script_sh <- whisker::whisker.render(template_sh,
                     list(max_node = nodes - 1,
+                         cpus_per_node = cpus_per_node,
                          jobname = jobname,
                          flags = slurm_options$flags,
                          options = slurm_options$options,
