@@ -48,6 +48,10 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param r_template The path to the template file for the R script run on each node. 
+#'   If NULL, uses the default template "rslurm/templates/slurm_run_single_R.txt".
+#' @param sh_template The path to the template file for the sbatch submission script. 
+#'   If NULL, uses the default template "rslurm/templates/submit_single_sh.txt".
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with 
@@ -62,6 +66,7 @@
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
                        pkgs = rev(.packages()), libPaths = NULL,
+                       r_template = NULL, sh_template = NULL,
                        slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
@@ -72,6 +77,14 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     }
     if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
         stop("names of params must match arguments of f")
+    }
+    
+    # Default templates
+    if(is.null(r_template)) {
+        r_template <- system.file("templates/slurm_run_single_R.txt", package = "rslurm")
+    }
+    if(is.null(sh_template)) {
+        sh_template <- system.file("templates/submit_single_sh.txt", package = "rslurm")
     }
         
     jobname <- make_jobname(jobname)
@@ -89,8 +102,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     }    
     
     # Create a R script to run function on cluster
-    template_r <- readLines(system.file("templates/slurm_run_single_R.txt", 
-                                        package = "rslurm"))
+    template_r <- readLines(r_template)
     script_r <- whisker::whisker.render(template_r,
                     list(pkgs = pkgs,
                          add_obj = !is.null(add_objects),
@@ -98,8 +110,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
     
     # Create submission bash script
-    template_sh <- readLines(system.file("templates/submit_single_sh.txt", 
-                                         package = "rslurm"))
+    template_sh <- readLines(sh_template)
     slurm_options <- format_option_list(slurm_options)
     rscript_path <- file.path(R.home("bin"), "Rscript")
     script_sh <- whisker::whisker.render(template_sh, 
