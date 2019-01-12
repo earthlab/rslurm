@@ -5,8 +5,8 @@
 \title{Execution of a single function call on the Slurm cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
-  pkgs = rev(.packages()), libPaths = NULL, slurm_options = list(),
-  submit = TRUE)
+  pkgs = rev(.packages()), libPaths = NULL, r_template = NULL,
+  sh_template = NULL, slurm_options = list(), submit = TRUE)
 }
 \arguments{
 \item{f}{Any R function.}
@@ -28,6 +28,12 @@ the user when \code{slurm_call} is called.}
 library trees to search through, or NULL. The default value of NULL
 corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 Non-existent library trees are silently ignored.}
+
+\item{r_template}{The path to the template file for the R script run on each node. 
+If NULL, uses the default template "rslurm/templates/slurm_run_single_R.txt".}
+
+\item{sh_template}{The path to the template file for the sbatch submission script. 
+If NULL, uses the default template "rslurm/templates/submit_single_sh.txt".}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}
