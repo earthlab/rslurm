@@ -23,6 +23,6 @@ if any and log outputs.
 The \code{queue} element of the output is a data frame matching the output
 of the Slurm \code{squeue} command for that job; it will only indicate portions
 of job that are running or in queue. The \code{log} element is a
-list of the contents of console/error output files for each node where the 
+vector of the contents of console/error output files for each node where the 
 job is running.
 }

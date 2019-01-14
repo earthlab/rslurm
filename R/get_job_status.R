@@ -6,7 +6,7 @@
 #' The \code{queue} element of the output is a data frame matching the output
 #' of the Slurm \code{squeue} command for that job; it will only indicate portions
 #' of job that are running or in queue. The \code{log} element is a
-#' list of the contents of console/error output files for each node where the 
+#' vector of the contents of console/error output files for each node where the 
 #' job is running.
 #' 
 #' @param slr_job A \code{slurm_job} object.
@@ -29,8 +29,9 @@ get_job_status <- function(slr_job) {
     # Get output logs
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
     out_files <- file.path(tmpdir, paste0("slurm_", 0:(slr_job$nodes - 1), ".out"))
-    logs <- lapply(out_files, 
-                   function(outf) paste(readLines(outf), collapse = "\n"))
+    logs <- vapply(out_files, 
+                   function(outf) paste(readLines(outf), collapse = "\n"),
+                   "")
     
     job_status <- list(completed = completed, queue = queue, log = logs)
     class(job_status) <- "slurm_job_status"
