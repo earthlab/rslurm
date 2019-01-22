@@ -38,7 +38,9 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE,
     if (!(outtype %in% outtypes)) {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
     }
-    stopifnot(is.null(ncores) || (is.numeric(ncores) & length(ncores) == 1))
+    if (!(is.null(ncores) || (is.numeric(ncores) && length(ncores) == 1))) {
+        stop("ncores must be an integer number of cores")
+    }
 
     # Wait for slr_job using Slurm dependency
     if (wait) {

@@ -8,6 +8,7 @@
     \subsection{NEW FEATURES}{
         \itemize{
             \item Improved status with \code{get_job_status}, deprecating \code{print_job_status} (\ghpr{37}).
+	    \item Use \code{mcapply} with \code{get_slurm_out} to gather results. (\ghpr{30}).
         }
     }
     \subsection{FIXES}{
