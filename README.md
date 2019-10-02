@@ -10,7 +10,7 @@ CRAN checks:
 
 RStudio CRAN Mirror:
 
-![](https://cranlogs.r-pkg.org/badges/rslurm)
+[![](https://cranlogs.r-pkg.org/badges/rslurm)](https://cran.rstudio.com/web/packages/rslurm/index.html)
 
 ### About
 
