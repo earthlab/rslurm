@@ -1,10 +1,16 @@
 ### Status
 
 Pre-release:
+
 [![Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
 
 CRAN checks:
+
 [rslurm results](https://cran.r-project.org/web/checks/check_results_rslurm.html)
+
+RStudio CRAN Mirror:
+
+![](https://cranlogs.r-pkg.org/badges/rslurm)
 
 ### About
 
