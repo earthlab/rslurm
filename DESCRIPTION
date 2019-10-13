@@ -1,6 +1,6 @@
 Package: rslurm
 Type: Package
-Title: Submit R Calculations to a Slurm Cluster
+Title: (TEST) Submit R Calculations to a Slurm Cluster
 Description: Functions that simplify submitting R scripts to a Slurm 
     workload manager, in part by automating the division of embarrassingly
     parallel calculations across cluster nodes.
