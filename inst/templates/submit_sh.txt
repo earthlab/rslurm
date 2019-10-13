@@ -9,4 +9,6 @@
 {{#options}}
 #SBATCH --{{{name}}}={{{value}}}
 {{/options}}
-{{{rscript}}} --vanilla slurm_run.R
+
+module load R
+R CMD BATCH slurm_run.R

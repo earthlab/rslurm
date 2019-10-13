@@ -105,12 +105,13 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir, showWarnings = FALSE)
 
-    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
-    saveRDS(f, file = file.path(tmpdir, "f.RDS"))
+    saveRDS(params, file = file.path(tmpdir, "params.RDS"), version = 2)
+    saveRDS(f, file = file.path(tmpdir, "f.RDS"), version = 2)
     if (!is.null(add_objects)) {
         save(list = add_objects,
              file = file.path(tmpdir, "add_objects.RData"),
-             envir = environment(f))
+             envir = environment(f),
+             version = 2)
     }    
     
     # Get chunk size (nb. of param. sets by node)
