@@ -34,8 +34,6 @@ You can install the released version of rslurm from
 
 ``` r
 install.packages("rslurm")
-#> Installing package into '/research-home/rblake/R/x86_64-pc-linux-gnu-library/3.6'
-#> (as 'lib' is unspecified)
 ```
 
 And the development version from
@@ -44,38 +42,6 @@ And the development version from
 ``` r
 # install.packages("devtools")
 devtools::install_github("SESYNC-ci/rslurm")
-#> Downloading GitHub repo SESYNC-ci/rslurm@master
-#> 
-#>   
-   checking for file ‘/nfs/scratch/Rtmp7bhdoS/remotes336048182486/SESYNC-ci-rslurm-eb2ccca/DESCRIPTION’ ...
-  
-✔  checking for file ‘/nfs/scratch/Rtmp7bhdoS/remotes336048182486/SESYNC-ci-rslurm-eb2ccca/DESCRIPTION’ (2.4s)
-#> 
-  
-─  preparing ‘rslurm’: (19.5s)
-#> 
-  
-   checking DESCRIPTION meta-information ...
-  
-✔  checking DESCRIPTION meta-information
-#> 
-  
-─  checking for LF line-endings in source and make files and shell scripts (13.4s)
-#> 
-  
-─  checking for empty or unneeded directories
-#> 
-  
-─  building ‘rslurm_0.4.0.9002.tar.gz’
-#> 
-  
-   Warning: invalid uid value replaced by that for user 'nobody'
-#> 
-  
-   
-#> 
-#> Installing package into '/research-home/rblake/R/x86_64-pc-linux-gnu-library/3.6'
-#> (as 'lib' is unspecified)
 ```
 
 ### Documentation
@@ -117,7 +83,6 @@ number of CPUs per node.
 library(rslurm)
 sjob <- slurm_apply(test_func, pars, jobname = 'test_apply',
                     nodes = 2, cpus_per_node = 2, submit = FALSE)
-#> Submission scripts output in directory _rslurm_test_apply
 ```
 
 The output of `slurm_apply` is a `slurm_job` object that stores a few

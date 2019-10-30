@@ -34,13 +34,13 @@ The package was developed by Philippe Marchand (current maintainer), with Ian Ca
 
 You can install the released version of rslurm from [CRAN](https://CRAN.R-project.org) with:
 
-``` {r}
+``` {r, eval = FALSE}
 install.packages("rslurm")
 ```
 
 And the development version from [GitHub](https://github.com/SESYNC-ci/rslurm) with:
 
-``` {r}
+``` {r, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("SESYNC-ci/rslurm")
 ```
@@ -60,7 +60,7 @@ To illustrate a typical rslurm workflow, we use a simple function that takes
 a mean and standard deviation as parameters, generates a million normal deviates
 and returns the sample mean and standard deviation.
 
-```{r}
+```{r, eval = FALSE}
 test_func <- function(par_mu, par_sd) {
     samp <- rnorm(10^6, par_mu, par_sd)
     c(s_mu = mean(samp), s_sd = sd(samp))
@@ -70,7 +70,7 @@ test_func <- function(par_mu, par_sd) {
 We then create a parameter data frame where each row is a parameter set and each
 column matches an argument of the function.
 
-```{r}
+```{r, eval = FALSE}
 pars <- data.frame(par_mu = 1:10,
                    par_sd = seq(0.1, 1, length.out = 10))
 ```
@@ -78,7 +78,7 @@ pars <- data.frame(par_mu = 1:10,
 We can now pass that function and the parameters data frame to `slurm_apply`,
 specifiying the number of cluster nodes to use and the number of CPUs per node.
 
-```{r}
+```{r, eval = FALSE}
 library(rslurm)
 sjob <- slurm_apply(test_func, pars, jobname = 'test_apply',
                     nodes = 2, cpus_per_node = 2, submit = FALSE)
