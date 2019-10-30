@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![cran checks](https://cranchecks.info/badges/worst/rslrum)](https://cran.r-project.org/web/checks/check_results_rslurm.html)
+[![cran checks](https://cranchecks.info/badges/worst/rslurm)](https://cran.r-project.org/web/checks/check_results_rslurm.html)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://cran.rstudio.com/web/packages/rslurm/index.html)
 
 ### About
