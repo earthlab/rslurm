@@ -15,8 +15,9 @@ The package was developed by Philippe Marchand (current maintainer), with Ian Ca
 
 ### Installation
 
-Install the package from R with `install.packages('rslurm')`. Note that job
-submission is only possible on a system with access to a Slurm workload manager
+Install the package from CRAN with `install.packages('rslurm')`.
+
+Note that job submission is only possible on a system with access to a Slurm workload manager
 (i.e. a system where the command line utilities `squeue` or `sinfo` return
 information from a Slurm head node).
 
