@@ -12,7 +12,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Submit R Calculations to a Slurm Cluster">
-<meta property="og:description" content="Functions that simplify submitting R scripts to a Slurm 
+<meta property="og:description" content="Functions that simplify submitting R scripts to a slurm 
     workload manager, in part by automating the division of embarrassingly
     parallel calculations across cluster nodes.">
 <meta name="twitter:card" content="summary">
@@ -83,7 +83,7 @@
 <div id="about" class="section level3">
 <h3 class="hasAnchor">
 <a href="#about" class="anchor"></a>About</h3>
-<p>Development of this R package was supported by the National Socio-Environmental Synthesis Center (SESYNC) under funding received from the National Science Foundation DBI-1052875.</p>
+<p>Development of this R package was supported by the National Socio-Environmental Synthesis Center (SESYNC) under funding received from the National Science Foundation grants DBI-1052875 and DBI-1639145.</p>
 <p>The package was developed by Philippe Marchand (current maintainer), with Ian Carroll and Mike Smorul contributing.</p>
 </div>
 <div id="installation" class="section level3">
@@ -117,7 +117,7 @@
 <a class="sourceLine" id="cb5-2" data-line-number="2">sjob &lt;-<span class="st"> </span><span class="kw"><a href="reference/slurm_apply.html">slurm_apply</a></span>(test_func, pars, <span class="dt">jobname =</span> <span class="st">'test_apply'</span>,</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                    <span class="dt">nodes =</span> <span class="dv">2</span>, <span class="dt">cpus_per_node =</span> <span class="dv">2</span>, <span class="dt">submit =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>The output of <code>slurm_apply</code> is a <code>slurm_job</code> object that stores a few pieces of information (job name, job ID, and the number of nodes) needed to retrieve the job’s output.</p>
-<p>See <a href="https://cran.r-project.org/package=rslurm">vignette</a> for more information.</p>
+<p>See <a href="http://cyberhelp.sesync.org/rslurm/">Get started</a> for more information.</p>
 </div>
 </div>
   </div>
@@ -143,8 +143,7 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Philippe Marchand <br><small class="roles"> Author </small>  </li>
-<li>Ian Carroll <br><small class="roles"> Contributor, maintainer </small>  </li>
+<li>Philippe Marchand <br><small class="roles"> Author, maintainer </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -164,7 +163,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Philippe Marchand, Ian Carroll.</p>
+  <p>Developed by Philippe Marchand.</p>
 </div>
 
 <div class="pkgdown">
