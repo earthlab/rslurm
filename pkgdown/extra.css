@@ -1,0 +1,43 @@
+a {
+    color: #dab8f5;
+}
+
+a:hover {
+    color: #dab8f5;
+}
+
+a:visited {
+    color: #dab8f5;
+}
+
+.navbar-default  .navbar-link {
+    color: #dab8f5;
+}
+
+.navbar-default  .navbar-nav > li > a {
+    color: #dab8f5;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+    background-color: transparent;
+}
+
+.nav-pills > li.active > a:focus {
+    background-color: transparent;
+}
+
+.navbar-nav {
+    background-color: #222222;
+}
+
+.navbar-brand {
+    background-color: #222222;
+}
+
+.navbar-right {
+    background-color: #222222;
+}
+
+.navbar-collapse {
+    background-color: #222222;
+}

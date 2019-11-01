@@ -3,4 +3,7 @@ pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
   rslurm: rslurm.html
+urls:
+  reference: http://cyberhelp.sesync.org/rslurm//reference
+  article: http://cyberhelp.sesync.org/rslurm//articles
 

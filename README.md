@@ -22,7 +22,7 @@ status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org
 
 Development of this R package was supported by the National
 Socio-Environmental Synthesis Center (SESYNC) under funding received
-from the National Science Foundation DBI-1052875.
+from the National Science Foundation grants DBI-1052875 and DBI-1639145.
 
 The package was developed by Philippe Marchand (current maintainer),
 with Ian Carroll and Mike Smorul contributing.
@@ -89,5 +89,5 @@ The output of `slurm_apply` is a `slurm_job` object that stores a few
 pieces of information (job name, job ID, and the number of nodes) needed
 to retrieve the job’s output.
 
-See [vignette](https://cran.r-project.org/package=rslurm) for more
+See [Get started](http://cyberhelp.sesync.org/rslurm/) for more
 information.
