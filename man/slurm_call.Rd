@@ -5,8 +5,8 @@
 \title{Execution of a single function call on the Slurm cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
-  pkgs = rev(.packages()), libPaths = NULL, slurm_options = list(),
-  submit = TRUE)
+  pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL,
+  slurm_options = list(), submit = TRUE)
 }
 \arguments{
 \item{f}{Any R function.}
@@ -28,6 +28,9 @@ the user when \code{slurm_call} is called.}
 library trees to search through, or NULL. The default value of NULL
 corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 Non-existent library trees are silently ignored.}
+
+\item{rscript_path}{The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}

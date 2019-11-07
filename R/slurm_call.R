@@ -48,6 +48,8 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param rscript_path The location of the Rscript command. If not specified, 
+#'   defaults to the location of Rscript within the R installation being run.
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with 
@@ -61,9 +63,9 @@
 #'   the output of this function.
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
-                       pkgs = rev(.packages()), libPaths = NULL,
-                       slurm_options = list(), submit = TRUE,
-                       rscript_path = NULL) {
+                       pkgs = rev(.packages()), 
+                       libPaths = NULL, rscript_path = NULL,
+                       slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
