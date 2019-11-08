@@ -24,9 +24,9 @@ over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if
 the parameter set is too small to use all CPUs on the requested nodes.}
 
-\item{cpus_per_node}{The number of CPUs requested per node, i.e. how many
-processes to run in parallel per node; this is mapped to the
-"cpus-per-task" Slurm parameter."}
+\item{cpus_per_node}{The number of CPUs requested per node, i.e., how many
+processes to run in parallel per node. This argument is mapped to the
+Slurm parameter \code{cpus-per-task}.}
 
 \item{add_objects}{A character vector containing the name of R objects to be
 saved in a .RData file and loaded on each cluster node prior to calling
