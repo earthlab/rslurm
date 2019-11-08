@@ -9,6 +9,7 @@
 #' vector of the contents of console/error output files for each node where the 
 #' job is running.
 #' 
+#' @importFrom utils read.table
 #' @param slr_job A \code{slurm_job} object.
 #' @return A list with three elements: \code{completed} is a logical value 
 #'   indicating if all portions of the job have completed or stopped, \code{queue} 

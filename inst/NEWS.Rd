@@ -11,11 +11,6 @@
 	    \item Use \code{mcapply} with \code{get_slurm_out} to gather results. (\ghpr{30}).
         }
     }
-    \subsection{FIXES}{
-        \itemize{
-        }
-    }
-  
 }
 
 \section{Changes in version 0.4.0 (2017-10-17)}{

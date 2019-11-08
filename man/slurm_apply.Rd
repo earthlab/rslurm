@@ -6,7 +6,7 @@
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
   add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  slurm_options = list(), submit = TRUE)
+  rscript_path = NULL, slurm_options = list(), submit = TRUE)
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -39,6 +39,9 @@ loaded by the user when \code{slurm_apply} is called.}
 library trees to search through, or NULL. The default value of NULL
 corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 Non-existent library trees are silently ignored.}
+
+\item{rscript_path}{The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.}
 
 \item{slurm_options}{A named list of options recognized by \code{sbatch}; see
 Details below for more information.}

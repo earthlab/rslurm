@@ -48,6 +48,8 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param rscript_path The location of the Rscript command. If not specified, 
+#'   defaults to the location of Rscript within the R installation being run.
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with 
@@ -61,7 +63,8 @@
 #'   the output of this function.
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
-                       pkgs = rev(.packages()), libPaths = NULL,
+                       pkgs = rev(.packages()), 
+                       libPaths = NULL, rscript_path = NULL,
                        slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
@@ -70,7 +73,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     if (!is.list(params)) {
         stop("second argument to slurm_call should be a list")
     }
-    if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
         stop("names of params must match arguments of f")
     }
         
@@ -101,7 +104,9 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     template_sh <- readLines(system.file("templates/submit_single_sh.txt", 
                                          package = "rslurm"))
     slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
+    if (is.null(rscript_path)){
+        rscript_path <- file.path(R.home("bin"), "Rscript")
+    }
     script_sh <- whisker::whisker.render(template_sh, 
                                          list(jobname = jobname,
                                               flags = slurm_options$flags, 

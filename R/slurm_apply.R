@@ -61,6 +61,8 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param rscript_path The location of the Rscript command. If not specified, 
+#'   defaults to the location of Rscript within the R installation being run.
 #' @param slurm_options A named list of options recognized by \code{sbatch}; see
 #'   Details below for more information.
 #' @param submit Whether or not to submit the job to the cluster with
@@ -81,7 +83,8 @@
 #' @export
 slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
                         add_objects = NULL, pkgs = rev(.packages()),
-                        libPaths = NULL, slurm_options = list(), submit = TRUE) {
+                        libPaths = NULL, rscript_path = NULL,
+						slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_apply should be a function")
@@ -89,7 +92,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     if (!is.data.frame(params)) {
         stop("second argument to slurm_apply should be a data.frame")
     }
-    if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
         stop("column names of params must match arguments of f")
     }
     if (!is.numeric(nodes) || length(nodes) != 1) {
@@ -138,7 +141,9 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     template_sh <- readLines(system.file("templates/submit_sh.txt",
                                          package = "rslurm"))
     slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
+    if (is.null(rscript_path)){
+        rscript_path <- file.path(R.home("bin"), "Rscript")
+    }
     script_sh <- whisker::whisker.render(template_sh,
                     list(max_node = nodes - 1,
                          jobname = jobname,
