@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #SBATCH --array=0-{{{max_node}}}
+#SBATCH --cpus-per-task={{{cpus_per_node}}}
 #SBATCH --job-name={{{jobname}}}
 #SBATCH --output=slurm_%a.out
 {{#flags}}
