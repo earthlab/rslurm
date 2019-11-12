@@ -24,8 +24,8 @@ Development of this R package was supported by the National
 Socio-Environmental Synthesis Center (SESYNC) under funding received
 from the National Science Foundation grants DBI-1052875 and DBI-1639145.
 
-The package was developed by Philippe Marchand (current maintainer),
-with Ian Carroll and Mike Smorul contributing.
+The package was developed by Philippe Marchand, with Ian Carroll and
+Mike Smorul contributing. Quentin Read is the current maintainer.
 
 ### Installation
 

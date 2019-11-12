@@ -5,9 +5,10 @@
 \title{Parallel execution of a function on the Slurm cluster}
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
-  add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  rscript_path = NULL, r_template = NULL, sh_template = NULL, 
-  slurm_options = list(), submit = TRUE)
+  preschedule_cores = TRUE, add_objects = NULL,
+  pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL,
+  r_template = NULL, sh_template = NULL, slurm_options = list(),
+  submit = TRUE)
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -28,6 +29,13 @@ the parameter set is too small to use all CPUs on the requested nodes.}
 \item{cpus_per_node}{The number of CPUs requested per node, i.e., how many
 processes to run in parallel per node. This argument is mapped to the
 Slurm parameter \code{cpus-per-task}.}
+
+\item{preschedule_cores}{Corresponds to the \code{mc.preschedule} argument of 
+\code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
+jobs are assigned to cores before computation. If \code{FALSE}, a new job is
+created for each row of \code{params}. Setting \code{FALSE} may be faster if 
+different values of \code{params} result in very variable completion time for
+jobs.}
 
 \item{add_objects}{A character vector containing the name of R objects to be
 saved in a .RData file and loaded on each cluster node prior to calling
@@ -104,7 +112,7 @@ the description of the related functions for more details.
 \examples{
 \dontrun{
 sjob <- slurm_apply(func, pars)
-print_job_status(sjob) # Prints console/error output once job is completed.
+get_job_status(sjob) # Prints console/error output once job is completed.
 func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 cleanup_files(sjob)
 }
@@ -113,6 +121,6 @@ cleanup_files(sjob)
 \code{\link{slurm_call}} to evaluate a single function call.
 
 \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
-  \code{\link{get_slurm_out}} and \code{\link{print_job_status}}
+  \code{\link{get_slurm_out}} and \code{\link{get_job_status}}
   which use the output of this function.
 }

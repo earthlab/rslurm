@@ -52,6 +52,12 @@
 #' @param cpus_per_node The number of CPUs requested per node, i.e., how many
 #'   processes to run in parallel per node. This argument is mapped to the
 #'   Slurm parameter \code{cpus-per-task}.
+#' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
+#' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
+#' jobs are assigned to cores before computation. If \code{FALSE}, a new job is
+#' created for each row of \code{params}. Setting \code{FALSE} may be faster if 
+#' different values of \code{params} result in very variable completion time for
+#' jobs.
 #' @param add_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
 #'   \code{f}.
@@ -76,17 +82,18 @@
 #'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
-#'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}}
+#'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}}
 #'   which use the output of this function.
 #' @examples
 #' \dontrun{
 #' sjob <- slurm_apply(func, pars)
-#' print_job_status(sjob) # Prints console/error output once job is completed.
+#' get_job_status(sjob) # Prints console/error output once job is completed.
 #' func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
+slurm_apply <- function(f, params, jobname = NA, 
+                        nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
                         add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
@@ -146,6 +153,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
                          add_obj = !is.null(add_objects),
                          nchunk = nchunk,
                          cpus_per_node = cpus_per_node,
+                         preschedule_cores = preschedule_cores,
                          libPaths = libPaths))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))
 

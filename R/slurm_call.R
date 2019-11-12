@@ -63,7 +63,7 @@
 #' @seealso \code{\link{slurm_apply}} to parallelize a function over a parameter
 #'   set.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
-#'   \code{\link{get_slurm_out}} and \code{\link{print_job_status}} which use
+#'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}} which use
 #'   the output of this function.
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 

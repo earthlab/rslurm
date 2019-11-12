@@ -16,6 +16,7 @@ load('add_objects.RData')
     FUN = .rslurm_func,
     .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE],
     mc.cores = {{{cpus_per_node}}},
+    mc.preschedule = {{{preschedule_cores}}},
     SIMPLIFY = FALSE))
 
 saveRDS(.rslurm_result, file = paste0('results_', .rslurm_id, '.RDS'))

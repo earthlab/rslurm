@@ -19,7 +19,7 @@ A \code{slurm_job} object.
 \description{
 This function creates a \code{slurm_job} object which can be passed to other
 functions such as \code{\link{cancel_slurm}}, \code{\link{cleanup_files}}, 
-\code{\link{get_slurm_out}} and \code{\link{print_job_status}}.
+\code{\link{get_slurm_out}} and \code{\link{get_job_status}}.
 }
 \details{
 In general, \code{slurm_job} objects are created automatically as the output of 
