@@ -4,6 +4,15 @@
 \newcommand{\ghpr}{\href{https://github.com/sesync-ci/rslurm/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/sesync-ci/rslurm/issues/#1}{##1}}
 
+\section{Changes in version 0.4.1 (YYYY-MM-DD)}{
+    \subsection{NEW FEATURES}{
+        \itemize{
+            \item Improved status with \code{get_job_status}, deprecating \code{print_job_status} (\ghpr{37}).
+	    \item Use \code{mcapply} with \code{get_slurm_out} to gather results. (\ghpr{30}).
+        }
+    }
+}
+
 \section{Changes in version 0.4.0 (2017-10-17)}{
     \subsection{NEW FEATURES AND FIXES}{
         \itemize{

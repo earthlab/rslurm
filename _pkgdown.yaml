@@ -1,0 +1,25 @@
+title: rslurm  
+url: http://cyberhelp.sesync.org/rslurm/
+template:  
+  params:  
+    bootswatch: darkly
+reference:  
+  - title: Introduction
+    desc: ~  
+    contents:  
+      - '`rslurm-package`'  
+  - title: Basic functions 
+    desc: ~  
+    contents:  
+      - '`slurm_apply`'  
+      - '`get_slurm_out`'    
+  - title: Other functions  
+    desc: ~
+    contents:  
+      - '`cancel_slurm`'  
+      - '`cleanup_files`'  
+      - '`get_job_status`'  
+      - '`slurm_call`'  
+      - '`slurm_job`'     
+navbar:  
+  type: standard  

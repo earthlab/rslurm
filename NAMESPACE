@@ -2,9 +2,12 @@
 
 export(cancel_slurm)
 export(cleanup_files)
+export(get_job_status)
 export(get_slurm_out)
 export(print_job_status)
 export(slurm_apply)
 export(slurm_call)
 export(slurm_job)
+importFrom(parallel,mclapply)
 importFrom(utils,capture.output)
+importFrom(utils,read.table)

@@ -6,8 +6,8 @@
 \usage{
 slurm_apply(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
   add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  r_template = NULL, sh_template = NULL, slurm_options = list(),
-  submit = TRUE)
+  rscript_path = NULL, r_template = NULL, sh_template = NULL, 
+  slurm_options = list(), submit = TRUE)
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
@@ -25,8 +25,9 @@ over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if
 the parameter set is too small to use all CPUs on the requested nodes.}
 
-\item{cpus_per_node}{The number of CPUs per node on the cluster; determines how
-many processes are run in parallel per node.}
+\item{cpus_per_node}{The number of CPUs requested per node, i.e., how many
+processes to run in parallel per node. This argument is mapped to the
+Slurm parameter \code{cpus-per-task}.}
 
 \item{add_objects}{A character vector containing the name of R objects to be
 saved in a .RData file and loaded on each cluster node prior to calling
@@ -40,6 +41,9 @@ loaded by the user when \code{slurm_apply} is called.}
 library trees to search through, or NULL. The default value of NULL
 corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 Non-existent library trees are silently ignored.}
+
+\item{rscript_path}{The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.}
 
 \item{r_template}{The path to the template file for the R script run on each node. 
 If NULL, uses the default template "rslurm/templates/slurm_run_R.txt".}
@@ -76,9 +80,9 @@ Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
 \code{slurm_options = list(time = "1:00:00", share = TRUE)}.
 See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
 Note that full names must be used (e.g. "time" rather than "t") and that flags
-(such as "share") must be specified as TRUE. The "array", "job-name", "nodes"
-and "output" options are already determined by \code{slurm_apply} and should
-not be manually set.
+(such as "share") must be specified as TRUE. The "array", "job-name", "nodes", 
+"cpus-per-task" and "output" options are already determined by 
+\code{slurm_apply} and should not be manually set.
 
 When processing the computation job, the Slurm cluster will output two types
 of files in the temporary folder: those containing the return values of the

@@ -5,8 +5,9 @@
 \title{Execution of a single function call on the Slurm cluster}
 \usage{
 slurm_call(f, params, jobname = NA, add_objects = NULL,
-  pkgs = rev(.packages()), libPaths = NULL, r_template = NULL,
-  sh_template = NULL, slurm_options = list(), submit = TRUE)
+  pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL, 
+  r_template = NULL, sh_template = NULL, slurm_options = list(), 
+  submit = TRUE)
 }
 \arguments{
 \item{f}{Any R function.}
@@ -29,6 +30,9 @@ library trees to search through, or NULL. The default value of NULL
 corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 Non-existent library trees are silently ignored.}
 
+\item{rscript_path}{The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.}
+ 
 \item{r_template}{The path to the template file for the R script run on each node. 
 If NULL, uses the default template "rslurm/templates/slurm_run_single_R.txt".}
 

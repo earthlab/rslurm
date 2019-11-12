@@ -1,28 +1,93 @@
-### Status
 
-Pre-release:
-[![Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-CRAN checks:
-[rslurm results](https://cran.r-project.org/web/checks/check_results_rslurm.html)
+# rslurm: submit R code to a SLURM cluster
+
+<!-- badges: start -->
+
+[![cran
+checks](https://cranchecks.info/badges/worst/rslurm)](https://cran.r-project.org/web/checks/check_results_rslurm.html)
+[![rstudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://cran.rstudio.com/web/packages/rslurm/index.html)
+[![Build
+Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
+[![Project Status: WIP – Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org/package=rslurm)
+<!-- badges: end -->
 
 ### About
 
-Development of this R package was supported by the National Socio-Environmental
-Synthesis Center (SESYNC) under funding received from the National Science
-Foundation DBI-1052875.
+Development of this R package was supported by the National
+Socio-Environmental Synthesis Center (SESYNC) under funding received
+from the National Science Foundation grants DBI-1052875 and DBI-1639145.
 
-The package was developed by Philippe Marchand, with Ian Carroll (current
-maintainer) and Mike Smorul contributing.
+The package was developed by Philippe Marchand (current maintainer),
+with Ian Carroll and Mike Smorul contributing.
 
 ### Installation
 
-Install the package from R with `install.packages('rslurm')`. Note that job
-submission is only possible on a system with access to a Slurm workload manager
-(i.e. a system where the command line utilities `squeue` or `sinfo` return
-information from a Slurm head node).
+You can install the released version of rslurm from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("rslurm")
+```
+
+And the development version from
+[GitHub](https://github.com/SESYNC-ci/rslurm) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("SESYNC-ci/rslurm")
+```
 
 ### Documentation
 
-Package documentation is accessible from the R console through `package?rslurm`
-and [online](https://cran.r-project.org/package=rslurm).
+Package documentation is accessible from the R console through
+`package?rslurm` and
+[online](https://cran.r-project.org/package=rslurm).
+
+### Example
+
+Note that job submission is only possible on a system with access to a
+Slurm workload manager (i.e. a system where the command line utilities
+`squeue` or `sinfo` return information from a Slurm head node).
+
+To illustrate a typical rslurm workflow, we use a simple function that
+takes a mean and standard deviation as parameters, generates a million
+normal deviates and returns the sample mean and standard deviation.
+
+``` r
+test_func <- function(par_mu, par_sd) {
+    samp <- rnorm(10^6, par_mu, par_sd)
+    c(s_mu = mean(samp), s_sd = sd(samp))
+}
+```
+
+We then create a parameter data frame where each row is a parameter set
+and each column matches an argument of the function.
+
+``` r
+pars <- data.frame(par_mu = 1:10,
+                   par_sd = seq(0.1, 1, length.out = 10))
+```
+
+We can now pass that function and the parameters data frame to
+`slurm_apply`, specifiying the number of cluster nodes to use and the
+number of CPUs per node.
+
+``` r
+library(rslurm)
+sjob <- slurm_apply(test_func, pars, jobname = 'test_apply',
+                    nodes = 2, cpus_per_node = 2, submit = FALSE)
+```
+
+The output of `slurm_apply` is a `slurm_job` object that stores a few
+pieces of information (job name, job ID, and the number of nodes) needed
+to retrieve the job’s output.
+
+See [Get started](http://cyberhelp.sesync.org/rslurm/) for more
+information.

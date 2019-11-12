@@ -48,6 +48,8 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param rscript_path The location of the Rscript command. If not specified, 
+#'   defaults to the location of Rscript within the R installation being run.
 #' @param r_template The path to the template file for the R script run on each node. 
 #'   If NULL, uses the default template "rslurm/templates/slurm_run_single_R.txt".
 #' @param sh_template The path to the template file for the sbatch submission script. 
@@ -65,9 +67,9 @@
 #'   the output of this function.
 #' @export
 slurm_call <- function(f, params, jobname = NA, add_objects = NULL, 
-                       pkgs = rev(.packages()), libPaths = NULL,
-                       r_template = NULL, sh_template = NULL,
-                       slurm_options = list(), submit = TRUE) {
+                       pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL,
+                       r_template = NULL, sh_template = NULL, slurm_options = list(), 
+                       submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
@@ -75,7 +77,7 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     if (!is.list(params)) {
         stop("second argument to slurm_call should be a list")
     }
-    if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
         stop("names of params must match arguments of f")
     }
     
@@ -112,7 +114,9 @@ slurm_call <- function(f, params, jobname = NA, add_objects = NULL,
     # Create submission bash script
     template_sh <- readLines(sh_template)
     slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
+    if (is.null(rscript_path)){
+        rscript_path <- file.path(R.home("bin"), "Rscript")
+    }
     script_sh <- whisker::whisker.render(template_sh, 
                                          list(jobname = jobname,
                                               flags = slurm_options$flags, 

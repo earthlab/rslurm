@@ -14,6 +14,8 @@
 #' @param slr_job A \code{slurm_job} object.
 #' @param outtype Can be "table" or "raw", see "Value" below for details.
 #' @param wait Specify whether to block until \code{slr_job} completes.
+#' @param ncores (optional) If not null, the number of cores passed to
+#' mclapply
 #' @return If \code{outtype = "table"}: A data frame with one column by 
 #'   return value of the function passed to \code{slurm_apply}, where 
 #'   each row is the output of the corresponding row in the params data frame 
@@ -23,8 +25,10 @@
 #'   of the function passed to \code{slurm_apply} for the corresponding
 #'   row in the params data frame passed to \code{slurm_apply}.
 #' @seealso \code{\link{slurm_apply}}, \code{\link{slurm_call}}
+#' @importFrom parallel mclapply
 #' @export
-get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
+get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE, 
+                          ncores = NULL) {
     
     # Check arguments
     if (!(class(slr_job) == "slurm_job")) {
@@ -33,6 +37,9 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     outtypes <- c("table", "raw")
     if (!(outtype %in% outtypes)) {
         stop(paste("outtype should be one of:", paste(outtypes, collapse = ', ')))
+    }
+    if (!(is.null(ncores) || (is.numeric(ncores) && length(ncores) == 1))) {
+        stop("ncores must be an integer number of cores")
     }
 
     # Wait for slr_job using Slurm dependency
@@ -50,7 +57,11 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE) {
     res_files <- file.path(tmpdir, setdiff(res_files, missing_files))
     if (length(res_files) == 0) return(NA)
     
-    slurm_out <- lapply(res_files, readRDS)
+    if (is.null(ncores)) {
+        slurm_out <- lapply(res_files, readRDS)
+    } else {
+        slurm_out <- mclapply(res_files, readRDS, mc.cores = ncores)
+    }
     slurm_out <- do.call(c, slurm_out)
     
     if (outtype == "table") {

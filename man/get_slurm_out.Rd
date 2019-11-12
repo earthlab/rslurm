@@ -4,7 +4,7 @@
 \alias{get_slurm_out}
 \title{Reads the output of a function calculated on the Slurm cluster}
 \usage{
-get_slurm_out(slr_job, outtype = "raw", wait = TRUE)
+get_slurm_out(slr_job, outtype = "raw", wait = TRUE, ncores = NULL)
 }
 \arguments{
 \item{slr_job}{A \code{slurm_job} object.}
@@ -12,6 +12,9 @@ get_slurm_out(slr_job, outtype = "raw", wait = TRUE)
 \item{outtype}{Can be "table" or "raw", see "Value" below for details.}
 
 \item{wait}{Specify whether to block until \code{slr_job} completes.}
+
+\item{ncores}{(optional) If not null, the number of cores passed to
+mclapply}
 }
 \value{
 If \code{outtype = "table"}: A data frame with one column by 

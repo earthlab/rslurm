@@ -17,9 +17,9 @@
 #' \code{slurm_options = list(time = "1:00:00", share = TRUE)}.
 #' See \url{http://slurm.schedmd.com/sbatch.html} for details on possible options.
 #' Note that full names must be used (e.g. "time" rather than "t") and that flags
-#' (such as "share") must be specified as TRUE. The "array", "job-name", "nodes"
-#' and "output" options are already determined by \code{slurm_apply} and should
-#' not be manually set.
+#' (such as "share") must be specified as TRUE. The "array", "job-name", "nodes", 
+#' "cpus-per-task" and "output" options are already determined by 
+#' \code{slurm_apply} and should not be manually set.
 #'
 #' When processing the computation job, the Slurm cluster will output two types
 #' of files in the temporary folder: those containing the return values of the
@@ -49,8 +49,9 @@
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if
 #'   the parameter set is too small to use all CPUs on the requested nodes.
-#' @param cpus_per_node The number of CPUs per node on the cluster; determines how
-#'   many processes are run in parallel per node.
+#' @param cpus_per_node The number of CPUs requested per node, i.e., how many
+#'   processes to run in parallel per node. This argument is mapped to the
+#'   Slurm parameter \code{cpus-per-task}.
 #' @param add_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
 #'   \code{f}.
@@ -61,6 +62,8 @@
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
 #'   Non-existent library trees are silently ignored.
+#' @param rscript_path The location of the Rscript command. If not specified, 
+#'   defaults to the location of Rscript within the R installation being run.
 #' @param r_template The path to the template file for the R script run on each node. 
 #'   If NULL, uses the default template "rslurm/templates/slurm_run_R.txt".
 #' @param sh_template The path to the template file for the sbatch submission script. 
@@ -84,8 +87,8 @@
 #' }
 #' @export
 slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
-                        add_objects = NULL, pkgs = rev(.packages()),
-                        libPaths = NULL, r_template = NULL, sh_template = NULL,
+                        add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
+                        rscript_path = NULL, r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
@@ -94,7 +97,7 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     if (!is.data.frame(params)) {
         stop("second argument to slurm_apply should be a data.frame")
     }
-    if (is.null(names(params)) || !(names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
         stop("column names of params must match arguments of f")
     }
     if (!is.numeric(nodes) || length(nodes) != 1) {
@@ -149,9 +152,12 @@ slurm_apply <- function(f, params, jobname = NA, nodes = 2, cpus_per_node = 2,
     # Create submission bash script
     template_sh <- readLines(sh_template)
     slurm_options <- format_option_list(slurm_options)
-    rscript_path <- file.path(R.home("bin"), "Rscript")
+    if (is.null(rscript_path)){
+        rscript_path <- file.path(R.home("bin"), "Rscript")
+    }
     script_sh <- whisker::whisker.render(template_sh,
                     list(max_node = nodes - 1,
+                         cpus_per_node = cpus_per_node,
                          jobname = jobname,
                          flags = slurm_options$flags,
                          options = slurm_options$options,

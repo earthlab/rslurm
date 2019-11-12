@@ -1,25 +1,24 @@
 Package: rslurm
 Type: Package
 Title: Submit R Calculations to a Slurm Cluster
-Description: Functions that simplify submitting R scripts to a Slurm 
+Description: Functions that simplify submitting R scripts to a slurm 
     workload manager, in part by automating the division of embarrassingly
     parallel calculations across cluster nodes.
-Acknowledgements: Development of this R package was supported by the National
-    Socio-Environmental Synthesis Center (SESYNC) under funding received from
-    the National Science Foundation DBI-1052875.
-Version: 0.4.0.9000
+Acknowledgements: Development of this R package was supported by the National 
+    Socio-Environmental Synthesis Center (SESYNC) under funding received from 
+    the National Science Foundation grants DBI-1052875 and DBI-1639145.
+Version: 0.4.0.9002
 License: GPL-3
 URL: https://github.com/SESYNC-ci/rslurm
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
-Authors@R: c(person('Philippe', 'Marchand', role = 'aut'), 
+Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = c('aut', 'cre')), 
              person('Mike', 'Smorul', role = 'ctb'),
-             person('Ian', 'Carroll',
-                    email = 'icarroll@sesync.org', role = c('ctb', 'cre')))
+             person('Ian', 'Carroll', role = 'ctb'))
 Depends:
     R (>= 3.2.0)
 Imports:
     whisker (>= 0.3)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests:
     parallel,
     testthat,
