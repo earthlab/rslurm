@@ -116,10 +116,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-5-0" class="anchor"></a>rslurm 0.5.0<small> Unreleased </small>
 </h1>
-<p><em>2019-11-14</em></p>
-<div id="new-features-and-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Improved status with <code>get_job_status</code>, deprecating <code>print_job_status</code> (<a href="https://github.com/sesync-ci/rslurm/pull/<a href='https://github.com/SESYNC-ci/rslurm/issues/37'>#37</a>"><a href='https://github.com/SESYNC-ci/rslurm/issues/37'>#37</a></a>).</p></li>
 <li><p>Use <code>mclapply</code> within <code>get_slurm_out</code> to gather results (<a href="https://github.com/sesync-ci/rslurm/pull/<a href='https://github.com/SESYNC-ci/rslurm/issues/30'>#30</a>"><a href='https://github.com/SESYNC-ci/rslurm/issues/30'>#30</a></a>).</p></li>
@@ -133,10 +132,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-4-0" class="anchor"></a>rslurm 0.4.0<small> 2017-10-19 </small>
 </h1>
-<p><em>2017-10-17</em></p>
-<div id="new-features-and-fixes-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-1" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-1" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Pass (serialized) functions to Slurm nodes without stringifying.</p></li>
 <li><p>Save <code>add_objects</code> objects from correct environment.</p></li>
@@ -144,9 +142,9 @@
 <li><p>Include reverse dependency check in release process.</p></li>
 </ul>
 </div>
-<div id="reversions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reversions" class="anchor"></a>Reversions</h2>
+<div id="reversions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#reversions" class="anchor"></a>Reversions</h3>
 <ul>
 <li><p>README now separate from package documentation.</p></li>
 <li><p>Vignette can be built on CRAN tests again (no slurm submissions).</p></li>
@@ -158,10 +156,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-3-3" class="anchor"></a>rslurm 0.3.3<small> 2017-04-09 </small>
 </h1>
-<p><em>2017-04-07</em></p>
-<div id="new-features-and-fixes-2" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-2" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-2" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li>Create README from R/slurm.R.</li>
 </ul>
@@ -171,10 +168,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-3-2" class="anchor"></a>rslurm 0.3.2<small> 2017-04-07 </small>
 </h1>
-<p><em>2017-04-06</em></p>
-<div id="new-features-and-fixes-3" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-3" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-3" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-3" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p><code>wait</code> argument adds option to <code>slurm_apply</code> and <code>slurm_call</code> to block the calling script until the submitted job completes. This option can be used to allow immediate processing of a submitted job’s output (<a href="https://github.com/sesync-ci/rslurm/pull/<a href='https://github.com/SESYNC-ci/rslurm/issues/2'>#2</a>"><a href='https://github.com/SESYNC-ci/rslurm/issues/2'>#2</a></a>).</p></li>
 <li><p>Use “.RDS” file extension, rather than “.RData”, for serialized objects (<a href="https://github.com/sesync-ci/rslurm/pull/<a href='https://github.com/SESYNC-ci/rslurm/issues/4'>#4</a>"><a href='https://github.com/SESYNC-ci/rslurm/issues/4'>#4</a></a>).</p></li>
@@ -186,10 +182,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-3-1" class="anchor"></a>rslurm 0.3.1<small> 2016-06-18 </small>
 </h1>
-<p><em>2016-06-18</em></p>
-<div id="new-features-and-fixes-4" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-4" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-4" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-4" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li>Minor bug fix: specify full path of ‘Rscript’ when running batch scripts.</li>
 </ul>
@@ -199,11 +194,10 @@
 <h1 class="page-header">
 <a href="#rslurm-0-3-0" class="anchor"></a>rslurm 0.3.0<small> 2016-05-28 </small>
 </h1>
-<p><em>2016-05-27</em></p>
 <p><em>First version on CRAN</em></p>
-<div id="new-features-and-fixes-5" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-5" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-5" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-5" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Added a <code>submit</code> argument to <code>slurm_apply</code> and <code>slurm_call</code>. If <code>submit = FALSE</code>, the submission scripts are created but not run. This is useful if the files need to be transferred from a local machine to the cluster and run at a later time.</p></li>
 <li><p>Added new optional arguments to <code>slurm_apply</code> and <code>slurm_call</code>, allowing users to give informative names to SLURM jobs (<code>jobname</code>) and set any options understood by <code>sbatch</code> (<code>slurm_options</code>).</p></li>
@@ -218,10 +212,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-2-0" class="anchor"></a>rslurm 0.2.0<small> Unreleased </small>
 </h1>
-<p><em>2015-11-23</em></p>
-<div id="new-features-and-fixes-6" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-6" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-6" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-6" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Changed the <code>slurm_apply</code> function to use <code><a href="https://rdrr.io/r/parallel/mcdummies.html">parallel::mcMap</a></code> instead of <code>mcmapply</code>, which fixes a bug where list outputs (i.e. each function call returns a list) would be collapsed in a single list (rather than returned as a list of lists).</p></li>
 <li><p>Changed the interface so that the output type (table or raw) is now an argument of <code>get_slurm_out</code> rather than of <code>slurm_apply</code>, and defaults to <code>raw</code>.</p></li>
@@ -233,10 +226,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-1-3" class="anchor"></a>rslurm 0.1.3<small> Unreleased </small>
 </h1>
-<p><em>2015-07-13</em></p>
-<div id="new-features-and-fixes-7" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-7" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-7" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-7" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Added the <code>slurm_call</code> function, which submits a single function evaluation on the cluster, with syntax similar to the base function <code>do.call</code>.</p></li>
 <li><p><code>get_slurm_out</code> can now process the output even if some filese are missing, in which case it issues a warning.</p></li>
@@ -247,10 +239,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-1-2" class="anchor"></a>rslurm 0.1.2<small> Unreleased </small>
 </h1>
-<p><em>2015-06-29</em></p>
-<div id="new-features-and-fixes-8" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-8" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-8" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-8" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li>Added the optional argument <code>pkgs</code> to <code>slurm_apply</code>, indicating which packages should be loaded on each node (by default, all packages currently attached to the user’s R session).</li>
 </ul>
@@ -260,10 +251,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-1-1" class="anchor"></a>rslurm 0.1.1<small> Unreleased </small>
 </h1>
-<p><em>2015-06-24</em></p>
-<div id="new-features-and-fixes-9" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features-and-fixes-9" class="anchor"></a>New features and fixes</h2>
+<div id="new-features-and-fixes-9" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-and-fixes-9" class="anchor"></a>New features and fixes</h3>
 <ul>
 <li><p>Added the optional argument <code>output</code> to <code>slurm_apply</code>, which can take the value <code>table</code> (each function evaluation returns a row, output is a data frame) or <code>raw</code> (each function evaluation returns an arbitrary R object, output is a list).</p></li>
 <li><p>Fixed a bug in the chunk size calculation for <code>slurm_apply</code>.</p></li>
@@ -274,10 +264,9 @@
 <h1 class="page-header">
 <a href="#rslurm-0-1-0" class="anchor"></a>rslurm 0.1.0<small> Unreleased </small>
 </h1>
-<p><em>2015-06-16</em></p>
-<div id="initial-release" class="section level2">
-<h2 class="hasAnchor">
-<a href="#initial-release" class="anchor"></a>Initial release</h2>
+<div id="initial-release" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initial-release" class="anchor"></a>Initial release</h3>
 <ul>
 <li>First version of the package released on Github.</li>
 </ul>

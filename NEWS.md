@@ -1,8 +1,6 @@
 # rslurm 0.5.0
 
-*2019-11-14*
-
-## New features and fixes
+### New features and fixes
 
 * Improved status with `get_job_status`, deprecating `print_job_status` 
 ([#37](https://github.com/sesync-ci/rslurm/pull/#37)).
@@ -22,9 +20,7 @@ completion time ([816b40e](https://github.com/SESYNC-ci/rslurm/commit/816b40e)).
 
 # rslurm 0.4.0
 
-*2017-10-17*
-
-## New features and fixes
+### New features and fixes
 
 * Pass (serialized) functions to Slurm nodes without stringifying.
 
@@ -34,7 +30,7 @@ completion time ([816b40e](https://github.com/SESYNC-ci/rslurm/commit/816b40e)).
 
 * Include reverse dependency check in release process.
 
-## Reversions
+### Reversions
 
 * README now separate from package documentation.
 
@@ -45,17 +41,13 @@ completion time ([816b40e](https://github.com/SESYNC-ci/rslurm/commit/816b40e)).
 
 # rslurm 0.3.3
 
-*2017-04-07*
-
-## New features and fixes
+### New features and fixes
 
 * Create README from R/slurm.R.
 
 # rslurm 0.3.2
 
-*2017-04-06*
-
-## New features and fixes
+### New features and fixes
 
 * `wait` argument adds option to `slurm_apply` and `slurm_call` to
 block the calling script until the submitted job completes. This
@@ -70,20 +62,16 @@ serialized objects ([#4](https://github.com/sesync-ci/rslurm/pull/#4)).
 
 # rslurm 0.3.1
 
-*2016-06-18*
-
-## New features and fixes
+### New features and fixes
 
 * Minor bug fix: specify full path of 'Rscript' when running batch scripts.
 
 
 # rslurm 0.3.0
 
-*2016-05-27*
-
 *First version on CRAN*
 
-## New features and fixes
+### New features and fixes
 
 * Added a `submit` argument to `slurm_apply` and `slurm_call`. If `submit = FALSE`,
 the submission scripts are created but not run. This is useful if the files need
@@ -111,9 +99,7 @@ removing this package's dependency on `stringr`.
 
 # rslurm 0.2.0
 
-*2015-11-23*
-
-## New features and fixes
+### New features and fixes
 
 * Changed the `slurm_apply` function to use `parallel::mcMap` instead of `mcmapply`, 
 which fixes a bug where list outputs (i.e. each function call returns a list) 
@@ -128,9 +114,7 @@ parallel processes to be run on each node.
 
 # rslurm 0.1.3
 
-*2015-07-13*
-
-## New features and fixes
+### New features and fixes
 
 * Added the `slurm_call` function, which submits a single function evaluation
 on the cluster, with syntax similar to the base function `do.call`.
@@ -141,9 +125,7 @@ in which case it issues a warning.
 
 # rslurm 0.1.2
 
-*2015-06-29*
-
-## New features and fixes
+### New features and fixes
 
 * Added the optional argument `pkgs` to `slurm_apply`, indicating which packages
 should be loaded on each node (by default, all packages currently attached to
@@ -152,9 +134,7 @@ the user's R session).
 
 # rslurm 0.1.1
 
-*2015-06-24*
-
-## New features and fixes
+### New features and fixes
 
 * Added the optional argument `output` to `slurm_apply`, which can take the 
 value `table` (each function evaluation returns a row, output is a data frame) or
@@ -165,8 +145,6 @@ value `table` (each function evaluation returns a row, output is a data frame) o
 
 # rslurm 0.1.0
 
-*2015-06-16*
-
-## Initial release
+### Initial release
 
 * First version of the package released on Github.
