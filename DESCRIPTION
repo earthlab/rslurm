@@ -14,6 +14,7 @@ BugReports: https://github.com/SESYNC-ci/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
              person('Mike', 'Smorul', role = 'ctb'),
+             person('Rachael', 'Blake', role = 'ctb'),
              person('Quentin', 'Read', email = 'qread@sesync.org', role = c('ctb', 'cre'))
              )
 Depends:

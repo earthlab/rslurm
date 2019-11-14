@@ -99,6 +99,8 @@ removing this package's dependency on `stringr`.
 
 # rslurm 0.2.0
 
+*2015-11-23*
+
 ### New features and fixes
 
 * Changed the `slurm_apply` function to use `parallel::mcMap` instead of `mcmapply`, 
@@ -114,6 +116,8 @@ parallel processes to be run on each node.
 
 # rslurm 0.1.3
 
+*2015-07-13*
+
 ### New features and fixes
 
 * Added the `slurm_call` function, which submits a single function evaluation
@@ -125,6 +129,8 @@ in which case it issues a warning.
 
 # rslurm 0.1.2
 
+*2015-06-29*
+
 ### New features and fixes
 
 * Added the optional argument `pkgs` to `slurm_apply`, indicating which packages
@@ -133,6 +139,8 @@ the user's R session).
 
 
 # rslurm 0.1.1
+
+*2015-06-24*
 
 ### New features and fixes
 
@@ -144,6 +152,8 @@ value `table` (each function evaluation returns a row, output is a data frame) o
 
 
 # rslurm 0.1.0
+
+*2015-06-16*
 
 ### Initial release
 
