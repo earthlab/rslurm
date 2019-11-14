@@ -11,8 +11,8 @@
 #'   evaluates a function in parallel for each row of parameters in a given 
 #'   data frame. The second, \code{slurm_apply}, automatically splits the parameter
 #'   rows into equal-size chunks, each chunk to be processed by a separate cluster 
-#'   node. It uses functions from the \code{\link[parallel]{parallel}} package 
-#'   to parallelize computations across processors on a given node.
+#'   node. It uses functions from the \code{\link[parallel]{parallel-package}} 
+#'   package to parallelize computations across processors on a given node.
 #'   
 #'   The output of \code{slurm_apply} or \code{slurm_call} is a \code{slurm_job}
 #'   object that serves as an input to the other functions in the package: 
@@ -35,7 +35,7 @@
 #'   When parallelizing a function, since any error will interrupt all 
 #'   calculations for the current node, it may be useful to wrap expressions 
 #'   which may generate errors into a \code{\link[base]{try}} or 
-#'   \code{\link[base]{tryCatch}} function. This will ensure the computation 
+#'   \code{\link[base:conditions]{tryCatch}} function. This will ensure the computation 
 #'   continues with the next parameter set after reporting the error.
 #'   
 #' @section Output Format:

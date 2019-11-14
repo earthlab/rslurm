@@ -3,12 +3,18 @@
 
 \newcommand{\ghpr}{\href{https://github.com/sesync-ci/rslurm/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/sesync-ci/rslurm/issues/#1}{##1}}
+\newcommand{\ghcommit}{\href{https://github.com/sesync-ci/rslurm/commit/#1}{#1}}
 
-\section{Changes in version 0.4.1 (YYYY-MM-DD)}{
-    \subsection{NEW FEATURES}{
+\section{Changes in version 0.5.0 (2019-11-14)}{
+    \subsection{NEW FEATURES AND FIXES}{
         \itemize{
             \item Improved status with \code{get_job_status}, deprecating \code{print_job_status} (\ghpr{37}).
-	    \item Use \code{mcapply} with \code{get_slurm_out} to gather results. (\ghpr{30}).
+	        \item Use \code{mcapply} with \code{get_slurm_out} to gather results (\ghpr{30}).
+	        \item Allow user to provide custom .R and .sh templates (\ghpr{47}).
+	        \item Allow user to specify path to Rscript (\ghpr{45}) and number of 
+	        CPUS per task (\ghpr{36})
+	        \item Allow user to disable core prescheduling if tasks have high variance in 
+	        completion time (\ghcommit{816b40e}).
         }
     }
 }

@@ -6,3 +6,8 @@
 ^release\.R
 ^revdep$
 ^README\.Rmd$
+
+# pkgdown directories and files:
+^_pkgdown\.yaml$
+^pkgdown$
+^docs$
