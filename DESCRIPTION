@@ -17,7 +17,7 @@ Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com
              person('Quentin', 'Read', email = 'qread@sesync.org', role = c('ctb', 'cre'))
              )
 Depends:
-    R (>= 3.2.0)
+    R (>= 3.5.0)
 Imports:
     whisker (>= 0.3)
 RoxygenNote: 6.1.1
