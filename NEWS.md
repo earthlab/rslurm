@@ -81,7 +81,7 @@ to be transferred from a local machine to the cluster and run at a later time.
 informative names to SLURM jobs (`jobname`) and set any options understood by
 `sbatch` (`slurm_options`).
 
-* The `data_file` arugment to `slurm_apply` and `slurm_call` is replaced with 
+* The `data_file` argument to `slurm_apply` and `slurm_call` is replaced with 
 `add_objects`, which accepts a vector of R object names from the active workspace
 and automatically saves them in a .RData file to be loaded on each node.
 
@@ -123,7 +123,7 @@ parallel processes to be run on each node.
 * Added the `slurm_call` function, which submits a single function evaluation
 on the cluster, with syntax similar to the base function `do.call`.
 
-* `get_slurm_out` can now process the output even if some filese are missing,
+* `get_slurm_out` can now process the output even if some files are missing,
 in which case it issues a warning.
 
 
@@ -157,4 +157,4 @@ value `table` (each function evaluation returns a row, output is a data frame) o
 
 ### Initial release
 
-* First version of the package released on Github.
+* First version of the package released on GitHub.

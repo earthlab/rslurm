@@ -77,7 +77,7 @@ pars <- data.frame(par_mu = 1:10,
 ```
 
 We can now pass that function and the parameters data frame to
-`slurm_apply`, specifiying the number of cluster nodes to use and the
+`slurm_apply`, specifying the number of cluster nodes to use and the
 number of CPUs per node.
 
 ``` r
