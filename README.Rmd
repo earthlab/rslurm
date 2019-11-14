@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rslurm: submit R code to a SLURM cluster
+# rslurm: submit R code to a Slurm cluster
 
 <!-- badges: start -->
 [![cran checks](https://cranchecks.info/badges/worst/rslurm)](https://cran.r-project.org/web/checks/check_results_rslurm.html)
