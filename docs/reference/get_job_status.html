@@ -8,12 +8,10 @@
 
 <title>Get the status of a Slurm job — get_job_status • rslurm</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -36,12 +34,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-
 <meta property="og:title" content="Get the status of a Slurm job — get_job_status" />
+
 <meta property="og:description" content="This function returns the completion status of a Slurm job, its queue status 
 if any and log outputs." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -72,7 +69,7 @@ if any and log outputs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -94,6 +91,7 @@ if any and log outputs." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm">
@@ -120,12 +118,14 @@ if any and log outputs." />
     </div>
 
     <div class="ref-description">
+    
     <p>This function returns the completion status of a Slurm job, its queue status 
 if any and log outputs.</p>
+    
     </div>
 
     <pre class="usage"><span class='fu'>get_job_status</span>(<span class='no'>slr_job</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -134,13 +134,14 @@ if any and log outputs.</p>
       <td><p>A <code>slurm_job</code> object.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with three elements: <code>completed</code> is a logical value 
   indicating if all portions of the job have completed or stopped, <code>queue</code> 
   contains the information on job elements still in queue, and
   <code>log</code> contains the console/error logs.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>queue</code> element of the output is a data frame matching the output
@@ -148,15 +149,18 @@ of the Slurm <code>squeue</code> command for that job; it will only indicate por
 of job that are running or in queue. The <code>log</code> element is a
 vector of the contents of console/error output files for each node where the 
 job is running.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      
       <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
@@ -164,7 +168,7 @@ job is running.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Philippe Marchand.</p>
+  <p>Developed by Philippe Marchand, Ian Carroll, Quentin Read.</p>
 </div>
 
 <div class="pkgdown">

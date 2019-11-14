@@ -8,12 +8,10 @@
 
 <title>Introduction to the <code>rslurm</code> Package — rslurm-package • rslurm</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -36,12 +34,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-
 <meta property="og:title" content="Introduction to the <code>rslurm</code> Package — rslurm-package" />
+
 <meta property="og:description" content="Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
 using the slurm_call or slurm_apply functions." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -72,7 +69,7 @@ using the slurm_call or slurm_apply functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -94,6 +91,7 @@ using the slurm_call or slurm_apply functions." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm">
@@ -120,29 +118,31 @@ using the slurm_call or slurm_apply functions." />
     </div>
 
     <div class="ref-description">
+    
     <p>Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
 using the <code><a href='slurm_call.html'>slurm_call</a></code> or <code><a href='slurm_apply.html'>slurm_apply</a></code> functions.</p>
+    
     </div>
 
-
-
+        
     <h2 class="hasAnchor" id="job-submission"><a class="anchor" href="#job-submission"></a>Job submission</h2>
 
     
 
   
 <p>This package includes two core functions used to send computations to a 
-  Slurm cluster. While <code><a href='slurm_call.html'>slurm_call</a></code> executes a function using a 
-  single set of parameters (passed as a list), <code><a href='slurm_apply.html'>slurm_apply</a></code> 
-  evaluates the function in parallel for multiple sets of parameters grouped 
-  in a data frame. <code>slurm_apply</code> automatically splits the parameter sets
-  into equal-size chunks, each chunk to be processed by a separate cluster 
-  node. It uses functions from the <code><a href='https://rdrr.io/r/parallel/parallel-package.html'>parallel</a></code> package 
-  to parallelize computations within each node.</p>  
+  Slurm cluster: 1) <code><a href='slurm_call.html'>slurm_call</a></code> executes a function using a 
+  single set of parameters (passed as a list), and 2) <code><a href='slurm_apply.html'>slurm_apply</a></code> 
+  evaluates a function in parallel for each row of parameters in a given 
+  data frame. The second, <code>slurm_apply</code>, automatically splits the parameter
+  rows into equal-size chunks, each chunk to be processed by a separate cluster 
+  node. It uses functions from the <code><a href='https://rdrr.io/r/parallel/parallel-package.html'>parallel-package</a></code> 
+  package to parallelize computations across processors on a given node.</p>  
 <p>The output of <code>slurm_apply</code> or <code>slurm_call</code> is a <code>slurm_job</code>
   object that serves as an input to the other functions in the package: 
   <code><a href='rslurm-deprecated.html'>print_job_status</a></code>, <code><a href='cancel_slurm.html'>cancel_slurm</a></code>, 
   <code><a href='get_slurm_out.html'>get_slurm_out</a></code> and <code><a href='cleanup_files.html'>cleanup_files</a></code>.</p>
+    
     <h2 class="hasAnchor" id="function-specification"><a class="anchor" href="#function-specification"></a>Function specification</h2>
 
     
@@ -162,6 +162,7 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code> or <code><a href
   which may generate errors into a <code><a href='https://rdrr.io/r/base/try.html'>try</a></code> or 
   <code><a href='https://rdrr.io/r/base/conditions.html'>tryCatch</a></code> function. This will ensure the computation 
   continues with the next parameter set after reporting the error.</p>
+    
     <h2 class="hasAnchor" id="output-format"><a class="anchor" href="#output-format"></a>Output Format</h2>
 
     
@@ -172,6 +173,20 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code> or <code><a href
   the function passed to <code>slurm_apply</code> produces a vector output, you may
   use <code>outtype = "table"</code> to collect the output in a single data frame, 
   with one row by function call.</p>
+    
+    <h2 class="hasAnchor" id="slurm-configuration"><a class="anchor" href="#slurm-configuration"></a>Slurm Configuration</h2>
+
+    
+
+  
+<p>Advanced options for the Slurm workload manager may accompany job submission
+  by both <code><a href='slurm_call.html'>slurm_call</a></code> and <code><a href='slurm_apply.html'>slurm_apply</a></code> through the 
+  optional <code>slurm_options</code> argument. For example, passing
+  <code><a href='https://rdrr.io/r/base/list.html'>list(time = '1:30')</a></code> for this options limits the job to 1 hour and 30
+  minutes. Some advanced configuration must be set through environment 
+  variables. On a multi-cluster head node, for example, the <code>SLURM_CLUSTERS</code>
+  environment variable must be set to direct jobs to a non-default cluster.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -196,9 +211,15 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code> or <code><a href
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      
       <li><a href="#job-submission">Job submission</a></li>
+
       <li><a href="#function-specification">Function specification</a></li>
+
       <li><a href="#output-format">Output Format</a></li>
+
+      <li><a href="#slurm-configuration">Slurm Configuration</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -208,7 +229,7 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code> or <code><a href
 
       <footer>
       <div class="copyright">
-  <p>Developed by Philippe Marchand.</p>
+  <p>Developed by Philippe Marchand, Ian Carroll, Quentin Read.</p>
 </div>
 
 <div class="pkgdown">

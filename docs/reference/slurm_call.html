@@ -8,12 +8,10 @@
 
 <title>Execution of a single function call on the Slurm cluster — slurm_call • rslurm</title>
 
-
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -36,12 +34,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-
 <meta property="og:title" content="Execution of a single function call on the Slurm cluster — slurm_call" />
+
 <meta property="og:description" content="Use slurm_call to perform a single function evaluation a the Slurm 
 cluster." />
 <meta name="twitter:card" content="summary" />
-
 
 
 
@@ -72,7 +69,7 @@ cluster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -94,6 +91,7 @@ cluster." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm">
@@ -120,14 +118,17 @@ cluster." />
     </div>
 
     <div class="ref-description">
+    
     <p>Use <code>slurm_call</code> to perform a single function evaluation a the Slurm 
 cluster.</p>
+    
     </div>
 
     <pre class="usage"><span class='fu'>slurm_call</span>(<span class='no'>f</span>, <span class='no'>params</span>, <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()), <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()), <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
   <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-
+    
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -164,6 +165,21 @@ corresponds to libraries returned by <code><a href='https://rdrr.io/r/base/libPa
 Non-existent library trees are silently ignored.</p></td>
     </tr>
     <tr>
+      <th>rscript_path</th>
+      <td><p>The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.</p></td>
+    </tr>
+    <tr>
+      <th>r_template</th>
+      <td><p>The path to the template file for the R script run on each node. 
+If NULL, uses the default template "rslurm/templates/slurm_run_single_R.txt".</p></td>
+    </tr>
+    <tr>
+      <th>sh_template</th>
+      <td><p>The path to the template file for the sbatch submission script. 
+If NULL, uses the default template "rslurm/templates/submit_single_sh.txt".</p></td>
+    </tr>
+    <tr>
       <th>slurm_options</th>
       <td><p>A named list of options recognized by <code>sbatch</code>; see
 Details below for more information.</p></td>
@@ -174,11 +190,12 @@ Details below for more information.</p></td>
 <code>sbatch</code>; see Details below for more information.</p></td>
     </tr>
     </table>
-
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>slurm_job</code> object containing the <code>jobname</code> and the number
   of <code>nodes</code> effectively used.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function creates a temporary folder ("_rslurm_[jobname]") in the current
@@ -206,23 +223,28 @@ submit.sh</code> from that directory.</p>
 <code>slurm_job</code> object which can be used to cancel the job, get the job 
 status or output, and delete the temporary files associated with it. See the
 description of the related functions for more details.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='slurm_apply.html'>slurm_apply</a></code> to parallelize a function over a parameter
   set.</p>
 <p><code><a href='cancel_slurm.html'>cancel_slurm</a></code>, <code><a href='cleanup_files.html'>cleanup_files</a></code>, 
-  <code><a href='get_slurm_out.html'>get_slurm_out</a></code> and <code><a href='rslurm-deprecated.html'>print_job_status</a></code> which use
+  <code><a href='get_slurm_out.html'>get_slurm_out</a></code> and <code><a href='get_job_status.html'>get_job_status</a></code> which use
   the output of this function.</p></div>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      
       <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
+
       <li><a href="#see-also">See also</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
@@ -230,7 +252,7 @@ description of the related functions for more details.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Philippe Marchand.</p>
+  <p>Developed by Philippe Marchand, Ian Carroll, Quentin Read.</p>
 </div>
 
 <div class="pkgdown">
