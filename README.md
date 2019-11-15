@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![cran
-checks](https://cranchecks.info/badges/worst/rslurm)](https://cran.r-project.org/web/checks/check_results_rslurm.html)
+checks](https://cranchecks.info/badges/worst/rslurm)](https://CRAN.R-project.org/web/checks/check_results_rslurm.html)
 [![rstudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://cran.rstudio.com/web/packages/rslurm/index.html)
+downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://CRAN.R-project.org/package=rslurm)
 [![Build
 Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
 [![Project Status: WIP – Initial development is in progress, but there
