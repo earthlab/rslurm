@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+#SBATCH --ntasks=1
+#SBATCH --job-name={{{jobname}}}
+#SBATCH --output=slurm_0.out
+{{#flags}}
+#SBATCH --{{{name}}}
+{{/flags}}
+{{#options}}
+#SBATCH --{{{name}}}={{{value}}}
+{{/options}}
+{{{rscript}}} --vanilla slurm_run.R

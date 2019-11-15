@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Introduction to the 'rslurm' Package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rslurm-package {rslurm}"><tr><td>rslurm-package {rslurm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Introduction to the <code>rslurm</code> Package</h2>
+
+<h3>Description</h3>
+
+<p>Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
+using the <code><a href="slurm_call.html">slurm_call</a></code> or <code><a href="slurm_apply.html">slurm_apply</a></code> functions.
+</p>
+
+
+<h3>Job submission</h3>
+
+<p>This package includes two core functions used to send computations to a 
+Slurm cluster: 1) <code><a href="slurm_call.html">slurm_call</a></code> executes a function using a 
+single set of parameters (passed as a list), and 2) <code><a href="slurm_apply.html">slurm_apply</a></code> 
+evaluates a function in parallel for each row of parameters in a given 
+data frame. The second, <code>slurm_apply</code>, automatically splits the parameter
+rows into equal-size chunks, each chunk to be processed by a separate cluster 
+node. It uses functions from the <code><a href="../../parallel/html/parallel-package.html">parallel-package</a></code> 
+package to parallelize computations across processors on a given node.
+</p>
+<p>The output of <code>slurm_apply</code> or <code>slurm_call</code> is a <code>slurm_job</code>
+object that serves as an input to the other functions in the package: 
+<code><a href="rslurm-deprecated.html">print_job_status</a></code>, <code><a href="cancel_slurm.html">cancel_slurm</a></code>, 
+<code><a href="get_slurm_out.html">get_slurm_out</a></code> and <code><a href="cleanup_files.html">cleanup_files</a></code>.
+</p>
+
+
+<h3>Function specification</h3>
+
+<p>To be compatible with <code><a href="slurm_apply.html">slurm_apply</a></code>, a function may accept any 
+number of single value parameters. The names of these parameters must match
+the column names of the <code>params</code> data frame supplied. There are no 
+restrictions on the types of parameters passed as a list to 
+<code><a href="slurm_call.html">slurm_call</a></code>.
+</p>
+<p>If the function passed to <code>slurm_call</code> or <code>slurm_apply</code> requires 
+knowledge of any R objects (data, custom helper functions) besides 
+<code>params</code>, a character vector corresponding to their names should be 
+passed to the optional <code>add_objects</code> argument.
+</p>
+<p>When parallelizing a function, since any error will interrupt all 
+calculations for the current node, it may be useful to wrap expressions 
+which may generate errors into a <code><a href="../../base/html/try.html">try</a></code> or 
+<code><a href="../../base/html/conditions.html">tryCatch</a></code> function. This will ensure the computation 
+continues with the next parameter set after reporting the error.
+</p>
+
+
+<h3>Output Format</h3>
+
+<p>The default output format for <code>get_slurm_out</code> (<code>outtype = "raw"</code>)
+is a list where each element is the return value of one function call. If 
+the function passed to <code>slurm_apply</code> produces a vector output, you may
+use <code>outtype = "table"</code> to collect the output in a single data frame, 
+with one row by function call.
+</p>
+
+
+<h3>Slurm Configuration</h3>
+
+<p>Advanced options for the Slurm workload manager may accompany job submission
+by both <code><a href="slurm_call.html">slurm_call</a></code> and <code><a href="slurm_apply.html">slurm_apply</a></code> through the 
+optional <code>slurm_options</code> argument. For example, passing
+<code>list(time = '1:30')</code> for this options limits the job to 1 hour and 30
+minutes. Some advanced configuration must be set through environment 
+variables. On a multi-cluster head node, for example, the <code>SLURM_CLUSTERS</code>
+environment variable must be set to direct jobs to a non-default cluster.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## Not run: 
+# Create a data frame of mean/sd values for normal distributions 
+pars &lt;- data.frame(par_m = seq(-10, 10, length.out = 1000), 
+                   par_sd = seq(0.1, 10, length.out = 1000))
+                   
+# Create a function to parallelize
+ftest &lt;- function(par_m, par_sd) {
+ samp &lt;- rnorm(10^7, par_m, par_sd)
+ c(s_m = mean(samp), s_sd = sd(samp))
+}
+
+sjob1 &lt;- slurm_apply(ftest, pars)
+print_job_status(sjob1)
+res &lt;- get_slurm_out(sjob1, "table")
+all.equal(pars, res) # Confirm correct output
+cleanup_files(sjob1)
+
+## End(Not run)
+  
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rslurm</em> version 0.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

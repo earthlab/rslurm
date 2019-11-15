@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Reads the output of a function calculated on the Slurm...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_slurm_out {rslurm}"><tr><td>get_slurm_out {rslurm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Reads the output of a function calculated on the Slurm cluster</h2>
+
+<h3>Description</h3>
+
+<p>This function reads all function output files (one by cluster node used) from 
+the specified Slurm job and returns the result in a single data frame
+(if &quot;table&quot; format selected) or list (if &quot;raw&quot; format selected). It doesn't 
+record any messages (including warnings or errors) output to the R console
+during the computation; these can be consulted by invoking 
+<code><a href="rslurm-deprecated.html">print_job_status</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_slurm_out(slr_job, outtype = "raw", wait = TRUE, ncores = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>slr_job</code></td>
+<td>
+<p>A <code>slurm_job</code> object.</p>
+</td></tr>
+<tr valign="top"><td><code>outtype</code></td>
+<td>
+<p>Can be &quot;table&quot; or &quot;raw&quot;, see &quot;Value&quot; below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>wait</code></td>
+<td>
+<p>Specify whether to block until <code>slr_job</code> completes.</p>
+</td></tr>
+<tr valign="top"><td><code>ncores</code></td>
+<td>
+<p>(optional) If not null, the number of cores passed to
+mclapply</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>outtype</code> option is only relevant for jobs submitted with 
+<code>slurm_apply</code>. Jobs sent with <code>slurm_call</code> only return a single
+object, and setting <code>outtype = "table"</code> creates an error in that case.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>outtype = "table"</code>: A data frame with one column by 
+return value of the function passed to <code>slurm_apply</code>, where 
+each row is the output of the corresponding row in the params data frame 
+passed to <code>slurm_apply</code>.
+</p>
+<p>If <code>outtype = "raw"</code>: A list where each element is the output 
+of the function passed to <code>slurm_apply</code> for the corresponding
+row in the params data frame passed to <code>slurm_apply</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="slurm_apply.html">slurm_apply</a></code>, <code><a href="slurm_call.html">slurm_call</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>rslurm</em> version 0.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

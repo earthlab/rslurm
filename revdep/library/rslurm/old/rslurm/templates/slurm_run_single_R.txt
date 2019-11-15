@@ -1,0 +1,14 @@
+{{#libPaths}}.libPaths(c('{{.}}', .libPaths()))
+{{/libPaths}}
+{{#pkgs}}library({{.}}, quietly = TRUE)
+{{/pkgs}}
+
+{{#add_obj}}
+load('add_objects.RData')
+{{/add_obj}}
+
+.rslurm_func <- readRDS('f.RDS')
+.rslurm_params <- readRDS('params.RDS')
+.rslurm_result <- do.call(.rslurm_func, .rslurm_params)
+               
+saveRDS(.rslurm_result, file = 'results_0.RDS')

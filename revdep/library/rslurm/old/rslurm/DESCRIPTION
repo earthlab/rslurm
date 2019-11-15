@@ -1,0 +1,32 @@
+Package: rslurm
+Type: Package
+Title: Submit R Calculations to a Slurm Cluster
+Description: Functions that simplify submitting R scripts to a Slurm 
+    workload manager, in part by automating the division of embarrassingly
+    parallel calculations across cluster nodes.
+Acknowledgements: Development of this R package was supported by the
+        National Socio-Environmental Synthesis Center (SESYNC) under
+        funding received from the National Science Foundation
+        DBI-1052875.
+Version: 0.4.0
+License: GPL-3
+URL: https://github.com/SESYNC-ci/rslurm
+BugReports: https://github.com/SESYNC-ci/rslurm/issues
+Authors@R: c(person('Philippe', 'Marchand', role = 'aut'), 
+             person('Mike', 'Smorul', role = 'ctb'),
+             person('Ian', 'Carroll',
+                    email = 'icarroll@sesync.org', role = c('ctb', 'cre')))
+Depends: R (>= 3.2.0)
+Imports: whisker (>= 0.3)
+RoxygenNote: 6.0.1
+Suggests: parallel, testthat, knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2017-10-19 15:53:33 UTC; icarroll
+Author: Philippe Marchand [aut],
+  Mike Smorul [ctb],
+  Ian Carroll [ctb, cre]
+Maintainer: Ian Carroll <icarroll@sesync.org>
+Repository: CRAN
+Date/Publication: 2017-10-19 19:49:10 UTC
+Built: R 3.6.1; ; 2019-11-12 13:12:16 UTC; windows

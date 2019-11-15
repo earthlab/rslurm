@@ -1,0 +1,12 @@
+cancel_slurm            Cancels a scheduled Slurm job
+cleanup_files           Deletes temporary files associated with a Slurm
+                        job
+get_job_status          Get the status of a Slurm job
+get_slurm_out           Reads the output of a function calculated on
+                        the Slurm cluster
+rslurm-package          Introduction to the 'rslurm' Package
+slurm_apply             Parallel execution of a function on the Slurm
+                        cluster
+slurm_call              Execution of a single function call on the
+                        Slurm cluster
+slurm_job               Create a slurm_job object
