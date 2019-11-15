@@ -1,8 +1,0 @@
-rslurm-package	rslurm-package
-cancel_slurm	cancel_slurm
-cleanup_files	cleanup_files
-get_slurm_out	get_slurm_out
-print_job_status	print_job_status
-slurm_apply	slurm_apply
-slurm_call	slurm_call
-slurm_job	slurm_job
