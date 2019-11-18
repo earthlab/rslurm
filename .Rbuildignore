@@ -11,4 +11,6 @@
 ^_pkgdown\.yaml$
 ^pkgdown$
 ^docs$
+
 ^CRAN-RELEASE$
+^logo_slurm\.svg$

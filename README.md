@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<img src="logo_slurm.svg" align="right" width=150px>
+
 # rslurm: submit R code to a Slurm cluster
 
 <!-- badges: start -->
