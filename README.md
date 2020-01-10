@@ -92,5 +92,6 @@ The output of `slurm_apply` is a `slurm_job` object that stores a few
 pieces of information (job name, job ID, and the number of nodes) needed
 to retrieve the job’s output.
 
-See [Get started](http://cyberhelp.sesync.org/rslurm/) for more
-information.
+See [Get
+started](http://cyberhelp.sesync.org/rslurm/articles/rslurm.html) for
+more information.
