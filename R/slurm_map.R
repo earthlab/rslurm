@@ -40,9 +40,8 @@
 #'
 #' @param f A function that accepts one or many single values as parameters and
 #'   may return any type of R object.
-#' @param params A data frame of parameter values to apply \code{f} to. Each
-#'   column corresponds to a parameter of \code{f} (\emph{Note}: names must
-#'   match) and each row corresponds to a separate function call.
+#' @param x A list to apply \code{f} to. Each
+#'   element of \code{x} corresponds to a separate function call.
 #' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a
 #'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
@@ -54,8 +53,8 @@
 #'   Slurm parameter \code{cpus-per-task}.
 #' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
 #' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
-#' rows of \code{params} are assigned to cores before computation. If \code{FALSE}, 
-#' each row of \code{params} is executed by the next available core.
+#' elements of \code{x} are assigned to cores before computation. 
+#' If \code{FALSE}, each element of \code{x} is executed by the next available core.
 #' Setting \code{FALSE} may be faster if 
 #' different values of \code{params} result in very variable completion time for
 #' jobs.
@@ -93,7 +92,7 @@
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_apply <- function(f, params, jobname = NA, 
+slurm_map <- function(f, x, jobname = NA, 
                         nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
                         add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
@@ -102,12 +101,12 @@ slurm_apply <- function(f, params, jobname = NA,
     if (!is.function(f)) {
         stop("first argument to slurm_apply should be a function")
     }
-    if (!is.data.frame(params)) {
-        stop("second argument to slurm_apply should be a data.frame")
+    if (!is.list(params)) {
+        stop("second argument to slurm_apply should be a list")
     }
-    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
-        stop("column names of params must match arguments of f")
-    }
+    #if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
+    #    stop("column names of params must match arguments of f")
+    #}
     if (!is.numeric(nodes) || length(nodes) != 1) {
         stop("nodes should be a single number")
     }
@@ -129,7 +128,7 @@ slurm_apply <- function(f, params, jobname = NA,
     tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir, showWarnings = FALSE)
 
-    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
+    saveRDS(x, file = file.path(tmpdir, "x.RDS"))
     saveRDS(f, file = file.path(tmpdir, "f.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects,
@@ -139,7 +138,7 @@ slurm_apply <- function(f, params, jobname = NA,
     
     # Get chunk size (nb. of param. sets by node)
     # Special case if less param. sets than CPUs in cluster
-    if (nrow(params) < cpus_per_node * nodes) {
+    if (length(x) < cpus_per_node * nodes) {
         nchunk <- cpus_per_node
     } else {
         nchunk <- ceiling(nrow(params) / nodes)
