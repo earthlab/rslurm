@@ -1,7 +1,8 @@
 #' Parallel execution of a function on the Slurm cluster
 #'
 #' Use \code{slurm_apply} to compute function over multiple sets of
-#' parameters in parallel, spread across multiple nodes of a Slurm cluster.
+#' parameters in parallel, spread across multiple nodes of a Slurm cluster,
+#' with similar syntax to \code{mapply}.
 #'
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
 #' directory, holding .RData and .RDS data files, the R script to run and the Bash
@@ -11,7 +12,7 @@
 #' \code{f} is evaluated in parallel within each node using functions from the
 #' \code{parallel} R package. The names of any other R objects (besides
 #' \code{params}) that \code{f} needs to access should be included in
-#' \code{add_objects}.
+#' \code{add_objects} or passed as additional arguments through \code{...}.
 #'
 #' Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
 #' \code{slurm_options = list(time = "1:00:00", share = TRUE)}.
@@ -43,6 +44,8 @@
 #' @param params A data frame of parameter values to apply \code{f} to. Each
 #'   column corresponds to a parameter of \code{f} (\emph{Note}: names must
 #'   match) and each row corresponds to a separate function call.
+#' @param ... Additional arguments to \code{f}. These arguments do not vary
+#'   with each call to \code{f}.
 #' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a
 #'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
@@ -82,6 +85,7 @@
 #' @return A \code{slurm_job} object containing the \code{jobname} and the
 #'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
+#' @seealso \code{\link{slurm_map}} to evaluate a function over a list.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
 #'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}}
 #'   which use the output of this function.
@@ -93,7 +97,7 @@
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_apply <- function(f, params, jobname = NA, 
+slurm_apply <- function(f, params, ..., jobname = NA, 
                         nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
                         add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
@@ -105,7 +109,7 @@ slurm_apply <- function(f, params, jobname = NA,
     if (!is.data.frame(params)) {
         stop("second argument to slurm_apply should be a data.frame")
     }
-    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || (!is.primitive(f) & any(!names(params) %in% names(formals(f))))) {
         stop("column names of params must match arguments of f")
     }
     if (!is.numeric(nodes) || length(nodes) != 1) {
@@ -128,9 +132,13 @@ slurm_apply <- function(f, params, jobname = NA,
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir, showWarnings = FALSE)
+    
+    # Unpack additional arguments
+    more_args <- list(...)
 
     saveRDS(params, file = file.path(tmpdir, "params.RDS"))
     saveRDS(f, file = file.path(tmpdir, "f.RDS"))
+    saveRDS(more_args, file = file.path(tmpdir, "more_args.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects,
              file = file.path(tmpdir, "add_objects.RData"),

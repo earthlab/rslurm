@@ -1,7 +1,8 @@
-#' Parallel execution of a function on the Slurm cluster
+#' Parallel execution of a function over a list on the Slurm cluster
 #'
-#' Use \code{slurm_apply} to compute function over multiple sets of
-#' parameters in parallel, spread across multiple nodes of a Slurm cluster.
+#' Use \code{slurm_map} to compute function over a list
+#' in parallel, spread across multiple nodes of a Slurm cluster,
+#' with similar syntax to \code{lapply}.
 #'
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
 #' directory, holding .RData and .RDS data files, the R script to run and the Bash
@@ -10,8 +11,8 @@
 #' The set of input parameters is divided in equal chunks sent to each node, and
 #' \code{f} is evaluated in parallel within each node using functions from the
 #' \code{parallel} R package. The names of any other R objects (besides
-#' \code{params}) that \code{f} needs to access should be included in
-#' \code{add_objects}.
+#' \code{x}) that \code{f} needs to access should be included in
+#' \code{add_objects} or passed as additional arguments through \code{...}.
 #'
 #' Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
 #' \code{slurm_options = list(time = "1:00:00", share = TRUE)}.
@@ -19,7 +20,7 @@
 #' Note that full names must be used (e.g. "time" rather than "t") and that flags
 #' (such as "share") must be specified as TRUE. The "array", "job-name", "nodes", 
 #' "cpus-per-task" and "output" options are already determined by 
-#' \code{slurm_apply} and should not be manually set.
+#' \code{slurm_map} and should not be manually set.
 #'
 #' When processing the computation job, the Slurm cluster will output two types
 #' of files in the temporary folder: those containing the return values of the
@@ -33,15 +34,17 @@
 #' job can be submitted manually by running the shell command
 #' \code{sbatch submit.sh} from that directory.
 #'
-#' After sending the job to the Slurm cluster, \code{slurm_apply} returns a
+#' After sending the job to the Slurm cluster, \code{slurm_map} returns a
 #' \code{slurm_job} object which can be used to cancel the job, get the job
 #' status or output, and delete the temporary files associated with it. See
 #' the description of the related functions for more details.
 #'
-#' @param f A function that accepts one or many single values as parameters and
-#'   may return any type of R object.
 #' @param x A list to apply \code{f} to. Each
 #'   element of \code{x} corresponds to a separate function call.
+#' @param f A function that accepts one element of \code{x} as its first argument,
+#' and may return any type of R object.
+#' @param ... Additional arguments to \code{f}. These arguments do not vary
+#' with each call to \code{f}.
 #' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a
 #'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
@@ -81,32 +84,31 @@
 #' @return A \code{slurm_job} object containing the \code{jobname} and the
 #'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
+#' @seealso \code{\link{slurm_apply}} to evaluate a function row-wise over a
+#' data frame of parameters.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
 #'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}}
 #'   which use the output of this function.
 #' @examples
 #' \dontrun{
-#' sjob <- slurm_apply(func, pars)
+#' sjob <- slurm_map(func, list)
 #' get_job_status(sjob) # Prints console/error output once job is completed.
 #' func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_map <- function(f, x, ..., jobname = NA, 
+slurm_map <- function(x, f, ..., jobname = NA, 
                         nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
                         add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
+    if (!is.list(x)) {
+        stop("first argument to slurm_map should be a list")
+    }
     if (!is.function(f)) {
-        stop("first argument to slurm_map should be a function")
+        stop("second argument to slurm_map should be a function")
     }
-    if (!is.list(params)) {
-        stop("second argument to slurm_map should be a list")
-    }
-    #if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
-    #    stop("column names of params must match arguments of f")
-    #}
     if (!is.numeric(nodes) || length(nodes) != 1) {
         stop("nodes should be a single number")
     }
@@ -140,8 +142,8 @@ slurm_map <- function(f, x, ..., jobname = NA,
              envir = environment(f))
     }    
     
-    # Get chunk size (nb. of param. sets by node)
-    # Special case if less param. sets than CPUs in cluster
+    # Get chunk size (nb. of list elements per node)
+    # Special case if less list elements than CPUs in cluster
     if (length(x) < cpus_per_node * nodes) {
         nchunk <- cpus_per_node
     } else {
