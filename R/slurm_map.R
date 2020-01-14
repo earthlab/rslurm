@@ -45,25 +45,25 @@
 #' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a
 #'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
-#'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
+#'   over. \code{slurm_map} automatically divides \code{x} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if
 #'   the parameter set is too small to use all CPUs on the requested nodes.
 #' @param cpus_per_node The number of CPUs requested per node, i.e., how many
 #'   processes to run in parallel per node. This argument is mapped to the
 #'   Slurm parameter \code{cpus-per-task}.
 #' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
-#' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
+#' \code{parallel::mclapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
 #' elements of \code{x} are assigned to cores before computation. 
 #' If \code{FALSE}, each element of \code{x} is executed by the next available core.
 #' Setting \code{FALSE} may be faster if 
-#' different values of \code{params} result in very variable completion time for
+#' different elements of \code{x} result in very variable completion time for
 #' jobs.
 #' @param add_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
 #'   \code{f}.
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
-#'   loaded by the user when \code{slurm_apply} is called.
+#'   loaded by the user when \code{slurm_map} is called.
 #' @param libPaths A character vector describing the location of additional R
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
@@ -92,17 +92,17 @@
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_map <- function(f, x, jobname = NA, 
+slurm_map <- function(f, x, ..., jobname = NA, 
                         nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
                         add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
-        stop("first argument to slurm_apply should be a function")
+        stop("first argument to slurm_map should be a function")
     }
     if (!is.list(params)) {
-        stop("second argument to slurm_apply should be a list")
+        stop("second argument to slurm_map should be a list")
     }
     #if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
     #    stop("column names of params must match arguments of f")
@@ -116,7 +116,7 @@ slurm_map <- function(f, x, jobname = NA,
     
     # Default templates
     if(is.null(r_template)) {
-        r_template <- system.file("templates/slurm_run_R.txt", package = "rslurm")
+        r_template <- system.file("templates/slurm_map_R.txt", package = "rslurm")
     }
     if(is.null(sh_template)) {
         sh_template <- system.file("templates/submit_sh.txt", package = "rslurm")
@@ -127,9 +127,13 @@ slurm_map <- function(f, x, jobname = NA,
     # Create temp folder
     tmpdir <- paste0("_rslurm_", jobname)
     dir.create(tmpdir, showWarnings = FALSE)
+    
+    # Unpack additional arguments
+    more_args <- list(...)
 
     saveRDS(x, file = file.path(tmpdir, "x.RDS"))
     saveRDS(f, file = file.path(tmpdir, "f.RDS"))
+    saveRDS(more_args, file = file.path(tmpdir, "more_args.RDS"))
     if (!is.null(add_objects)) {
         save(list = add_objects,
              file = file.path(tmpdir, "add_objects.RData"),
@@ -141,10 +145,10 @@ slurm_map <- function(f, x, jobname = NA,
     if (length(x) < cpus_per_node * nodes) {
         nchunk <- cpus_per_node
     } else {
-        nchunk <- ceiling(nrow(params) / nodes)
+        nchunk <- ceiling(length(x) / nodes)
     }
     # Re-adjust number of nodes (only matters for small sets)
-    nodes <- ceiling(nrow(params) / nchunk)
+    nodes <- ceiling(length(x) / nchunk)
 
     # Create a R script to run function in parallel on each node
     template_r <- readLines(r_template)
