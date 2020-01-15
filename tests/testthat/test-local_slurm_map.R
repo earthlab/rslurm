@@ -42,7 +42,7 @@ msg <- capture.output(
 sjob2 <- local_slurm_array(sjob2)
 res <- get_slurm_out(sjob2, "table", wait = FALSE)
 test_that("slurm_map works with length 1 list", {
-    expect_equal(pars[1, ], res, tolerance = 0.01)  
+    expect_equal(pars[1, ], res, tolerance = 0.01, check.attributes = FALSE)  
 })
 
 # Test slurm_map with add_objects
@@ -63,7 +63,7 @@ test_that("slurm_map correctly handles add_objects", {
 # Test slurm_map with dots as additional arguments
 
 msg <- capture.output(
-    sjob4 <- slurm_map(pars_list, ftest, par_n = 10^6, jobname = "test2", 
+    sjob4 <- slurm_map(pars_list, ftest, par_n = 10^6, jobname = "test4", 
                        nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
 sjob4 <- local_slurm_array(sjob4)
