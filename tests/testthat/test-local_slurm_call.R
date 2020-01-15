@@ -8,7 +8,7 @@ Sys.setenv(R_TESTS = "")
 msg <- capture.output({
     z <- 0
     sjob <- slurm_call(function(x, y) x * 2 + y + z, list(x = 5, y = 6),
-                       add_objects = c('z'),
+                       global_objects = c('z'),
                        jobname = "test^\\* call", submit = FALSE)
 })
 

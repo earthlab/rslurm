@@ -70,11 +70,11 @@ test_that("slurm_apply works with single parameter and single row", {
     expect_equal(pars$par_m[1], res$s_m, tolerance = 0.01)  
 })
 
-test_that("slurm_apply correctly handles add_objects", {
+test_that("slurm_apply correctly handles global_objects", {
     if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_apply(function(i) ftest(pars[i, 1], pars[i, 2]),
                         data.frame(i = 1:nrow(pars)),
-                        add_objects = c('ftest', 'pars'), jobname = "test5",
+                        global_objects = c('ftest', 'pars'), jobname = "test5",
                         nodes = 2, cpus_per_node = 1,
                         slurm_options = SLURM_OPTS)
     res <- get_slurm_out(sjob, "table")
@@ -87,7 +87,7 @@ test_that("slurm_apply correctly handles arguments given as dots", {
     sjob <- slurm_apply(ftest2,
                         pars,
                         par_n = 10^6,
-                        add_objects = c('ftest2', 'pars'), jobname = "test6",
+                        global_objects = c('ftest2', 'pars'), jobname = "test6",
                         nodes = 2, cpus_per_node = 1,
                         slurm_options = SLURM_OPTS)
     res <- get_slurm_out(sjob, "table")

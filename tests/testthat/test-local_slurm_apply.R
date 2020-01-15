@@ -70,17 +70,17 @@ test_that("slurm_apply works with single parameter and single row", {
     expect_equal(pars$par_m[1], res$s_m, tolerance = 0.01)  
 })
 
-# Test slurm_apply with add_objects
+# Test slurm_apply with global_objects
 
 msg <- capture.output(
     sjob5 <- slurm_apply(function(i) ftest(pars[i, 1], pars[i, 2]),
                          data.frame(i = 1:nrow(pars)),
-                         add_objects = c('ftest', 'pars'), jobname = "test5",
+                         global_objects = c('ftest', 'pars'), jobname = "test5",
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
 sjob5 <- local_slurm_array(sjob5)
 res <- get_slurm_out(sjob5, "table", wait = FALSE)
-test_that("slurm_apply correctly handles add_objects", {
+test_that("slurm_apply correctly handles global_objects", {
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
 })
 
@@ -90,7 +90,7 @@ msg <- capture.output(
     sjob6 <- slurm_apply(ftest2,
                          pars,
                          par_n = 10^6,
-                         add_objects = c('ftest2', 'pars'), jobname = "test6",
+                         global_objects = c('ftest2', 'pars'), jobname = "test6",
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
 sjob6 <- local_slurm_array(sjob6)

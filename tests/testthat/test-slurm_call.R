@@ -11,7 +11,7 @@ test_that("slurm_job name is correctly edited and output is correct", {
     if (SLURM) skip(SLURM_MSG)
     z <- 0
     sjob <- slurm_call(function(x, y) x * 2 + y + z, list(x = 5, y = 6),
-                       add_objects = c('z'),
+                       global_objects = c('z'),
                        jobname = "test^\\* call", slurm_options = SLURM_OPTS)
     res <- get_slurm_out(sjob)
     cleanup_files(sjob)

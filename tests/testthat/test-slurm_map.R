@@ -46,11 +46,11 @@ test_that("slurm_map works with single list element", {
     expect_equal(pars[1, ], res, tolerance = 0.01, check.attributes = FALSE)  
 })
 
-test_that("slurm_map correctly handles add_objects", {
+test_that("slurm_map correctly handles global_objects", {
     if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_map(as.list(1:length(pars_list)),
                       function(i) ftest(pars_list[[i]]),
-                      add_objects = c('ftest', 'pars_list'), jobname = "test3",
+                      global_objects = c('ftest', 'pars_list'), jobname = "test3",
                       nodes = 2, cpus_per_node = 1,
                       slurm_options = SLURM_OPTS)
     res <- get_slurm_out(sjob, "table")

@@ -8,6 +8,7 @@ slurm_call(
   f,
   params,
   jobname = NA,
+  global_objects = NULL,
   add_objects = NULL,
   pkgs = rev(.packages()),
   libPaths = NULL,
@@ -26,9 +27,12 @@ slurm_call(
 \item{jobname}{The name of the Slurm job; if \code{NA}, it is assigned a 
 random name of the form "slr####".}
 
-\item{add_objects}{A character vector containing the name of R objects to be 
+\item{global_objects}{A character vector containing the name of R objects to be 
 saved in a .RData file and loaded on each cluster node prior to calling 
 \code{f}.}
+
+\item{add_objects}{Older deprecated name of \code{global_objects}, retained for
+backwards compatibility.}
 
 \item{pkgs}{A character vector containing the names of packages that must be
 loaded on each cluster node. By default, it includes all packages loaded by
@@ -68,7 +72,7 @@ directory, holding .RData and .RDS data files, the R script to run and the
 Bash submission script generated for the Slurm job.
 
 The names of any other R objects (besides \code{params}) that \code{f} needs 
-to access should be listed in the \code{add_objects} argument.
+to access should be listed in the \code{global_objects} argument.
 
 Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g. 
 \code{slurm_options = list(time = "1:00:00", share = TRUE)}. See

@@ -12,7 +12,7 @@ slurm_map(
   nodes = 2,
   cpus_per_node = 2,
   preschedule_cores = TRUE,
-  add_objects = NULL,
+  global_objects = NULL,
   pkgs = rev(.packages()),
   libPaths = NULL,
   rscript_path = NULL,
@@ -52,7 +52,7 @@ Setting \code{FALSE} may be faster if
 different elements of \code{x} result in very variable completion time for
 jobs.}
 
-\item{add_objects}{A character vector containing the name of R objects to be
+\item{global_objects}{A character vector containing the name of R objects to be
 saved in a .RData file and loaded on each cluster node prior to calling
 \code{f}.}
 
@@ -98,7 +98,7 @@ The set of input parameters is divided in equal chunks sent to each node, and
 \code{f} is evaluated in parallel within each node using functions from the
 \code{parallel} R package. The names of any other R objects (besides
 \code{x}) that \code{f} needs to access should be included in
-\code{add_objects} or passed as additional arguments through \code{...}.
+\code{global_objects} or passed as additional arguments through \code{...}.
 
 Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
 \code{slurm_options = list(time = "1:00:00", share = TRUE)}.

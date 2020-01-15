@@ -142,11 +142,11 @@ of complex R objects, `obj_list`. To use `slurm_apply` in this case, we can wrap
 ```{r eval = FALSE}
 sjob <- slurm_apply(function(i) func(obj_list[[i]]), 
                     data.frame(i = seq_along(obj_list)),
-                    add_objects = c("func", "obj_list"),
+                    global_objects = c("func", "obj_list"),
                     nodes = 2, cpus_per_node = 2)
 ```
 
-The `add_objects` argument specifies the names of any R objects (besides the 
+The `global_objects` argument specifies the names of any R objects (besides the 
 parameters data frame) that must be accessed by the function passed to 
 `slurm_apply`. These objects are saved to a `.RDS` file that is loaded
 on each cluster node prior to evaluating the function in parallel.
@@ -176,7 +176,7 @@ sjob <- slurm_apply(test_func, pars, slurm_options = sopt)
 
 As mentioned above, the `slurm_apply` function creates a job-specific folder. 
 This folder contains the parameters as a RDS file and (if applicable) the
-objects specified as `add_objects` saved together in a RData file. The function
+objects specified as `global_objects` saved together in a RData file. The function
 also generates a R script (`slurm_run.R`) to be run on each cluster node, as
 well as a Bash script (`submit.sh`) to submit the job to Slurm.
 
