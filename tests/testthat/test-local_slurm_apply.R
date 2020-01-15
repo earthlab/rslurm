@@ -15,6 +15,11 @@ ftest <- function(par_m, par_sd = 1, ...) {
     c(s_m = mean(samp), s_sd = sd(samp))
 }
 
+# Alternative version with n as argument, to test more_args
+ftest2 <- function(par_m, par_sd = 1, par_n = 10^6, ...) {
+    samp <- rnorm(par_n, par_m, par_sd)
+    c(s_m = mean(samp), s_sd = sd(samp))
+}
 
 # Test slurm_apply locally
 
@@ -79,8 +84,22 @@ test_that("slurm_apply correctly handles add_objects", {
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
 })
 
+# Test slurm_apply with ... arguments
+
+msg <- capture.output(
+    sjob6 <- slurm_apply(ftest2,
+                         pars,
+                         par_n = 10^6,
+                         add_objects = c('ftest2', 'pars'), jobname = "test6",
+                         nodes = 2, cpus_per_node = 1, submit = FALSE)
+)
+sjob6 <- local_slurm_array(sjob6)
+res <- get_slurm_out(sjob6, "table", wait = FALSE)
+test_that("slurm_apply correctly handles arguments passed with ...", {
+    expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
+})
 
 # Cleanup all temporary files at the end
 # Pause to make sure folders are free to be deleted
 Sys.sleep(1)
-lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5), cleanup_files, wait = FALSE)
+lapply(list(sjob1, sjob2, sjob3, sjob4, sjob5, sjob6), cleanup_files, wait = FALSE)

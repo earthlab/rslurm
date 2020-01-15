@@ -19,6 +19,12 @@ ftest <- function(par_m, par_sd = 1, ...) {
     c(s_m = mean(samp), s_sd = sd(samp))
 }
 
+# Alternative version with n as argument, to test more_args
+ftest2 <- function(par_m, par_sd = 1, par_n = 10^6, ...) {
+    samp <- rnorm(par_n, par_m, par_sd)
+    c(s_m = mean(samp), s_sd = sd(samp))
+}
+
 # ## FIXME
 # saveRDS(Sys.getenv(), 'testthat_env.RDS')
 # slurm_apply(function (i) Sys.getenv(), data.frame(i = c(0)), pkgs = c(), jobname = 'test0', nodes = 1, cpus_per_node = 1)
@@ -74,4 +80,18 @@ test_that("slurm_apply correctly handles add_objects", {
     res <- get_slurm_out(sjob, "table")
     cleanup_files(sjob)
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
+})
+
+test_that("slurm_apply correctly handles arguments given as dots", {
+    if (SLURM) skip (SLURM_MSG)
+    sjob <- slurm_apply(ftest2,
+                        pars,
+                        par_n = 10^6,
+                        add_objects = c('ftest2', 'pars'), jobname = "test6",
+                        nodes = 2, cpus_per_node = 1,
+                        slurm_options = SLURM_OPTS)
+    res <- get_slurm_out(sjob, "table")
+    cleanup_files(sjob)
+    expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
+    
 })
