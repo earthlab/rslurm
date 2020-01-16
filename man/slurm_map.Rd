@@ -4,23 +4,11 @@
 \alias{slurm_map}
 \title{Parallel execution of a function over a list on the Slurm cluster}
 \usage{
-slurm_map(
-  x,
-  f,
-  ...,
-  jobname = NA,
-  nodes = 2,
-  cpus_per_node = 2,
-  preschedule_cores = TRUE,
-  global_objects = NULL,
-  pkgs = rev(.packages()),
-  libPaths = NULL,
-  rscript_path = NULL,
-  r_template = NULL,
-  sh_template = NULL,
-  slurm_options = list(),
-  submit = TRUE
-)
+slurm_map(x, f, ..., jobname = NA, nodes = 2, cpus_per_node = 2,
+  preschedule_cores = TRUE, global_objects = NULL,
+  pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL,
+  r_template = NULL, sh_template = NULL, slurm_options = list(),
+  submit = TRUE)
 }
 \arguments{
 \item{x}{A list to apply \code{f} to. Each

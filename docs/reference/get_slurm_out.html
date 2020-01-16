@@ -8,10 +8,12 @@
 
 <title>Reads the output of a function calculated on the Slurm cluster — get_slurm_out • rslurm</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -34,8 +36,8 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Reads the output of a function calculated on the Slurm cluster — get_slurm_out" />
 
+<meta property="og:title" content="Reads the output of a function calculated on the Slurm cluster — get_slurm_out" />
 <meta property="og:description" content="This function reads all function output files (one by cluster node used) from 
 the specified Slurm job and returns the result in a single data frame
 (if &quot;table&quot; format selected) or list (if &quot;raw&quot; format selected). It doesn't 
@@ -43,6 +45,7 @@ record any messages (including warnings or errors) output to the R console
 during the computation; these can be consulted by invoking 
 print_job_status." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -95,7 +98,6 @@ print_job_status." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm">
@@ -122,18 +124,16 @@ print_job_status." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function reads all function output files (one by cluster node used) from 
 the specified Slurm job and returns the result in a single data frame
 (if "table" format selected) or list (if "raw" format selected). It doesn't 
 record any messages (including warnings or errors) output to the R console
 during the computation; these can be consulted by invoking 
 <code><a href='rslurm-deprecated.html'>print_job_status</a></code>.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>get_slurm_out</span>(<span class='no'>slr_job</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='st'>"raw"</span>, <span class='kw'>wait</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -155,7 +155,7 @@ during the computation; these can be consulted by invoking
 mclapply</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If <code>outtype = "table"</code>: A data frame with one column by 
@@ -165,30 +165,24 @@ mclapply</p></td>
 <p>If <code>outtype = "raw"</code>: A list where each element is the output 
   of the function passed to <code>slurm_apply</code> for the corresponding
   row in the params data frame passed to <code>slurm_apply</code>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>outtype</code> option is only relevant for jobs submitted with 
 <code>slurm_apply</code>. Jobs sent with <code>slurm_call</code> only return a single
 object, and setting <code>outtype = "table"</code> creates an error in that case.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='slurm_apply.html'>slurm_apply</a></code>, <code><a href='slurm_call.html'>slurm_call</a></code></p></div>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>

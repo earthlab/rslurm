@@ -6,22 +6,26 @@
 \title{Introduction to the \code{rslurm} Package}
 \description{
 Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
-using the \code{\link{slurm_call}} or \code{\link{slurm_apply}} functions.
+using the \code{\link{slurm_call}}, \code{\link{slurm_apply}}, or
+\code{\link{slurm_map}} functions.
 }
 \section{Job submission}{
 
   
-  This package includes two core functions used to send computations to a 
+  This package includes three core functions used to send computations to a 
   Slurm cluster: 1) \code{\link{slurm_call}} executes a function using a 
-  single set of parameters (passed as a list), and 2) \code{\link{slurm_apply}} 
+  single set of parameters (passed as a list), 2) \code{\link{slurm_apply}} 
   evaluates a function in parallel for each row of parameters in a given 
-  data frame. The second, \code{slurm_apply}, automatically splits the parameter
-  rows into equal-size chunks, each chunk to be processed by a separate cluster 
-  node. It uses functions from the \code{\link[parallel]{parallel-package}} 
+  data frame, and 3) \code{\link{slurm_map}} evaluates a function in parallel
+  for each element of a list. 
+  The functions \code{slurm_apply} and \code{slurm_map} automatically split the 
+  parameter rows or list elements into equal-size chunks, 
+  each chunk to be processed by a separate cluster node. 
+  They use functions from the \code{\link[parallel]{parallel-package}} 
   package to parallelize computations across processors on a given node.
   
-  The output of \code{slurm_apply} or \code{slurm_call} is a \code{slurm_job}
-  object that serves as an input to the other functions in the package: 
+  The output of \code{slurm_apply}, \code{slurm_map}, or \code{slurm_call} 
+  is a \code{slurm_job} object that serves as an input to the other functions in the package: 
   \code{\link{print_job_status}}, \code{\link{cancel_slurm}}, 
   \code{\link{get_slurm_out}} and \code{\link{cleanup_files}}.
 }
@@ -33,12 +37,12 @@ using the \code{\link{slurm_call}} or \code{\link{slurm_apply}} functions.
   number of single value parameters. The names of these parameters must match
   the column names of the \code{params} data frame supplied. There are no 
   restrictions on the types of parameters passed as a list to 
-  \code{\link{slurm_call}}.
+  \code{\link{slurm_call}} or \code{\link{slurm_map}}
   
   If the function passed to \code{slurm_call} or \code{slurm_apply} requires 
   knowledge of any R objects (data, custom helper functions) besides 
   \code{params}, a character vector corresponding to their names should be 
-  passed to the optional \code{add_objects} argument.
+  passed to the optional \code{global_objects} argument.
   
   When parallelizing a function, since any error will interrupt all 
   calculations for the current node, it may be useful to wrap expressions 
@@ -61,9 +65,9 @@ using the \code{\link{slurm_call}} or \code{\link{slurm_apply}} functions.
 
   
   Advanced options for the Slurm workload manager may accompany job submission
-  by both \code{\link{slurm_call}} and \code{\link{slurm_apply}} through the 
-  optional \code{slurm_options} argument. For example, passing
-  \code{list(time = '1:30')} for this options limits the job to 1 hour and 30
+  by \code{\link{slurm_call}}, \code{\link{slurm_map}}, and \code{\link{slurm_apply}} 
+  through the optional \code{slurm_options} argument. For example, passing
+  \code{list(time = '1:30:00')} for this options limits the job to 1 hour and 30
   minutes. Some advanced configuration must be set through environment 
   variables. On a multi-cluster head node, for example, the \code{SLURM_CLUSTERS}
   environment variable must be set to direct jobs to a non-default cluster.
