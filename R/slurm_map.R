@@ -1,8 +1,8 @@
-#' Parallel execution of a function on the Slurm cluster
+#' Parallel execution of a function over a list on the Slurm cluster
 #'
-#' Use \code{slurm_apply} to compute function over multiple sets of
-#' parameters in parallel, spread across multiple nodes of a Slurm cluster,
-#' with similar syntax to \code{mapply}.
+#' Use \code{slurm_map} to compute function over a list
+#' in parallel, spread across multiple nodes of a Slurm cluster,
+#' with similar syntax to \code{lapply}.
 #'
 #' This function creates a temporary folder ("_rslurm_[jobname]") in the current
 #' directory, holding .RData and .RDS data files, the R script to run and the Bash
@@ -11,7 +11,7 @@
 #' The set of input parameters is divided in equal chunks sent to each node, and
 #' \code{f} is evaluated in parallel within each node using functions from the
 #' \code{parallel} R package. The names of any other R objects (besides
-#' \code{params}) that \code{f} needs to access should be included in
+#' \code{x}) that \code{f} needs to access should be included in
 #' \code{global_objects} or passed as additional arguments through \code{...}.
 #'
 #' Use \code{slurm_options} to set any option recognized by \code{sbatch}, e.g.
@@ -20,7 +20,7 @@
 #' Note that full names must be used (e.g. "time" rather than "t") and that flags
 #' (such as "share") must be specified as TRUE. The "array", "job-name", "nodes", 
 #' "cpus-per-task" and "output" options are already determined by 
-#' \code{slurm_apply} and should not be manually set.
+#' \code{slurm_map} and should not be manually set.
 #'
 #' When processing the computation job, the Slurm cluster will output two types
 #' of files in the temporary folder: those containing the return values of the
@@ -34,42 +34,39 @@
 #' job can be submitted manually by running the shell command
 #' \code{sbatch submit.sh} from that directory.
 #'
-#' After sending the job to the Slurm cluster, \code{slurm_apply} returns a
+#' After sending the job to the Slurm cluster, \code{slurm_map} returns a
 #' \code{slurm_job} object which can be used to cancel the job, get the job
 #' status or output, and delete the temporary files associated with it. See
 #' the description of the related functions for more details.
 #'
-#' @param f A function that accepts one or many single values as parameters and
-#'   may return any type of R object.
-#' @param params A data frame of parameter values to apply \code{f} to. Each
-#'   column corresponds to a parameter of \code{f} (\emph{Note}: names must
-#'   match) and each row corresponds to a separate function call.
+#' @param x A list to apply \code{f} to. Each
+#'   element of \code{x} corresponds to a separate function call.
+#' @param f A function that accepts one element of \code{x} as its first argument,
+#' and may return any type of R object.
 #' @param ... Additional arguments to \code{f}. These arguments do not vary
-#'   with each call to \code{f}.
+#' with each call to \code{f}.
 #' @param jobname The name of the Slurm job; if \code{NA}, it is assigned a
 #'   random name of the form "slr####".
 #' @param nodes The (maximum) number of cluster nodes to spread the calculation
-#'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
+#'   over. \code{slurm_map} automatically divides \code{x} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if
 #'   the parameter set is too small to use all CPUs on the requested nodes.
 #' @param cpus_per_node The number of CPUs requested per node, i.e., how many
 #'   processes to run in parallel per node. This argument is mapped to the
 #'   Slurm parameter \code{cpus-per-task}.
 #' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
-#' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
-#' rows of \code{params} are assigned to cores before computation. If \code{FALSE}, 
-#' each row of \code{params} is executed by the next available core.
+#' \code{parallel::mclapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
+#' elements of \code{x} are assigned to cores before computation. 
+#' If \code{FALSE}, each element of \code{x} is executed by the next available core.
 #' Setting \code{FALSE} may be faster if 
-#' different values of \code{params} result in very variable completion time for
+#' different elements of \code{x} result in very variable completion time for
 #' jobs.
 #' @param global_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
 #'   \code{f}.
-#' @param add_objects Older deprecated name of \code{global_objects}, retained for
-#' backwards compatibility.
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
-#'   loaded by the user when \code{slurm_apply} is called.
+#'   loaded by the user when \code{slurm_map} is called.
 #' @param libPaths A character vector describing the location of additional R
 #'   library trees to search through, or NULL. The default value of NULL
 #'   corresponds to libraries returned by \code{.libPaths()} on a cluster node.
@@ -87,33 +84,30 @@
 #' @return A \code{slurm_job} object containing the \code{jobname} and the
 #'   number of \code{nodes} effectively used.
 #' @seealso \code{\link{slurm_call}} to evaluate a single function call.
-#' @seealso \code{\link{slurm_map}} to evaluate a function over a list.
+#' @seealso \code{\link{slurm_apply}} to evaluate a function row-wise over a
+#' data frame of parameters.
 #' @seealso \code{\link{cancel_slurm}}, \code{\link{cleanup_files}},
 #'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}}
 #'   which use the output of this function.
 #' @examples
 #' \dontrun{
-#' sjob <- slurm_apply(func, pars)
+#' sjob <- slurm_map(func, list)
 #' get_job_status(sjob) # Prints console/error output once job is completed.
 #' func_result <- get_slurm_out(sjob, "table") # Loads output data into R.
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_apply <- function(f, params, ..., jobname = NA, 
+slurm_map <- function(x, f, ..., jobname = NA, 
                         nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
-                        global_objects = NULL, add_objects = NULL, 
-                        pkgs = rev(.packages()), libPaths = NULL, 
+                        global_objects = NULL, pkgs = rev(.packages()), libPaths = NULL, 
                         rscript_path = NULL, r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
+    if (!is.list(x)) {
+        stop("first argument to slurm_map should be a list")
+    }
     if (!is.function(f)) {
-        stop("first argument to slurm_apply should be a function")
-    }
-    if (!is.data.frame(params)) {
-        stop("second argument to slurm_apply should be a data.frame")
-    }
-    if (is.null(names(params)) || (!is.primitive(f) & any(!names(params) %in% names(formals(f))))) {
-        stop("column names of params must match arguments of f")
+        stop("second argument to slurm_map should be a function")
     }
     if (!is.numeric(nodes) || length(nodes) != 1) {
         stop("nodes should be a single number")
@@ -122,15 +116,9 @@ slurm_apply <- function(f, params, ..., jobname = NA,
         stop("cpus_per_node should be a single number")
     }
     
-    # Check for use of deprecated argument
-    if (!missing("add_objects")) {
-        warning("Argument add_objects is deprecated; use global_objects instead.", .call = FALSE)
-        global_objects <- add_objects
-    }
-    
     # Default templates
     if(is.null(r_template)) {
-        r_template <- system.file("templates/slurm_run_R.txt", package = "rslurm")
+        r_template <- system.file("templates/slurm_map_R.txt", package = "rslurm")
     }
     if(is.null(sh_template)) {
         sh_template <- system.file("templates/submit_sh.txt", package = "rslurm")
@@ -145,7 +133,7 @@ slurm_apply <- function(f, params, ..., jobname = NA,
     # Unpack additional arguments
     more_args <- list(...)
 
-    saveRDS(params, file = file.path(tmpdir, "params.RDS"))
+    saveRDS(x, file = file.path(tmpdir, "x.RDS"))
     saveRDS(f, file = file.path(tmpdir, "f.RDS"))
     saveRDS(more_args, file = file.path(tmpdir, "more_args.RDS"))
     if (!is.null(global_objects)) {
@@ -154,15 +142,15 @@ slurm_apply <- function(f, params, ..., jobname = NA,
              envir = environment(f))
     }    
     
-    # Get chunk size (nb. of param. sets by node)
-    # Special case if less param. sets than CPUs in cluster
-    if (nrow(params) < cpus_per_node * nodes) {
+    # Get chunk size (nb. of list elements per node)
+    # Special case if less list elements than CPUs in cluster
+    if (length(x) < cpus_per_node * nodes) {
         nchunk <- cpus_per_node
     } else {
-        nchunk <- ceiling(nrow(params) / nodes)
+        nchunk <- ceiling(length(x) / nodes)
     }
     # Re-adjust number of nodes (only matters for small sets)
-    nodes <- ceiling(nrow(params) / nchunk)
+    nodes <- ceiling(length(x) / nchunk)
 
     # Create a R script to run function in parallel on each node
     template_r <- readLines(r_template)

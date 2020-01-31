@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parallel execution of a function on the Slurm cluster — slurm_apply • rslurm</title>
+<title>Parallel execution of a function over a list on the Slurm cluster — slurm_map • rslurm</title>
 
 
 <!-- jquery -->
@@ -37,10 +37,10 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Parallel execution of a function on the Slurm cluster — slurm_apply" />
-<meta property="og:description" content="Use slurm_apply to compute function over multiple sets of
-parameters in parallel, spread across multiple nodes of a Slurm cluster,
-with similar syntax to mapply." />
+<meta property="og:title" content="Parallel execution of a function over a list on the Slurm cluster — slurm_map" />
+<meta property="og:description" content="Use slurm_map to compute function over a list
+in parallel, spread across multiple nodes of a Slurm cluster,
+with similar syntax to lapply." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,36 +115,35 @@ with similar syntax to mapply." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Parallel execution of a function on the Slurm cluster</h1>
-    <small class="dont-index">Source: <a href='https://github.com/SESYNC-ci/rslurm/blob/master/R/slurm_apply.R'><code>R/slurm_apply.R</code></a></small>
-    <div class="hidden name"><code>slurm_apply.Rd</code></div>
+    <h1>Parallel execution of a function over a list on the Slurm cluster</h1>
+    <small class="dont-index">Source: <a href='https://github.com/SESYNC-ci/rslurm/blob/master/R/slurm_map.R'><code>R/slurm_map.R</code></a></small>
+    <div class="hidden name"><code>slurm_map.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Use <code>slurm_apply</code> to compute function over multiple sets of
-parameters in parallel, spread across multiple nodes of a Slurm cluster,
-with similar syntax to <code>mapply</code>.</p>
+    <p>Use <code>slurm_map</code> to compute function over a list
+in parallel, spread across multiple nodes of a Slurm cluster,
+with similar syntax to <code>lapply</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slurm_apply</span>(<span class='no'>f</span>, <span class='no'>params</span>, <span class='no'>...</span>, <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>nodes</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>cpus_per_node</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>preschedule_cores</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()), <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>slurm_map</span>(<span class='no'>x</span>, <span class='no'>f</span>, <span class='no'>...</span>, <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>nodes</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>cpus_per_node</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>preschedule_cores</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()), <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>f</th>
-      <td><p>A function that accepts one or many single values as parameters and
-may return any type of R object.</p></td>
+      <th>x</th>
+      <td><p>A list to apply <code>f</code> to. Each
+element of <code>x</code> corresponds to a separate function call.</p></td>
     </tr>
     <tr>
-      <th>params</th>
-      <td><p>A data frame of parameter values to apply <code>f</code> to. Each
-column corresponds to a parameter of <code>f</code> (<em>Note</em>: names must
-match) and each row corresponds to a separate function call.</p></td>
+      <th>f</th>
+      <td><p>A function that accepts one element of <code>x</code> as its first argument,
+and may return any type of R object.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -159,7 +158,7 @@ random name of the form "slr####".</p></td>
     <tr>
       <th>nodes</th>
       <td><p>The (maximum) number of cluster nodes to spread the calculation
-over. <code>slurm_apply</code> automatically divides <code>params</code> in chunks of
+over. <code>slurm_map</code> automatically divides <code>x</code> in chunks of
 approximately equal size to send to each node. Less nodes are allocated if
 the parameter set is too small to use all CPUs on the requested nodes.</p></td>
     </tr>
@@ -172,11 +171,11 @@ Slurm parameter <code>cpus-per-task</code>.</p></td>
     <tr>
       <th>preschedule_cores</th>
       <td><p>Corresponds to the <code>mc.preschedule</code> argument of 
-<code><a href='https://rdrr.io/r/parallel/mcdummies.html'>parallel::mcmapply</a></code>. Defaults to <code>TRUE</code>. If <code>TRUE</code>, the 
-rows of <code>params</code> are assigned to cores before computation. If <code>FALSE</code>, 
-each row of <code>params</code> is executed by the next available core.
+<code><a href='https://rdrr.io/r/parallel/mcdummies.html'>parallel::mclapply</a></code>. Defaults to <code>TRUE</code>. If <code>TRUE</code>, the 
+elements of <code>x</code> are assigned to cores before computation. 
+If <code>FALSE</code>, each element of <code>x</code> is executed by the next available core.
 Setting <code>FALSE</code> may be faster if 
-different values of <code>params</code> result in very variable completion time for
+different elements of <code>x</code> result in very variable completion time for
 jobs.</p></td>
     </tr>
     <tr>
@@ -186,15 +185,10 @@ saved in a .RData file and loaded on each cluster node prior to calling
 <code>f</code>.</p></td>
     </tr>
     <tr>
-      <th>add_objects</th>
-      <td><p>Older deprecated name of <code>global_objects</code>, retained for
-backwards compatibility.</p></td>
-    </tr>
-    <tr>
       <th>pkgs</th>
       <td><p>A character vector containing the names of packages that must
 be loaded on each cluster node. By default, it includes all packages
-loaded by the user when <code>slurm_apply</code> is called.</p></td>
+loaded by the user when <code>slurm_map</code> is called.</p></td>
     </tr>
     <tr>
       <th>libPaths</th>
@@ -242,7 +236,7 @@ submission script generated for the Slurm job.</p>
 <p>The set of input parameters is divided in equal chunks sent to each node, and
 <code>f</code> is evaluated in parallel within each node using functions from the
 <code>parallel</code> R package. The names of any other R objects (besides
-<code>params</code>) that <code>f</code> needs to access should be included in
+<code>x</code>) that <code>f</code> needs to access should be included in
 <code>global_objects</code> or passed as additional arguments through <code>...</code>.</p>
 <p>Use <code>slurm_options</code> to set any option recognized by <code>sbatch</code>, e.g.
 <code>slurm_options = list(time = "1:00:00", share = TRUE)</code>.
@@ -250,7 +244,7 @@ See <a href='http://slurm.schedmd.com/sbatch.html'>http://slurm.schedmd.com/sbat
 Note that full names must be used (e.g. "time" rather than "t") and that flags
 (such as "share") must be specified as TRUE. The "array", "job-name", "nodes", 
 "cpus-per-task" and "output" options are already determined by 
-<code>slurm_apply</code> and should not be manually set.</p>
+<code>slurm_map</code> and should not be manually set.</p>
 <p>When processing the computation job, the Slurm cluster will output two types
 of files in the temporary folder: those containing the return values of the
 function for each subset of parameters ("results_[node_id].RDS") and those
@@ -261,21 +255,22 @@ message (or error) is output to the console. If <code>submit = FALSE</code>,
 a message indicates the location of the saved data and script files; the
 job can be submitted manually by running the shell command
 <code>sbatch submit.sh</code> from that directory.</p>
-<p>After sending the job to the Slurm cluster, <code>slurm_apply</code> returns a
+<p>After sending the job to the Slurm cluster, <code>slurm_map</code> returns a
 <code>slurm_job</code> object which can be used to cancel the job, get the job
 status or output, and delete the temporary files associated with it. See
 the description of the related functions for more details.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='slurm_call.html'>slurm_call</a></code> to evaluate a single function call.</p>
-<p><code><a href='slurm_map.html'>slurm_map</a></code> to evaluate a function over a list.</p>
+<p><code><a href='slurm_apply.html'>slurm_apply</a></code> to evaluate a function row-wise over a
+data frame of parameters.</p>
 <p><code><a href='cancel_slurm.html'>cancel_slurm</a></code>, <code><a href='cleanup_files.html'>cleanup_files</a></code>,
   <code><a href='get_slurm_out.html'>get_slurm_out</a></code> and <code><a href='get_job_status.html'>get_job_status</a></code>
   which use the output of this function.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>sjob</span> <span class='kw'>&lt;-</span> <span class='fu'>slurm_apply</span>(<span class='no'>func</span>, <span class='no'>pars</span>)
+<span class='no'>sjob</span> <span class='kw'>&lt;-</span> <span class='fu'>slurm_map</span>(<span class='no'>func</span>, <span class='no'>list</span>)
 <span class='fu'><a href='get_job_status.html'>get_job_status</a></span>(<span class='no'>sjob</span>) <span class='co'># Prints console/error output once job is completed.</span>
 <span class='no'>func_result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span>(<span class='no'>sjob</span>, <span class='st'>"table"</span>) <span class='co'># Loads output data into R.</span>
 <span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span>(<span class='no'>sjob</span>)

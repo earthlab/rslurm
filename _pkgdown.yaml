@@ -12,6 +12,7 @@ reference:
     desc: ~  
     contents:  
       - '`slurm_apply`'  
+      - '`slurm_map`'
       - '`get_slurm_out`'    
   - title: Other functions  
     desc: ~

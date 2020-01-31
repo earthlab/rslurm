@@ -8,17 +8,17 @@ load('add_objects.RData')
 {{/add_obj}}
 
 .rslurm_func <- readRDS('f.RDS')
-.rslurm_params <- readRDS('params.RDS')
+.rslurm_x <- readRDS('x.RDS')
 .rslurm_more_args <- readRDS('more_args.RDS')
 .rslurm_id <- as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 .rslurm_istart <- .rslurm_id * {{{nchunk}}} + 1
-.rslurm_iend <- min((.rslurm_id + 1) * {{{nchunk}}}, nrow(.rslurm_params))
-.rslurm_result <- do.call(parallel::mcmapply, c(
-    FUN = .rslurm_func,
-    .rslurm_params[.rslurm_istart:.rslurm_iend, , drop = FALSE],
-    MoreArgs = list(.rslurm_more_args),
+.rslurm_iend <- min((.rslurm_id + 1) * {{{nchunk}}}, length(.rslurm_x))
+.rslurm_result <- do.call(parallel::mclapply, c(list(
+    X = .rslurm_x[.rslurm_istart:.rslurm_iend],
+    FUN = .rslurm_func),
+    .rslurm_more_args,
     mc.cores = {{{cpus_per_node}}},
-    mc.preschedule = {{{preschedule_cores}}},
-    SIMPLIFY = FALSE))
+    mc.preschedule = {{{preschedule_cores}}}
+    ))
 
 saveRDS(.rslurm_result, file = paste0('results_', .rslurm_id, '.RDS'))
