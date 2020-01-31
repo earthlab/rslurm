@@ -4,11 +4,24 @@
 \alias{slurm_apply}
 \title{Parallel execution of a function on the Slurm cluster}
 \usage{
-slurm_apply(f, params, ..., jobname = NA, nodes = 2,
-  cpus_per_node = 2, preschedule_cores = TRUE, global_objects = NULL,
-  add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  rscript_path = NULL, r_template = NULL, sh_template = NULL,
-  slurm_options = list(), submit = TRUE)
+slurm_apply(
+  f,
+  params,
+  ...,
+  jobname = NA,
+  nodes = 2,
+  cpus_per_node = 2,
+  preschedule_cores = TRUE,
+  global_objects = NULL,
+  add_objects = NULL,
+  pkgs = rev(.packages()),
+  libPaths = NULL,
+  rscript_path = NULL,
+  r_template = NULL,
+  sh_template = NULL,
+  slurm_options = list(),
+  submit = TRUE
+)
 }
 \arguments{
 \item{f}{A function that accepts one or many single values as parameters and
