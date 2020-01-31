@@ -21,6 +21,7 @@ reference:
       - '`cleanup_files`'  
       - '`get_job_status`'  
       - '`slurm_call`'  
-      - '`slurm_job`'     
+      - '`slurm_job`'
+      - '`local_slurm_array`'
 navbar:  
   type: standard  

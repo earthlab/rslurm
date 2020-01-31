@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • rslurm</title>
+<title>Execute a Slurm job locally — local_slurm_array • rslurm</title>
 
 
 <!-- jquery -->
@@ -37,7 +37,10 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Execute a Slurm job locally — local_slurm_array" />
+<meta property="og:description" content="Run a previously created slurm_job object locally instead of on a
+Slurm cluster" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-standard navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,114 +112,59 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Execute a Slurm job locally</h1>
+    <small class="dont-index">Source: <a href='https://github.com/SESYNC-ci/rslurm/blob/master/R/local_slurm_array.R'><code>R/local_slurm_array.R</code></a></small>
+    <div class="hidden name"><code>local_slurm_array.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Run a previously created <code>slurm_job</code> object locally instead of on a
+Slurm cluster</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>local_slurm_array</span>(<span class='no'>slr_job</span>, <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-introduction" class="hasAnchor"><a href="#section-introduction" class="anchor"></a>Introduction</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="rslurm-package.html">rslurm-package</a></code> </p>
-        </td>
-        <td><p>Introduction to the <code>rslurm</code> Package</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-basic-functions" class="hasAnchor"><a href="#section-basic-functions" class="anchor"></a>Basic functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="slurm_apply.html">slurm_apply()</a></code> </p>
-        </td>
-        <td><p>Parallel execution of a function on the Slurm cluster</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slurm_map.html">slurm_map()</a></code> </p>
-        </td>
-        <td><p>Parallel execution of a function over a list on the Slurm cluster</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_slurm_out.html">get_slurm_out()</a></code> </p>
-        </td>
-        <td><p>Reads the output of a function calculated on the Slurm cluster</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-other-functions" class="hasAnchor"><a href="#section-other-functions" class="anchor"></a>Other functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="cancel_slurm.html">cancel_slurm()</a></code> </p>
-        </td>
-        <td><p>Cancels a scheduled Slurm job</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cleanup_files.html">cleanup_files()</a></code> </p>
-        </td>
-        <td><p>Deletes temporary files associated with a Slurm job</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_job_status.html">get_job_status()</a></code> </p>
-        </td>
-        <td><p>Get the status of a Slurm job</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slurm_call.html">slurm_call()</a></code> </p>
-        </td>
-        <td><p>Execution of a single function call on the Slurm cluster</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slurm_job.html">slurm_job()</a></code> </p>
-        </td>
-        <td><p>Create a slurm_job object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="local_slurm_array.html">local_slurm_array()</a></code> </p>
-        </td>
-        <td><p>Execute a Slurm job locally</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>slr_job</th>
+      <td><p>An object of class <code>slurm_job</code>.</p></td>
+    </tr>
+    <tr>
+      <th>rscript_path</th>
+      <td><p>The location of the Rscript command. If not specified, 
+defaults to the location of Rscript within the R installation being run.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function is most useful for testing your function on a reduced dataset
+before submitting the full job to the Slurm cluster.</p>
+<p>Call <code>local_slurm_array</code> on a <code>slurm_job</code> object created with
+<code><a href='slurm_apply.html'>slurm_apply(..., submit = FALSE)</a></code> or <code><a href='slurm_map.html'>slurm_map(..., submit = FALSE)</a></code>.
+The job will run serially on the local system rather than being submitted
+to the Slurm cluster.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>sjob</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='slurm_apply.html'>slurm_apply</a></span>(<span class='no'>func</span>, <span class='no'>pars</span>, <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>local_slurm_array</span>(<span class='no'>sjob</span>)
+<span class='no'>func_result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span>(<span class='no'>sjob</span>, <span class='st'>"table"</span>) <span class='co'># Loads output data into R.</span>
+<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span>(<span class='no'>sjob</span>)
+}</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-introduction">Introduction</a></li>
-      <li><a href="#section-basic-functions">Basic functions</a></li>
-      <li><a href="#section-other-functions">Other functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

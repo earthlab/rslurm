@@ -4,10 +4,20 @@
 \alias{slurm_call}
 \title{Execution of a single function call on the Slurm cluster}
 \usage{
-slurm_call(f, params, jobname = NA, global_objects = NULL,
-  add_objects = NULL, pkgs = rev(.packages()), libPaths = NULL,
-  rscript_path = NULL, r_template = NULL, sh_template = NULL,
-  slurm_options = list(), submit = TRUE)
+slurm_call(
+  f,
+  params,
+  jobname = NA,
+  global_objects = NULL,
+  add_objects = NULL,
+  pkgs = rev(.packages()),
+  libPaths = NULL,
+  rscript_path = NULL,
+  r_template = NULL,
+  sh_template = NULL,
+  slurm_options = list(),
+  submit = TRUE
+)
 }
 \arguments{
 \item{f}{Any R function.}
