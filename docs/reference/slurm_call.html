@@ -124,10 +124,20 @@ cluster." />
 cluster.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slurm_call</span>(<span class='no'>f</span>, <span class='no'>params</span>, <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()), <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>slurm_call</span>(
+  <span class='no'>f</span>,
+  <span class='no'>params</span>,
+  <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()),
+  <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
