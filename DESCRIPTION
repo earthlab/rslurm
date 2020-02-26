@@ -8,14 +8,15 @@ Acknowledgements: Development of this R package was supported by the National
     Socio-Environmental Synthesis Center (SESYNC) under funding received from 
     the National Science Foundation grants DBI-1052875 and DBI-1639145.
 Version: 0.5.0
+Date: 2019-11-15
 License: GPL-3
-URL: https://github.com/SESYNC-ci/rslurm
+URL: http://cyberhelp.sesync.org/rslurm/
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
-             person('Mike', 'Smorul', role = 'ctb'),
-             person('Rachael', 'Blake', role = 'ctb'),
-             person('Quentin', 'Read', email = 'qread@sesync.org', role = c('ctb', 'cre')),
+             person('Mike', 'Smorul', role = 'aut'),
+             person('Rachael', 'Blake', role = 'aut'),
+             person('Quentin', 'Read', email = 'qread@sesync.org', role = c('aut', 'cre')),
              person('Se Jong', 'Cho', role = 'art')
              )
 Depends:
