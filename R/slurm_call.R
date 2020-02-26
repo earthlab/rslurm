@@ -79,7 +79,7 @@ slurm_call <- function(f, params, jobname = NA, global_objects = NULL, add_objec
     if (!is.list(params)) {
         stop("second argument to slurm_call should be a list")
     }
-    if (is.null(names(params)) || any(!names(params) %in% names(formals(f)))) {
+    if (is.null(names(params)) || (!is.primitive(f) && !"..." %in% names(formals(f)) && any(!names(params) %in% names(formals(f))))) {
         stop("names of params must match arguments of f")
     }
     

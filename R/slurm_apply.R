@@ -112,7 +112,7 @@ slurm_apply <- function(f, params, ..., jobname = NA,
     if (!is.data.frame(params)) {
         stop("second argument to slurm_apply should be a data.frame")
     }
-    if (is.null(names(params)) || (!is.primitive(f) & any(!names(params) %in% names(formals(f))))) {
+    if (is.null(names(params)) || (!is.primitive(f) && !"..." %in% names(formals(f)) && any(!names(params) %in% names(formals(f))))) {
         stop("column names of params must match arguments of f")
     }
     if (!is.numeric(nodes) || length(nodes) != 1) {
