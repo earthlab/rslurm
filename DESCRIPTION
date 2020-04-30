@@ -19,7 +19,8 @@ Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com
              person('Quentin', 'Read', email = 'qread@sesync.org', role = c('aut', 'cre')),
              person('Dayne', 'Filer', role = 'ctb'),
              person('Ben', 'Fasoli', role = 'ctb'),
-             person('Pol', 'van Rijn', role = 'ctb),
+             person('Pol', 'van Rijn', role = 'ctb'),
+             person('Sebastian', 'Schubert', role = 'ctb'),
              person('Se Jong', 'Cho', role = 'art')
              )
 Depends:

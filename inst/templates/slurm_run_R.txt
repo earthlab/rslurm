@@ -1,4 +1,4 @@
-{{#libPaths}}.libPaths(c('{{.}}', .libPaths()))
+{{#libPaths}}.libPaths(c(.libPaths(), '{{.}}'))
 {{/libPaths}}
 {{#pkgs}}library({{.}}, quietly = TRUE)
 {{/pkgs}}
