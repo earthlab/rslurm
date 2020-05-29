@@ -138,11 +138,11 @@ slurm_call <- function(f, params, jobname = NA, global_objects = NULL, add_objec
         cat("Cannot submit; no Slurm workload manager found\n")
     }
     if (submit) {
-        submit_slurm_job(tmpdir)
+        jobid <- submit_slurm_job(tmpdir)
     } else {
         cat(paste("Submission scripts output in directory", tmpdir,"\n"))
     }
 
     # Return 'slurm_job' object
-    slurm_job(jobname, 1)
+    slurm_job(jobname, jobid, 1)
 }
