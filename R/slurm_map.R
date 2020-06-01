@@ -186,6 +186,7 @@ slurm_map <- function(x, f, ..., jobname = NA,
     if (submit) {
         jobid <- submit_slurm_job(tmpdir)
     } else {
+        jobid <- NA
         cat(paste("Submission scripts output in directory", tmpdir,"\n"))
     }
 

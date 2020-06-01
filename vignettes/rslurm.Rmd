@@ -222,9 +222,11 @@ variable that Slurm will set on each cluster node. This variable is read by
 different parameter subset and write its output to a different results file. The
 R script calls `parallel::mcMap` to parallelize calculations on each node.
 
-Additionally, the --dependency option can be utilized by taking the jobid from the
-`slurm_object` returned by `slurm_apply`, `slurm_map`, and `slurm_call` functions.  
-The ID can be manually added to the slurm options.
+Additionally, the `--dependency` option can be utilized by taking the job ID from the
+`slurm_job` object returned by `slurm_apply`, `slurm_map`, and `slurm_call` functions.  
+The ID can be manually added to the slurm options. 
+In the following example, the job ID of `sjob1` is used to ensure that `sjob2` does not 
+begin running until after `sjob1` finishes.
 
 ```{r eval = FALSE}
 # Job1

@@ -198,6 +198,7 @@ slurm_apply <- function(f, params, ..., jobname = NA,
     if (submit) {
         jobid <- submit_slurm_job(tmpdir)
     } else {
+        jobid <- NA
         cat(paste("Submission scripts output in directory", tmpdir,"\n"))
     }
 
