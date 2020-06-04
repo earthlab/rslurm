@@ -14,4 +14,7 @@ notifications:
 branches:
   only:
   - master
+
+after_failure:
+  - ./travis-tool.sh dump_logs  
   
