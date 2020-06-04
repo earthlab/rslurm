@@ -16,5 +16,5 @@ branches:
   - master
 
 after_failure:
-  - Rscript -e 'devtools::install();devtools::test()'
+  - Rscript -e 'install.packages("devtools");devtools::install();devtools::test()'
   
