@@ -1,7 +1,8 @@
 library(rslurm)
 context("slurm_map")
 
-SLURM = system('sinfo', ignore.stdout = TRUE, ignore.stderr = TRUE)
+# Locates sinfo on system, returns "1" if not found.
+SLURM = system('whereis sinfo | wc -w', intern = TRUE) == '1'
 SLURM_MSG = 'Only test on Slurm head node.'
 SLURM_OPTS = list(time = '1')
 

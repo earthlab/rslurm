@@ -14,7 +14,11 @@ notifications:
 branches:
   only:
   - master
+  
+r_binary_packages:
+  - devtools
+  - roxygen2
 
 after_failure:
-  - Rscript -e 'install.packages("devtools");devtools::install();devtools::test()'
+  - Rscript -e 'devtools::install();devtools::test()'
   
