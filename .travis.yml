@@ -16,5 +16,5 @@ branches:
   - master
 
 after_failure:
-  - ./travis-tool.sh dump_logs  
+  - Rscript -e 'devtools::install();devtools::test()'
   
