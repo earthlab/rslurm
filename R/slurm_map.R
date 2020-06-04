@@ -184,11 +184,12 @@ slurm_map <- function(x, f, ..., jobname = NA,
         cat("Cannot submit; no Slurm workload manager found\n")
     }
     if (submit) {
-        submit_slurm_job(tmpdir)
+        jobid <- submit_slurm_job(tmpdir)
     } else {
+        jobid <- NA
         cat(paste("Submission scripts output in directory", tmpdir,"\n"))
     }
 
     # Return 'slurm_job' object
-    slurm_job(jobname, nodes)
+    slurm_job(jobname, jobid, nodes)
 }

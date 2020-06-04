@@ -222,6 +222,24 @@ variable that Slurm will set on each cluster node. This variable is read by
 different parameter subset and write its output to a different results file. The
 R script calls `parallel::mcMap` to parallelize calculations on each node.
 
+Additionally, the `--dependency` option can be utilized by taking the job ID from the
+`slurm_job` object returned by `slurm_apply`, `slurm_map`, and `slurm_call` functions.  
+The ID can be manually added to the slurm options. 
+In the following example, the job ID of `sjob1` is used to ensure that `sjob2` does not 
+begin running until after `sjob1` finishes.
+
+```{r eval = FALSE}
+# Job1
+sopt1 <- list(time = '1:00:00', share = TRUE)
+sjob1 <- slurm_apply(test_func, pars, slurm_options = sopt1)
+
+# Job2 depends on Job1
+pars2 <- data.frame(par_mu = 2:20,
+                   par_sd = seq(0.2, 2, length.out = 20))
+sopt2 <- c(sopt1, list(dependency=sprintf("afterany:%s", sjob1$jobid)))
+sjob2 <- slurm_apply(test_func2, pars2, slurm_options = sopt2)
+```
+
 Both `slurm_run.R` and `submit.sh` are generated from templates, using the 
 [`whisker`](https://cran.r-project.org/package=whisker) package; these templates
 can be found in the `rslurm/templates` subfolder in your R package library.

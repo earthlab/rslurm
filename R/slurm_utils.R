@@ -34,9 +34,13 @@ format_option_list <- function(slurm_options) {
 # Submit job
 submit_slurm_job <- function(tmpdir) {
     old_wd <- setwd(tmpdir)
-    tryCatch({
-        system("sbatch submit.sh")
-    }, finally = setwd(old_wd))
+    sys_out <- tryCatch({
+            system("sbatch submit.sh", intern = TRUE)
+        }, finally = setwd(old_wd))
+    message(sys_out)
+    sys_out <- strsplit(sys_out, " ")[[1]]
+    jobid <- sys_out[length(sys_out)]
+    return(jobid)
 }
 
 # Submit dummy job with a dependency via srun to block R process

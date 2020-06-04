@@ -15,3 +15,10 @@ branches:
   only:
   - master
   
+r_packages:
+  - devtools
+  - roxygen2
+
+after_failure:
+  - Rscript -e 'devtools::install();devtools::test()'
+  

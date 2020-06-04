@@ -4,12 +4,14 @@
 \alias{slurm_job}
 \title{Create a slurm_job object}
 \usage{
-slurm_job(jobname, nodes)
+slurm_job(jobname = NULL, jobid = NULL, nodes = NULL)
 }
 \arguments{
 \item{jobname}{The name of the Slurm job. The rslurm-generated scripts and 
 output files associated with a job should be found in the 
 \emph{_rslurm_[jobname]} folder.}
+
+\item{jobid}{The id of the Slurm job created by the sbatch command.}
 
 \item{nodes}{The number of cluster nodes used by that job.}
 }
