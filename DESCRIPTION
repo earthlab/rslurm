@@ -27,7 +27,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     whisker (>= 0.3)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests:
     parallel,
     testthat,

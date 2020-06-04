@@ -11,8 +11,8 @@
 #' @param jobname The name of the Slurm job. The rslurm-generated scripts and 
 #' output files associated with a job should be found in the 
 #' \emph{_rslurm_[jobname]} folder.
-#' @param nodes The number of cluster nodes used by that job.
 #' @param jobid The id of the Slurm job created by the sbatch command.
+#' @param nodes The number of cluster nodes used by that job.
 #' @return A \code{slurm_job} object.
 #' @export
 slurm_job <- function(jobname = NULL, jobid = NULL, nodes = NULL) {
