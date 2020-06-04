@@ -1,8 +1,9 @@
-pandoc: 2.2.3.2
-pkgdown: 1.4.1
+pandoc: 2.3.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   rslurm: rslurm.html
+last_built: 2020-06-04T16:03Z
 urls:
   reference: http://cyberhelp.sesync.org/rslurm//reference
   article: http://cyberhelp.sesync.org/rslurm//articles
