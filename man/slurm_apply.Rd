@@ -11,6 +11,7 @@ slurm_apply(
   jobname = NA,
   nodes = 2,
   cpus_per_node = 2,
+  processes_per_node = cpus_per_node,
   preschedule_cores = TRUE,
   global_objects = NULL,
   add_objects = NULL,
@@ -42,9 +43,13 @@ over. \code{slurm_apply} automatically divides \code{params} in chunks of
 approximately equal size to send to each node. Less nodes are allocated if
 the parameter set is too small to use all CPUs on the requested nodes.}
 
-\item{cpus_per_node}{The number of CPUs requested per node, i.e., how many
-processes to run in parallel per node. This argument is mapped to the
-Slurm parameter \code{cpus-per-task}.}
+\item{cpus_per_node}{The number of CPUs requested per node. This argument is
+mapped to the Slurm parameter \code{cpus-per-task}.}
+
+\item{processes_per_node}{The number of logical CPUs to utilize per node,
+i.e. how many processes to run in parallel per node. This can exceed
+\code{cpus_per_node} for nodes which support hyperthreading. Defaults to
+\code{logical_cpus_per_node = cpus_per_node}.}
 
 \item{preschedule_cores}{Corresponds to the \code{mc.preschedule} argument of 
 \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
