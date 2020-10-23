@@ -129,24 +129,25 @@ parameters in parallel, spread across multiple nodes of a Slurm cluster,
 with similar syntax to <code>mapply</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slurm_apply</span>(
-  <span class='no'>f</span>,
-  <span class='no'>params</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>nodes</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>cpus_per_node</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>preschedule_cores</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()),
-  <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>slurm_apply</span><span class='op'>(</span>
+  <span class='va'>f</span>,
+  <span class='va'>params</span>,
+  <span class='va'>...</span>,
+  jobname <span class='op'>=</span> <span class='cn'>NA</span>,
+  nodes <span class='op'>=</span> <span class='fl'>2</span>,
+  cpus_per_node <span class='op'>=</span> <span class='fl'>2</span>,
+  processes_per_node <span class='op'>=</span> <span class='va'>cpus_per_node</span>,
+  preschedule_cores <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  global_objects <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_objects <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pkgs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
+  libPaths <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rscript_path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  r_template <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sh_template <span class='op'>=</span> <span class='cn'>NULL</span>,
+  slurm_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  submit <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,9 +182,15 @@ the parameter set is too small to use all CPUs on the requested nodes.</p></td>
     </tr>
     <tr>
       <th>cpus_per_node</th>
-      <td><p>The number of CPUs requested per node, i.e., how many
-processes to run in parallel per node. This argument is mapped to the
-Slurm parameter <code>cpus-per-task</code>.</p></td>
+      <td><p>The number of CPUs requested per node. This argument is
+mapped to the Slurm parameter <code>cpus-per-task</code>.</p></td>
+    </tr>
+    <tr>
+      <th>processes_per_node</th>
+      <td><p>The number of logical CPUs to utilize per node,
+i.e. how many processes to run in parallel per node. This can exceed
+<code>cpus_per_node</code> for nodes which support hyperthreading. Defaults to
+<code>logical_cpus_per_node = cpus_per_node</code>.</p></td>
     </tr>
     <tr>
       <th>preschedule_cores</th>
@@ -290,12 +297,13 @@ the description of the related functions for more details.</p>
   which use the output of this function.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>sjob</span> <span class='kw'>&lt;-</span> <span class='fu'>slurm_apply</span>(<span class='no'>func</span>, <span class='no'>pars</span>)
-<span class='fu'><a href='get_job_status.html'>get_job_status</a></span>(<span class='no'>sjob</span>) <span class='co'># Prints console/error output once job is completed.</span>
-<span class='no'>func_result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span>(<span class='no'>sjob</span>, <span class='st'>"table"</span>) <span class='co'># Loads output data into R.</span>
-<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span>(<span class='no'>sjob</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>sjob</span> <span class='op'>&lt;-</span> <span class='fu'>slurm_apply</span><span class='op'>(</span><span class='va'>func</span>, <span class='va'>pars</span><span class='op'>)</span>
+<span class='fu'><a href='get_job_status.html'>get_job_status</a></span><span class='op'>(</span><span class='va'>sjob</span><span class='op'>)</span> <span class='co'># Prints console/error output once job is completed.</span>
+<span class='va'>func_result</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span><span class='op'>(</span><span class='va'>sjob</span>, <span class='st'>"table"</span><span class='op'>)</span> <span class='co'># Loads output data into R.</span>
+<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span><span class='op'>(</span><span class='va'>sjob</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -307,11 +315,11 @@ the description of the related functions for more details.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Philippe Marchand, Ian Carroll, Mike Smorul, Rachael Blake, Quentin Read.</p>
+  <p>Developed by .</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
