@@ -52,9 +52,12 @@
 #'   over. \code{slurm_apply} automatically divides \code{params} in chunks of
 #'   approximately equal size to send to each node. Less nodes are allocated if
 #'   the parameter set is too small to use all CPUs on the requested nodes.
-#' @param cpus_per_node The number of CPUs requested per node, i.e., how many
-#'   processes to run in parallel per node. This argument is mapped to the
-#'   Slurm parameter \code{cpus-per-task}.
+#' @param cpus_per_node The number of CPUs requested per node. This argument is
+#'   mapped to the Slurm parameter \code{cpus-per-task}.
+#' @param processes_per_node The number of logical CPUs to utilize per node,
+#'   i.e. how many processes to run in parallel per node. This can exceed
+#'   \code{cpus_per_node} for nodes which support hyperthreading. Defaults to
+#'   \code{logical_cpus_per_node = cpus_per_node}.
 #' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
 #' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
 #' rows of \code{params} are assigned to cores before computation. If \code{FALSE}, 
@@ -99,11 +102,12 @@
 #' cleanup_files(sjob)
 #' }
 #' @export
-slurm_apply <- function(f, params, ..., jobname = NA, 
-                        nodes = 2, cpus_per_node = 2, preschedule_cores = TRUE,
-                        global_objects = NULL, add_objects = NULL, 
-                        pkgs = rev(.packages()), libPaths = NULL, 
-                        rscript_path = NULL, r_template = NULL, sh_template = NULL, 
+slurm_apply <- function(f, params, ..., jobname = NA, nodes = 2,
+                        cpus_per_node = 2, processes_per_node = cpus_per_node,
+                        preschedule_cores = TRUE, global_objects = NULL,
+                        add_objects = NULL, pkgs = rev(.packages()),
+                        libPaths = NULL, rscript_path = NULL, 
+                        r_template = NULL, sh_template = NULL, 
                         slurm_options = list(), submit = TRUE) {
     # Check inputs
     if (!is.function(f)) {
@@ -171,6 +175,7 @@ slurm_apply <- function(f, params, ..., jobname = NA,
                          add_obj = !is.null(global_objects),
                          nchunk = nchunk,
                          cpus_per_node = cpus_per_node,
+                         processes_per_node = processes_per_node,
                          preschedule_cores = preschedule_cores,
                          libPaths = libPaths))
     writeLines(script_r, file.path(tmpdir, "slurm_run.R"))

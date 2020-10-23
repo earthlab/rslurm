@@ -17,7 +17,7 @@ load('add_objects.RData')
     X = .rslurm_x[.rslurm_istart:.rslurm_iend],
     FUN = .rslurm_func),
     .rslurm_more_args,
-    mc.cores = {{{cpus_per_node}}},
+    mc.cores = {{{processes_per_node}}},
     mc.preschedule = {{{preschedule_cores}}}
     ))
 
