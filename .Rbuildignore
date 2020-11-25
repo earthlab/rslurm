@@ -14,3 +14,4 @@
 
 ^CRAN-RELEASE$
 ^logo_slurm\.svg$
+^\.github$

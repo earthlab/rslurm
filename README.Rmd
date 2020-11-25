@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![cran checks](https://cranchecks.info/badges/worst/rslurm)](https://CRAN.R-project.org/web/checks/check_results_rslurm.html)
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://CRAN.R-project.org/package=rslurm)
-[![Build Status](https://travis-ci.org/SESYNC-ci/rslurm.svg?branch=master)](https://travis-ci.org/SESYNC-ci/rslurm)
+[![R build status](https://github.com/SESYNC-ci/rslurm/workflows/R-CMD-check/badge.svg)](https://github.com/SESYNC-ci/rslurm/actions)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org/package=rslurm)
 <!-- badges: end -->
