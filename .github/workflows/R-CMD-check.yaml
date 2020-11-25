@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - master
-      - github-actions-test # This is here to test whether the new CI works.
   pull_request:
     branches:
       - main
