@@ -68,7 +68,7 @@
 #'   \code{\link{get_slurm_out}} and \code{\link{get_job_status}} which use
 #'   the output of this function.
 #' @export
-slurm_call <- function(f, params, jobname = NA, global_objects = NULL, add_objects = NULL, 
+slurm_call <- function(f, params = list(), jobname = NA, global_objects = NULL, add_objects = NULL, 
                        pkgs = rev(.packages()), libPaths = NULL, rscript_path = NULL,
                        r_template = NULL, sh_template = NULL, slurm_options = list(), 
                        submit = TRUE) {
@@ -76,12 +76,14 @@ slurm_call <- function(f, params, jobname = NA, global_objects = NULL, add_objec
     if (!is.function(f)) {
         stop("first argument to slurm_call should be a function")
     }
-    if (!is.list(params)) {
-        stop("second argument to slurm_call should be a list")
-    }
-    if (is.null(names(params)) || (!is.primitive(f) && !"..." %in% names(formals(f)) && any(!names(params) %in% names(formals(f))))) {
-        stop("names of params must match arguments of f")
-    }
+    if (!missing(params)) {
+        if (!is.list(params)) {
+            stop("second argument to slurm_call should be a list")
+        }
+        if (is.null(names(params)) || (!is.primitive(f) && !"..." %in% names(formals(f)) && any(!names(params) %in% names(formals(f))))) {
+            stop("names of params must match arguments of f")
+        }
+    } 
     
     # Check for use of deprecated argument
     if (!missing("add_objects")) {

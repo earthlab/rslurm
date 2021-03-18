@@ -6,7 +6,7 @@
 \usage{
 slurm_call(
   f,
-  params,
+  params = list(),
   jobname = NA,
   global_objects = NULL,
   add_objects = NULL,
