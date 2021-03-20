@@ -32,5 +32,15 @@ test_that("slurm_call will handle a bytecoded function", {
     sjob <- slurm_call(lm, params, slurm_options = SLURM_OPTS)
     result_slurm <- get_slurm_out(sjob)
     cleanup_files(sjob)
-    expect_equal(result_slurm$coeficients, result_local$coeficients)
+    expect_equal(result_slurm$coefficients, result_local$coefficients)
+})
+
+test_that("slurm_call executes if no parameters provided", {
+    if (SLURM) skip(SLURM_MSG)
+    ftest <- function() sum((1:1000)^2)
+    result_local <- ftest()
+    sjob <- slurm_call(ftest, slurm_options = SLURM_OPTS)
+    result_slurm <- get_slurm_out(sjob)
+    cleanup_files(sjob)
+    expect_equal(result_slurm, result_local)
 })
