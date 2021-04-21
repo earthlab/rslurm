@@ -1,18 +1,46 @@
+# rslurm 0.6.0
+
+## New features and fixes
+
+* New function `slurm_map()` with similar syntax to `lapply()`
+([#48](https://github.com/SESYNC-ci/rslurm/pull/48)).
+
+* Better handling of additional arguments to `f` in `slurm_apply()`, and
+of how R objects are made available to the Slurm jobs
+([#48](https://github.com/SESYNC-ci/rslurm/pull/48)).
+
+* Slurm jobID added to `slurm_job` objects
+([#55](https://github.com/SESYNC-ci/rslurm/pull/55)).
+
+* `processes_per_node` argument added to support hyperthreading
+([#57](https://github.com/SESYNC-ci/rslurm/pull/57)).
+
+* `get_slurm_out())` is now compatible with partitions that cannot
+accept interactive jobs and with newer releases of Slurm,
+though there is a potential incompatibility with versions of Slurm older than 16.05.0, 
+which was released on May 2016
+([#65](https://github.com/SESYNC-ci/rslurm/pull/65)).
+
+* Miscellaneous minor bug fixes 
+([#49](https://github.com/SESYNC-ci/rslurm/pull/49),
+[#51](https://github.com/SESYNC-ci/rslurm/pull/51),
+[#53](https://github.com/SESYNC-ci/rslurm/issues/53)).
+
 # rslurm 0.5.0
 
 ### New features and fixes
 
 * Improved status with `get_job_status`, deprecating `print_job_status` 
-([#37](https://github.com/sesync-ci/rslurm/pull/37)).
+([#37](https://github.com/SESYNC-ci/rslurm/pull/37)).
 
 * Use `mclapply` within `get_slurm_out` to gather results 
-([#30](https://github.com/sesync-ci/rslurm/pull/30)).
+([#30](https://github.com/SESYNC-ci/rslurm/pull/30)).
 
 * Allow user to provide custom .R and .sh templates 
-([#47](https://github.com/sesync-ci/rslurm/pull/47)).
+([#47](https://github.com/SESYNC-ci/rslurm/pull/47)).
 
 * Allow user to specify path to `Rscript` ([#45](https://github.com/sesync-ci/rslurm/pull/45)) 
-and number of CPUS per task ([#36](https://github.com/sesync-ci/rslurm/pull/36)).
+and number of CPUS per task ([#36](https://github.com/SESYNC-ci/rslurm/pull/36)).
 
 * Allow user to disable core prescheduling if tasks have high variance in 
 completion time ([816b40e](https://github.com/SESYNC-ci/rslurm/commit/816b40e)).
@@ -52,12 +80,12 @@ completion time ([816b40e](https://github.com/SESYNC-ci/rslurm/commit/816b40e)).
 * `wait` argument adds option to `slurm_apply` and `slurm_call` to
 block the calling script until the submitted job completes. This
 option can be used to allow immediate processing of a submitted
-job's output ([#2](https://github.com/sesync-ci/rslurm/pull/2)).
+job's output ([#2](https://github.com/SESYNC-ci/rslurm/pull/2)).
 
 * Use ".RDS" file extension, rather than ".RData", for
-serialized objects ([#4](https://github.com/sesync-ci/rslurm/pull/4)).
+serialized objects ([#4](https://github.com/SESYNC-ci/rslurm/pull/4)).
 
-* Minor bug fixes ([#4](https://github.com/sesync-ci/rslurm/pull/4)).
+* Minor bug fixes ([#4](https://github.com/SESYNC-ci/rslurm/pull/4)).
 
 
 # rslurm 0.3.1
