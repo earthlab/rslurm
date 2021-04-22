@@ -22,6 +22,7 @@ Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com
              person('Pol', 'van Rijn', role = 'ctb'),
              person('Sebastian', 'Schubert', role = 'ctb'),
              person('Rob', 'Gilmore', role = 'ctb'),
+             person('Christopher', 'Barrington', role = 'ctb'),
              person('Se Jong', 'Cho', role = 'art')
              )
 Depends:

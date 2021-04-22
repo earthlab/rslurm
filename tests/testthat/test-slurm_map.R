@@ -2,7 +2,7 @@ library(rslurm)
 context("slurm_map")
 
 # Locates sinfo on system, returns "1" if not found.
-SLURM = system('whereis sinfo | wc -w', intern = TRUE) == '1'
+SLURM = Sys.which("sinfo") == ""
 SLURM_MSG = 'Only test on Slurm head node.'
 SLURM_OPTS = list(time = '1')
 
@@ -26,6 +26,7 @@ ftest <- function(pars, par_n = 10^6, ...) {
 # slurm_apply(function (i) Sys.getenv(), data.frame(i = c(0)), pkgs = c(), jobname = 'test0', nodes = 1, cpus_per_node = 1)
 
 test_that("slurm_map gives correct output", {
+    skip_on_os("windows")
     if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_map(pars_list, ftest, jobname = "test1", nodes = 2, 
                       cpus_per_node = 1, slurm_options = SLURM_OPTS)
@@ -38,6 +39,7 @@ test_that("slurm_map gives correct output", {
 })
 
 test_that("slurm_map works with single list element", {
+    skip_on_os("windows")
     if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_map(pars_list[1], ftest, nodes = 2, jobname = "test2",
                       cpus_per_node = 1, slurm_options = SLURM_OPTS)
@@ -48,6 +50,7 @@ test_that("slurm_map works with single list element", {
 })
 
 test_that("slurm_map correctly handles global_objects", {
+    skip_on_os("windows")
     if (SLURM) skip(SLURM_MSG)
     sjob <- slurm_map(as.list(1:length(pars_list)),
                       function(i) ftest(pars_list[[i]]),
@@ -60,6 +63,7 @@ test_that("slurm_map correctly handles global_objects", {
 })
 
 test_that("slurm_map correctly handles arguments passed with ...", {
+    skip_on_os("windows")
     if (SLURM) skip (SLURM_MSG)
     sjob <- slurm_map(pars_list, ftest,
                       par_n = 10^6, jobname = "test4",
