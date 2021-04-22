@@ -27,6 +27,7 @@ sjob1 <- local_slurm_array(sjob1)
 res <- get_slurm_out(sjob1, "table", wait = FALSE)
 res_raw <- get_slurm_out(sjob1, "raw", wait = FALSE)
 test_that("slurm_map gives correct output", {
+    skip_on_os("windows")
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
     expect_equal(pars, as.data.frame(do.call(rbind, res_raw)),
                  tolerance = 0.01, check.attributes = FALSE)
@@ -42,6 +43,7 @@ msg <- capture.output(
 sjob2 <- local_slurm_array(sjob2)
 res <- get_slurm_out(sjob2, "table", wait = FALSE)
 test_that("slurm_map works with length 1 list", {
+    skip_on_os("windows")
     expect_equal(pars[1, ], res, tolerance = 0.01, check.attributes = FALSE)  
 })
 
@@ -57,6 +59,7 @@ msg <- capture.output(
 sjob3 <- local_slurm_array(sjob3)
 res <- get_slurm_out(sjob3, "table", wait = FALSE)
 test_that("slurm_map correctly handles global_objects", {
+    skip_on_os("windows")
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
 })
 
@@ -69,6 +72,7 @@ msg <- capture.output(
 sjob4 <- local_slurm_array(sjob4)
 res <- get_slurm_out(sjob4, "table", wait = FALSE)
 test_that("slurm_map correctly handles arguments passed with ...", {
+    skip_on_os("windows")
     expect_equal(pars$par_m, res$s_m, tolerance = 0.01)  
 })
 

@@ -25,6 +25,7 @@ sjob <- local_slurm_array(sjob)
 res <- get_slurm_out(sjob, wait = FALSE)
 
 test_that("slurm_call returns correct output", {
+    skip_on_os("windows")
     expect_equal(res, 16)
 })
 
