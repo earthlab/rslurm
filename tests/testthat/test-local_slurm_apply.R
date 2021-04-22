@@ -27,11 +27,12 @@ msg <- capture.output(
     sjob1 <- slurm_apply(ftest, pars, jobname = "test1", nodes = 2, 
                          cpus_per_node = 1, submit = FALSE)
 )
-sjob1 <- local_slurm_array(sjob1)
-res <- get_slurm_out(sjob1, "table", wait = FALSE)
-res_raw <- get_slurm_out(sjob1, "raw", wait = FALSE)
+
 test_that("slurm_apply gives correct output", {
     skip_on_os("windows")
+    sjob1 <- local_slurm_array(sjob1)
+    res <- get_slurm_out(sjob1, "table", wait = FALSE)
+    res_raw <- get_slurm_out(sjob1, "raw", wait = FALSE)
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
     expect_equal(pars, as.data.frame(do.call(rbind, res_raw)),
                  tolerance = 0.01, check.attributes = FALSE)
@@ -44,10 +45,11 @@ msg <- capture.output(
     sjob2 <- slurm_apply(ftest, pars[, 1, drop = FALSE], jobname = "test2", 
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
-sjob2 <- local_slurm_array(sjob2)
-res <- get_slurm_out(sjob2, "table", wait = FALSE)
+
 test_that("slurm_apply works with single parameter", {
     skip_on_os("windows")
+    sjob2 <- local_slurm_array(sjob2)
+    res <- get_slurm_out(sjob2, "table", wait = FALSE)
     expect_equal(pars$par_m, res$s_m, tolerance = 0.01)  
 })
 
@@ -55,10 +57,11 @@ msg <- capture.output(
     sjob3 <- slurm_apply(ftest, pars[1, ], nodes = 2, jobname = "test3",
                          cpus_per_node = 1, submit = FALSE)
 )
-sjob3 <- local_slurm_array(sjob3)
-res <- get_slurm_out(sjob3, "table", wait = FALSE)
+
 test_that("slurm_apply works with single row", {
     skip_on_os("windows")
+    sjob3 <- local_slurm_array(sjob3)
+    res <- get_slurm_out(sjob3, "table", wait = FALSE)
     expect_equal(sjob3$nodes, 1)
     expect_equal(pars[1, ], res, tolerance = 0.01, check.attributes = FALSE)  
 })
@@ -67,10 +70,11 @@ msg <- capture.output(
     sjob4 <- slurm_apply(ftest, pars[1, 1, drop = FALSE], jobname = "test4",
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
-sjob4 <- local_slurm_array(sjob4)
-res <- get_slurm_out(sjob4, "table", wait = FALSE)
+
 test_that("slurm_apply works with single parameter and single row", {
     skip_on_os("windows")
+    sjob4 <- local_slurm_array(sjob4)
+    res <- get_slurm_out(sjob4, "table", wait = FALSE)
     expect_equal(pars$par_m[1], res$s_m, tolerance = 0.01)  
 })
 
@@ -82,10 +86,11 @@ msg <- capture.output(
                          global_objects = c('ftest', 'pars'), jobname = "test5",
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
-sjob5 <- local_slurm_array(sjob5)
-res <- get_slurm_out(sjob5, "table", wait = FALSE)
+
 test_that("slurm_apply correctly handles global_objects", {
     skip_on_os("windows")
+    sjob5 <- local_slurm_array(sjob5)
+    res <- get_slurm_out(sjob5, "table", wait = FALSE)
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
 })
 
@@ -98,10 +103,11 @@ msg <- capture.output(
                          global_objects = c('ftest2', 'pars'), jobname = "test6",
                          nodes = 2, cpus_per_node = 1, submit = FALSE)
 )
-sjob6 <- local_slurm_array(sjob6)
-res <- get_slurm_out(sjob6, "table", wait = FALSE)
+
 test_that("slurm_apply correctly handles arguments passed with ...", {
     skip_on_os("windows")
+    sjob6 <- local_slurm_array(sjob6)
+    res <- get_slurm_out(sjob6, "table", wait = FALSE)
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
 })
 
