@@ -85,10 +85,12 @@ list.files('_rslurm_test_apply', 'results')
 ```
 
 The results from all the nodes can be read back into R with the
-`get_slurm_out()` function.
+`get_slurm_out()` function. In this example, `wait = FALSE`, 
+but if you use the default argument `wait = TRUE`, execution will 
+be paused until the Slurm job finishes running.
 
 ```{r}
-res <- get_slurm_out(sjob, outtype = 'table')
+res <- get_slurm_out(sjob, outtype = 'table', wait = FALSE)
 head(res, 3)
 ```
 
@@ -103,7 +105,7 @@ function returns a simple vector. The default `outtype = 'raw'` combines the
 outputs into a list and can thus handle arbitrarily complex return objects.
 
 ```{r}
-res_raw <- get_slurm_out(sjob, outtype = 'raw')
+res_raw <- get_slurm_out(sjob, outtype = 'raw', wait = FALSE)
 res_raw[1:3]
 ```
 
