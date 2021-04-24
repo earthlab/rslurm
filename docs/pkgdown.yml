@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   rslurm: rslurm.html
-last_built: 2020-10-23T01:31Z
+last_built: 2021-04-24T23:34Z
 urls:
   reference: http://cyberhelp.sesync.org/rslurm//reference
   article: http://cyberhelp.sesync.org/rslurm//articles

@@ -75,7 +75,7 @@ cluster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ cluster." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +100,7 @@ cluster." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,20 +127,20 @@ cluster." />
 cluster.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slurm_call</span>(
-  <span class='no'>f</span>,
-  <span class='no'>params</span>,
-  <span class='kw'>jobname</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>global_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_objects</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pkgs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span>()),
-  <span class='kw'>libPaths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rscript_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>r_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sh_template</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>slurm_options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>submit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>slurm_call</span><span class='op'>(</span>
+  <span class='va'>f</span>,
+  params <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  jobname <span class='op'>=</span> <span class='cn'>NA</span>,
+  global_objects <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_objects <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pkgs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
+  libPaths <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rscript_path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  r_template <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sh_template <span class='op'>=</span> <span class='cn'>NULL</span>,
+  slurm_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  submit <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -263,7 +263,7 @@ description of the related functions for more details.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

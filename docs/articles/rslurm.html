@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -57,7 +57,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/SESYNC-ci/rslurm/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,8 +71,7 @@
 
       
 
-      </header><script src="rslurm_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="rslurm_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="rslurm_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="rslurm_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Parallelize R code on a Slurm cluster</h1>
@@ -129,9 +128,9 @@
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">'_rslurm_test_apply'</span>, <span class="st">'results'</span><span class="op">)</span></pre></div>
 <pre><code>## [1] "results_0.RDS" "results_1.RDS"</code></pre>
-<p>The results from all the nodes can be read back into R with the <code><a href="../reference/get_slurm_out.html">get_slurm_out()</a></code> function.</p>
+<p>The results from all the nodes can be read back into R with the <code><a href="../reference/get_slurm_out.html">get_slurm_out()</a></code> function. In this example, <code>wait = FALSE</code>, but if you use the default argument <code>wait = TRUE</code>, execution will be paused until the Slurm job finishes running.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'table'</span><span class="op">)</span>
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'table'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">res</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
 <pre><code>##       s_mu       s_sd
 ## 1 1.000137 0.09995552
@@ -140,7 +139,7 @@
 <p>The utility function <code>print_job_status</code> displays the status of a submitted job (i.e. in queue, running or completed), and <code>cancel_slurm</code> will remove a job from the queue, aborting its execution if necessary. These functions are R wrappers for the Slurm command line functions <code>squeue</code> and <code>scancel</code>, respectively.</p>
 <p>When <code>outtype = 'table'</code>, the outputs from each function evaluation are row-bound into a single data frame; this is an appropriate format when the function returns a simple vector. The default <code>outtype = 'raw'</code> combines the outputs into a list and can thus handle arbitrarily complex return objects.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span>
+<span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'raw'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">res_raw</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></pre></div>
 <pre><code>## [[1]]
 ##       s_mu       s_sd 
@@ -238,7 +237,7 @@ The ID can be manually added to the slurm options. In the following example, the
 
 
       <footer><div class="copyright">
-  <p>Developed by .</p>
+  <p>Developed by Philippe Marchand, Ian Carroll, Mike Smorul, Rachael Blake, Quentin Read.</p>
 </div>
 
 <div class="pkgdown">

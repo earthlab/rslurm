@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Introduction to the <code>rslurm</code> Package — rslurm-package • rslurm</title>
+<title>Introduction to the rslurm Package — rslurm-package • rslurm</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,7 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Introduction to the <code>rslurm</code> Package — rslurm-package" />
+<meta property="og:title" content="Introduction to the rslurm Package — rslurm-package" />
 <meta property="og:description" content="Send long-running or parallel jobs to a Slurm workload manager (i.e. cluster)
 using the slurm_call, slurm_apply, or
 slurm_map functions." />
@@ -76,7 +76,7 @@ slurm_map functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@ slurm_map functions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +101,7 @@ slurm_map functions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -149,7 +149,7 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code>, <code><a href='
   package to parallelize computations across processors on a given node.</p>  
 <p>The output of <code>slurm_apply</code>, <code>slurm_map</code>, or <code>slurm_call</code> 
   is a <code>slurm_job</code> object that serves as an input to the other functions in the package: 
-  <code><a href='rslurm-deprecated.html'>print_job_status</a></code>, <code><a href='cancel_slurm.html'>cancel_slurm</a></code>, 
+  <code><a href='print_job_status.html'>print_job_status</a></code>, <code><a href='cancel_slurm.html'>cancel_slurm</a></code>, 
   <code><a href='get_slurm_out.html'>get_slurm_out</a></code> and <code><a href='cleanup_files.html'>cleanup_files</a></code>.</p>
     <h2 class="hasAnchor" id="function-specification"><a class="anchor" href="#function-specification"></a>Function specification</h2>
 
@@ -195,23 +195,25 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code>, <code><a href='
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Create a data frame of mean/sd values for normal distributions </span>
-<span class='no'>pars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>par_m</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(-<span class='fl'>10</span>, <span class='fl'>10</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>1000</span>),
-                   <span class='kw'>par_sd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0.1</span>, <span class='fl'>10</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>1000</span>))
-
+<span class='va'>pars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>par_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>, 
+                   par_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+                   
 <span class='co'># Create a function to parallelize</span>
-<span class='no'>ftest</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>par_m</span>, <span class='no'>par_sd</span>) {
- <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>^<span class='fl'>7</span>, <span class='no'>par_m</span>, <span class='no'>par_sd</span>)
- <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>s_m</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>samp</span>), <span class='kw'>s_sd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span>(<span class='no'>samp</span>))
-}
+<span class='va'>ftest</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span> <span class='op'>{</span>
+ <span class='va'>samp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>^</span><span class='fl'>7</span>, <span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>s_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span>, s_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='no'>sjob1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='slurm_apply.html'>slurm_apply</a></span>(<span class='no'>ftest</span>, <span class='no'>pars</span>)
-<span class='fu'><a href='rslurm-deprecated.html'>print_job_status</a></span>(<span class='no'>sjob1</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span>(<span class='no'>sjob1</span>, <span class='st'>"table"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>pars</span>, <span class='no'>res</span>) <span class='co'># Confirm correct output</span>
-<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span>(<span class='no'>sjob1</span>)
-}</div></pre>
+<span class='va'>sjob1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slurm_apply.html'>slurm_apply</a></span><span class='op'>(</span><span class='va'>ftest</span>, <span class='va'>pars</span><span class='op'>)</span>
+<span class='fu'><a href='print_job_status.html'>print_job_status</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span>
+<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span><span class='op'>(</span><span class='va'>sjob1</span>, <span class='st'>"table"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>pars</span>, <span class='va'>res</span><span class='op'>)</span> <span class='co'># Confirm correct output</span>
+<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span>
+<span class='op'>}</span>
+  
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -227,7 +229,7 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code>, <code><a href='
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
