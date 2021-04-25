@@ -7,8 +7,6 @@
 
 <!-- badges: start -->
 
-[![cran
-checks](https://cranchecks.info/badges/worst/rslurm)](https://CRAN.R-project.org/web/checks/check_results_rslurm.html)
 [![rstudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://CRAN.R-project.org/package=rslurm)
 [![R build
