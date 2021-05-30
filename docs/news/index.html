@@ -81,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SESYNC-ci/rslurm/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -172,7 +172,7 @@
 <ul>
 <li><p>README now separate from package documentation.</p></li>
 <li><p>Vignette can be built on CRAN tests again (no slurm submissions).</p></li>
-<li><p>Returned to <code><a href="https://rdrr.io/r/parallel/mclapply.html">parallel::mcmapply</a></code>, without SIMPLIFY, to prevent <code>mc.cores</code> error when checking on Windows.</p></li>
+<li><p>Returned to <code><a href="https://rdrr.io/r/parallel/mcdummies.html">parallel::mcmapply</a></code>, without SIMPLIFY, to prevent <code>mc.cores</code> error when checking on Windows.</p></li>
 </ul>
 </div>
 </div>
@@ -241,7 +241,7 @@
 <h3 class="hasAnchor">
 <a href="#new-features-and-fixes-7" class="anchor"></a>New features and fixes</h3>
 <ul>
-<li><p>Changed the <code>slurm_apply</code> function to use <code><a href="https://rdrr.io/r/parallel/mclapply.html">parallel::mcMap</a></code> instead of <code>mcmapply</code>, which fixes a bug where list outputs (i.e. each function call returns a list) would be collapsed in a single list (rather than returned as a list of lists).</p></li>
+<li><p>Changed the <code>slurm_apply</code> function to use <code><a href="https://rdrr.io/r/parallel/mcdummies.html">parallel::mcMap</a></code> instead of <code>mcmapply</code>, which fixes a bug where list outputs (i.e. each function call returns a list) would be collapsed in a single list (rather than returned as a list of lists).</p></li>
 <li><p>Changed the interface so that the output type (table or raw) is now an argument of <code>get_slurm_out</code> rather than of <code>slurm_apply</code>, and defaults to <code>raw</code>.</p></li>
 <li><p>Added <code>cpus_per_node</code> argument to <code>slurm_apply</code>, indicating the number of parallel processes to be run on each node.</p></li>
 </ul>
