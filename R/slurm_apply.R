@@ -57,19 +57,21 @@
 #' @param processes_per_node The number of logical CPUs to utilize per node,
 #'   i.e. how many processes to run in parallel per node. This can exceed
 #'   \code{cpus_per_node} for nodes which support hyperthreading. Defaults to
-#'   \code{logical_cpus_per_node = cpus_per_node}.
+#'   \code{processes_per_node = cpus_per_node}.
 #' @param preschedule_cores Corresponds to the \code{mc.preschedule} argument of 
-#' \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
-#' rows of \code{params} are assigned to cores before computation. If \code{FALSE}, 
-#' each row of \code{params} is executed by the next available core.
-#' Setting \code{FALSE} may be faster if 
-#' different values of \code{params} result in very variable completion time for
-#' jobs.
+#'   \code{parallel::mcmapply}. Defaults to \code{TRUE}. If \code{TRUE}, the 
+#'   rows of \code{params} are assigned to cores before computation. If \code{FALSE}, 
+#'   each row of \code{params} is executed by the next available core.
+#'   Setting \code{FALSE} may be faster if 
+#'   different values of \code{params} result in very variable completion time for
+#'   jobs.
+#' @param job_array_task_limit The maximum number of job array tasks to run at 
+#'   the same time. Defaults to \code{NULL} (no limit).
 #' @param global_objects A character vector containing the name of R objects to be
 #'   saved in a .RData file and loaded on each cluster node prior to calling
 #'   \code{f}.
 #' @param add_objects Older deprecated name of \code{global_objects}, retained for
-#' backwards compatibility.
+#'   backwards compatibility.
 #' @param pkgs A character vector containing the names of packages that must
 #'   be loaded on each cluster node. By default, it includes all packages
 #'   loaded by the user when \code{slurm_apply} is called.
@@ -104,7 +106,7 @@
 #' @export
 slurm_apply <- function(f, params, ..., jobname = NA, nodes = 2,
                         cpus_per_node = 2, processes_per_node = cpus_per_node,
-                        preschedule_cores = TRUE, global_objects = NULL,
+                        preschedule_cores = TRUE, job_array_task_limit = NULL, global_objects = NULL,
                         add_objects = NULL, pkgs = rev(.packages()),
                         libPaths = NULL, rscript_path = NULL, 
                         r_template = NULL, sh_template = NULL, 
@@ -188,6 +190,7 @@ slurm_apply <- function(f, params, ..., jobname = NA, nodes = 2,
     }
     script_sh <- whisker::whisker.render(template_sh,
                     list(max_node = nodes - 1,
+                         job_array_task_limit = ifelse(is.null(job_array_task_limit), "", paste0("%", job_array_task_limit)),
                          cpus_per_node = cpus_per_node,
                          jobname = jobname,
                          flags = slurm_options$flags,

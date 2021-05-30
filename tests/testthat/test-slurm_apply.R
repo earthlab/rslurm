@@ -102,3 +102,17 @@ test_that("slurm_apply correctly handles arguments given as dots", {
     expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
     
 })
+
+test_that("job_array_task_limit argument works correctly", {
+    skip_on_os("windows")
+    if (SLURM) skip(SLURM_MSG)
+    sjob <- slurm_apply(ftest, pars, jobname = "test1", nodes = 2, 
+                        cpus_per_node = 1, slurm_options = SLURM_OPTS,
+                        job_array_task_limit = 1)
+    res <- get_slurm_out(sjob, "table")
+    res_raw <- get_slurm_out(sjob, "raw")
+    cleanup_files(sjob)
+    expect_equal(pars, res, tolerance = 0.01, check.attributes = FALSE)
+    expect_equal(pars, as.data.frame(do.call(rbind, res_raw)),
+                 tolerance = 0.01, check.attributes = FALSE)
+})

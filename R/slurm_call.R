@@ -42,7 +42,7 @@
 #'   saved in a .RData file and loaded on each cluster node prior to calling 
 #'   \code{f}.
 #' @param add_objects Older deprecated name of \code{global_objects}, retained for
-#' backwards compatibility.
+#'   backwards compatibility.
 #' @param pkgs A character vector containing the names of packages that must be
 #'   loaded on each cluster node. By default, it includes all packages loaded by
 #'   the user when \code{slurm_call} is called.
