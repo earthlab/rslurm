@@ -138,6 +138,7 @@ with similar syntax to <code>lapply</code>.</p>
   cpus_per_node <span class='op'>=</span> <span class='fl'>2</span>,
   processes_per_node <span class='op'>=</span> <span class='va'>cpus_per_node</span>,
   preschedule_cores <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  job_array_task_limit <span class='op'>=</span> <span class='cn'>NULL</span>,
   global_objects <span class='op'>=</span> <span class='cn'>NULL</span>,
   pkgs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/zpackages.html'>.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
   libPaths <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -188,7 +189,7 @@ mapped to the Slurm parameter <code>cpus-per-task</code>.</p></td>
       <td><p>The number of logical CPUs to utilize per node,
 i.e. how many processes to run in parallel per node. This can exceed
 <code>cpus_per_node</code> for nodes which support hyperthreading. Defaults to
-<code>logical_cpus_per_node = cpus_per_node</code>.</p></td>
+<code>processes_per_node = cpus_per_node</code>.</p></td>
     </tr>
     <tr>
       <th>preschedule_cores</th>
@@ -199,6 +200,11 @@ If <code>FALSE</code>, each element of <code>x</code> is executed by the next av
 Setting <code>FALSE</code> may be faster if 
 different elements of <code>x</code> result in very variable completion time for
 jobs.</p></td>
+    </tr>
+    <tr>
+      <th>job_array_task_limit</th>
+      <td><p>The maximum number of job array tasks to run at 
+the same time. Defaults to <code>NULL</code> (no limit).</p></td>
     </tr>
     <tr>
       <th>global_objects</th>
