@@ -10,4 +10,5 @@
 {{#options}}
 #SBATCH --{{{name}}}={{{value}}}
 {{/options}}
+module load R
 {{{rscript}}} --vanilla slurm_run.R
