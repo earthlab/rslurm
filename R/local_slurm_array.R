@@ -30,7 +30,7 @@ local_slurm_array <- function(slr_job, rscript_path = NULL) {
     }
     
     if (is.null(rscript_path)) {
-        rscript_path <- file.path(R.home("bin"), "Rscript")
+        rscript_path <- "Rscript"
     }
     
     slurm_run_path <- paste0("_rslurm_", slr_job$jobname)

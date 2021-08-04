@@ -125,7 +125,7 @@ slurm_call <- function(f, params = list(), jobname = NA, global_objects = NULL, 
     template_sh <- readLines(sh_template)
     slurm_options <- format_option_list(slurm_options)
     if (is.null(rscript_path)){
-        rscript_path <- file.path(R.home("bin"), "Rscript")
+        rscript_path <- "Rscript" 
     }
     script_sh <- whisker::whisker.render(template_sh, 
                                          list(jobname = jobname,
