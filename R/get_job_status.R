@@ -29,7 +29,7 @@ get_job_status <- function(slr_job) {
     
     # Get output logs
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
-    out_files <- file.path(tmpdir, paste0("slurm_", 0:(slr_job$nodes - 1), ".out"))
+    out_files <- list.files(tmpdir, pattern = "slurm.*\\.out", full.names = TRUE)
     logs <- vapply(out_files, 
                    function(outf) paste(readLines(outf), collapse = "\n"),
                    "")
