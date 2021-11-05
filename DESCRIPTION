@@ -10,7 +10,7 @@ Acknowledgements: Development of this R package was supported by the National
 Version: 0.6.0
 Date: 2021-04-21
 License: GPL-3
-URL: http://cyberhelp.sesync.org/rslurm/
+URL: https://sesync-ci.github.io/rslurm/
 BugReports: https://github.com/SESYNC-ci/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
