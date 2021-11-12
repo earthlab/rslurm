@@ -34,7 +34,7 @@ The package was developed by Philippe Marchand and Ian Carroll, with Mike Smorul
 
 ### Installation
 
-You can install the released version of rslurm from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of [rslurm](https://cran.r-project.org/package=rslurm) from [CRAN](https://CRAN.R-project.org) with:
 
 ``` {r, eval = FALSE}
 install.packages("rslurm")
@@ -50,7 +50,7 @@ devtools::install_github("SESYNC-ci/rslurm")
 ### Documentation
 
 Package documentation is accessible from the R console through `package?rslurm`
-and [online](https://cran.r-project.org/package=rslurm).
+and [online](https://sesync-ci.github.io/rslurm).
 
 ### Example
 
@@ -90,4 +90,4 @@ The output of `slurm_apply` is a `slurm_job` object that stores a few pieces of
 information (job name, job ID, and the number of nodes) needed to retrieve the
 job's output.
 
-See [Get started](http://cyberhelp.sesync.org/rslurm/articles/rslurm.html) for more information.  
+See [Get started](https://sesync-ci.github.io/rslurm/articles/rslurm.html) for more information.  

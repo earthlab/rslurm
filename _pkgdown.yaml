@@ -1,5 +1,5 @@
 title: rslurm  
-url: http://cyberhelp.sesync.org/rslurm/
+url: https://sesync-ci.github.io/rslurm/
 template:  
   params:  
     bootswatch: darkly
