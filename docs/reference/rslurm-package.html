@@ -76,7 +76,7 @@ slurm_map functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1</span>
       </span>
     </div>
 
@@ -188,32 +188,32 @@ using the <code><a href='slurm_call.html'>slurm_call</a></code>, <code><a href='
 <p>Advanced options for the Slurm workload manager may accompany job submission
   by <code><a href='slurm_call.html'>slurm_call</a></code>, <code><a href='slurm_map.html'>slurm_map</a></code>, and <code><a href='slurm_apply.html'>slurm_apply</a></code> 
   through the optional <code>slurm_options</code> argument. For example, passing
-  <code><a href='https://rdrr.io/r/base/list.html'>list(time = '1:30:00')</a></code> for this options limits the job to 1 hour and 30
+  <code>list(time = '1:30:00')</code> for this options limits the job to 1 hour and 30
   minutes. Some advanced configuration must be set through environment 
   variables. On a multi-cluster head node, for example, the <code>SLURM_CLUSTERS</code>
   environment variable must be set to direct jobs to a non-default cluster.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Create a data frame of mean/sd values for normal distributions </span>
-<span class='va'>pars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>par_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>, 
-                   par_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-                   
-<span class='co'># Create a function to parallelize</span>
-<span class='va'>ftest</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span> <span class='op'>{</span>
- <span class='va'>samp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>^</span><span class='fl'>7</span>, <span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span>
- <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>s_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span>, s_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>sjob1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slurm_apply.html'>slurm_apply</a></span><span class='op'>(</span><span class='va'>ftest</span>, <span class='va'>pars</span><span class='op'>)</span>
-<span class='fu'><a href='print_job_status.html'>print_job_status</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span>
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span><span class='op'>(</span><span class='va'>sjob1</span>, <span class='st'>"table"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>pars</span>, <span class='va'>res</span><span class='op'>)</span> <span class='co'># Confirm correct output</span>
-<span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span>
-<span class='op'>}</span>
-  
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># Create a data frame of mean/sd values for normal distributions </span></span>
+<span class='r-in'><span class='va'>pars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>par_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>, </span>
+<span class='r-in'>                   par_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>10</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>                   </span>
+<span class='r-in'><span class='co'># Create a function to parallelize</span></span>
+<span class='r-in'><span class='va'>ftest</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'> <span class='va'>samp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>^</span><span class='fl'>7</span>, <span class='va'>par_m</span>, <span class='va'>par_sd</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>s_m <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span>, s_sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>sjob1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='slurm_apply.html'>slurm_apply</a></span><span class='op'>(</span><span class='va'>ftest</span>, <span class='va'>pars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='print_job_status.html'>print_job_status</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_slurm_out.html'>get_slurm_out</a></span><span class='op'>(</span><span class='va'>sjob1</span>, <span class='st'>"table"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>pars</span>, <span class='va'>res</span><span class='op'>)</span> <span class='co'># Confirm correct output</span></span>
+<span class='r-in'><span class='fu'><a href='cleanup_files.html'>cleanup_files</a></span><span class='op'>(</span><span class='va'>sjob1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'>  </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
