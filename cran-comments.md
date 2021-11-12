@@ -1,3 +1,9 @@
+# Version 0.6.1 notes, 12 November 2021
+
+## Test environments
+
+## R CMD check results
+
 # Version 0.6.0 notes, 21 April 2021
 
 ## Test environments

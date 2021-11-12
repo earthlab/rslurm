@@ -1,3 +1,17 @@
+# rslurm 0.6.1
+
+This is a patch release to initiate automatic generation of DOIs by Zenodo with each future release.
+
+## New features and fixes
+
+* Argument `job_array_task_limit` included in `slurm_*()` functions to 
+allow the user to set `JobArrayTaskLimit`
+([#70](https://github.com/SESYNC-ci/rslurm/issues/70)).
+
+* `get_job_status()` now checks whether `slurm_*.out` files exist
+before attempting to open them, avoiding an error
+([#72](https://github.com/SESYNC-ci/rslurm/issues/72)).
+
 # rslurm 0.6.0
 
 ## New features and fixes
