@@ -18,6 +18,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org/package=rslurm)
+[![DOI](https://zenodo.org/badge/37485241.svg)](https://zenodo.org/badge/latestdoi/37485241)
 <!-- badges: end -->
 
 ### About

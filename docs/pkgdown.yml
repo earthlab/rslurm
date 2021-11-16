@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   rslurm: rslurm.html
-last_built: 2021-11-12T19:48Z
+last_built: 2021-11-16T14:51Z
 urls:
   reference: https://sesync-ci.github.io/rslurm//reference
   article: https://sesync-ci.github.io/rslurm//articles
