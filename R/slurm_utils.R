@@ -49,8 +49,19 @@ wait_for_job <- function(slr_job) {
         paste('test -z "$(squeue -hn', slr_job$jobname, '2>/dev/null)"'),
         ignore.stderr = TRUE)
     if (queued) {
-        block_cmd <- sprintf('sbatch --nodes=1 --output=/dev/null --time=00:01:00 --dependency=singleton --job-name=%s --wait --wrap="hostname"', slr_job$jobname)
+        # don't use --wait - generates Slurm RPCs
+        tmp <- paste0("_rslurm_", slr_job$jobname)
+        flagfile <- tempfile(pattern="flag", tmpdir=tmp)
+        block_cmd <- sprintf('sbatch -o/dev/null -t00:01:00 -dsingleton -J%s --wrap="touch %s"', slr_job$jobname, flagfile)
         system(block_cmd, intern=TRUE)
+        while (TRUE) {
+            if (file.exists(flagfile)) {
+                break
+            } else {
+                Sys.sleep(30)
+            }
+        }
+        file.remove(flagfile)
     }
     return()
 }
