@@ -54,12 +54,8 @@ wait_for_job <- function(slr_job) {
         flagfile <- tempfile(pattern="flag", tmpdir=tmp)
         block_cmd <- sprintf('sbatch -o/dev/null -t00:01:00 -dsingleton -J%s --wrap="touch %s"', slr_job$jobname, flagfile)
         system(block_cmd, intern=TRUE)
-        while (TRUE) {
-            if (file.exists(flagfile)) {
-                break
-            } else {
-                Sys.sleep(30)
-            }
+        while (!file.exists(flagfile)) {
+            Sys.sleep(10)
         }
         file.remove(flagfile)
     }
