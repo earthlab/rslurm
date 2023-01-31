@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-standard navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rslurm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/rslurm.html">Get started</a>
 </li>
@@ -56,7 +52,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/SESYNC-ci/rslurm/">
+  <a href="https://github.com/SESYNC-ci/rslurm/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -71,24 +67,24 @@
 
       
 
-      </header><script src="rslurm_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Parallelize R code on a Slurm cluster</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/SESYNC-ci/rslurm/blob/master/vignettes/rslurm.Rmd"><code>vignettes/rslurm.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/SESYNC-ci/rslurm/blob/HEAD/vignettes/rslurm.Rmd" class="external-link"><code>vignettes/rslurm.Rmd</code></a></small>
       <div class="hidden name"><code>rslurm.Rmd</code></div>
 
     </div>
 
     
     
-<p>Many computing-intensive processes in R involve the repeated evaluation of a function over many items or parameter sets. These so-called <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel">embarrassingly parallel</a> calculations can be run serially with the <code>lapply</code> or <code>Map</code> function, or in parallel on a single machine with <code>mclapply</code> or <code>mcMap</code> (from the <code>parallel</code> package).</p>
-<p>The rslurm package simplifies the process of distributing this type of calculation across a computing cluster that uses the <a href="http://slurm.schedmd.com/">Slurm</a> workload manager. Its main function, <code>slurm_apply</code> (and the related <code>slurm_map</code>) automatically divide the computation over multiple nodes and write the necessary submission scripts. The package also includes functions to retrieve and combine the output from different nodes, as well as wrappers for common Slurm commands.</p>
-<div id="table-of-contents" class="section level3">
-<h3 class="hasAnchor">
-<a href="#table-of-contents" class="anchor"></a>Table of contents</h3>
+<p>Many computing-intensive processes in R involve the repeated evaluation of a function over many items or parameter sets. These so-called <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel" class="external-link">embarrassingly parallel</a> calculations can be run serially with the <code>lapply</code> or <code>Map</code> function, or in parallel on a single machine with <code>mclapply</code> or <code>mcMap</code> (from the <code>parallel</code> package).</p>
+<p>The rslurm package simplifies the process of distributing this type of calculation across a computing cluster that uses the <a href="http://slurm.schedmd.com/" class="external-link">Slurm</a> workload manager. Its main function, <code>slurm_apply</code> (and the related <code>slurm_map</code>) automatically divide the computation over multiple nodes and write the necessary submission scripts. The package also includes functions to retrieve and combine the output from different nodes, as well as wrappers for common Slurm commands.</p>
+<div class="section level3">
+<h3 id="table-of-contents">Table of contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a>
+</h3>
 <ul>
 <li><a href="#basic-example">Basic example</a></li>
 <li><a href="#single-function-evaluation">Single function evaluation</a></li>
@@ -99,129 +95,129 @@
 <li><a href="#how-it-works-advanced-customization">How it works / advanced customization</a></li>
 </ul>
 </div>
-<div id="basic-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-example" class="anchor"></a>Basic example</h2>
+<div class="section level2">
+<h2 id="basic-example">Basic example<a class="anchor" aria-label="anchor" href="#basic-example"></a>
+</h2>
 <p>To illustrate a typical rslurm workflow, we use a simple function that takes a mean and standard deviation as parameters, generates a million normal deviates and returns the sample mean and standard deviation.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">par_mu</span>, <span class="va">par_sd</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">^</span><span class="fl">6</span>, <span class="va">par_mu</span>, <span class="va">par_sd</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>s_mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span>, s_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">par_mu</span>, <span class="va">par_sd</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">^</span><span class="fl">6</span>, <span class="va">par_mu</span>, <span class="va">par_sd</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>s_mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span>, s_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>We then create a parameter data frame where each row is a parameter set and each column matches an argument of the function.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,
-                   par_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##   par_mu par_sd
-## 1      1    0.1
-## 2      2    0.2
-## 3      3    0.3</code></pre>
-<p>We can now pass that function and the parameters data frame to <code>slurm_apply</code>, specifiying the number of cluster nodes to use and the number of CPUs per node. The latter (<code>cpus_per_node</code>) determines how many processes will be forked on each node, as the <code>mc.cores</code> argument of <code><a href="https://rdrr.io/r/parallel/mclapply.html">parallel::mcMap</a></code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sesync-ci.github.io/rslurm/">rslurm</a></span><span class="op">)</span>
-<span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, jobname <span class="op">=</span> <span class="st">'test_apply'</span>,
-                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span>, submit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Submission scripts output in directory _rslurm_test_apply</code></pre>
-<p>The output of <code>slurm_apply</code> is a <code>slurm_job</code> object that stores a few pieces of information (job name, job ID, and the number of nodes) needed to retrieve the job’s output.</p>
-<p>The default argument <code>submit = TRUE</code> would submit a generated script to the Slurm cluster and print a message confirming the job has been submitted to Slurm, assuming your are running R on a Slurm head node. When working from a R session without direct access to the cluster, you must set <code>submit = FALSE</code>. Either way, the function creates a folder called <code>\_rslurm\_[jobname]</code> in the working directory that contains scripts and data files. This folder may be moved to a Slurm head node, the shell command <code>sbatch submit.sh</code> run from within the folder, and the folder moved back to your working directory. The contents of the <code>\_rslurm\_[jobname]</code> folder after completion of the <code>test_apply</code> job, i.e. following either manual or automatic (i.e. with <code>submit = TRUE</code>) submission to the cluster, includes one <code>results_*.RDS</code> file for each node:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">'_rslurm_test_apply'</span>, <span class="st">'results'</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "results_0.RDS" "results_1.RDS"</code></pre>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
+<span>                   par_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pars</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   par_mu par_sd</span></span>
+<span><span class="co">## 1      1    0.1</span></span>
+<span><span class="co">## 2      2    0.2</span></span>
+<span><span class="co">## 3      3    0.3</span></span></code></pre>
+<p>We can now pass that function and the parameters data frame to <code>slurm_apply</code>, specifiying the number of cluster nodes to use and the number of CPUs per node. The latter (<code>cpus_per_node</code>) determines how many processes will be forked on each node, as the <code>mc.cores</code> argument of <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mcMap</a></code>.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sesync-ci.github.io/rslurm/">rslurm</a></span><span class="op">)</span></span>
+<span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, jobname <span class="op">=</span> <span class="st">'test_apply'</span>,</span>
+<span>                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span>, submit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Submission scripts output in directory _rslurm_test_apply</span></span></code></pre>
+<p>The output of <code>slurm_apply</code> is a <code>slurm_job</code> object that stores a few pieces of information (job name, job ID, and the number of nodes) needed to retrieve the job's output.</p>
+<p>The default argument <code>submit = TRUE</code> would submit a generated script to the Slurm cluster and print a message confirming the job has been submitted to Slurm, assuming your are running R on a Slurm head node. When working from a R session without direct access to the cluster, you must set <code>submit = FALSE</code>. Either way, the function creates a folder called <code>\_rslurm\_[jobname]</code> in the working directory that contains scripts and data files. This folder may be moved to a Slurm head node, the shell command <code>sbatch submit.sh</code> run from within the folder, and the folder moved back to your working directory. The contents of the <code>\_rslurm\_[jobname]</code> folder after completion of the <code>test_apply</code> job, i.e. following either manual or automatic (i.e. with <code>submit = TRUE</code>) submission to the cluster, includes one <code>results_*.RDS</code> file for each node:</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">'_rslurm_test_apply'</span>, <span class="st">'results'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "results_0.RDS" "results_1.RDS"</span></span></code></pre>
 <p>The results from all the nodes can be read back into R with the <code><a href="../reference/get_slurm_out.html">get_slurm_out()</a></code> function. In this example, <code>wait = FALSE</code>, but if you use the default argument <code>wait = TRUE</code>, execution will be paused until the Slurm job finishes running.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'table'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">res</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##       s_mu       s_sd
-## 1 1.000137 0.09995552
-## 2 2.000144 0.19988175
-## 3 2.999822 0.30030102</code></pre>
-<p>The utility function <code>print_job_status</code> displays the status of a submitted job (i.e. in queue, running or completed), and <code>cancel_slurm</code> will remove a job from the queue, aborting its execution if necessary. These functions are R wrappers for the Slurm command line functions <code>squeue</code> and <code>scancel</code>, respectively.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'table'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       s_mu       s_sd</span></span>
+<span><span class="co">## 1 1.000137 0.09995552</span></span>
+<span><span class="co">## 2 2.000144 0.19988175</span></span>
+<span><span class="co">## 3 2.999822 0.30030102</span></span></code></pre>
+<p>The utility function <code>print_job_status</code> displays the status of a submitted job (i.e. in queue, running or completed), and <code>cancel_slurm</code> will remove a job from the queue, aborting its execution if necessary. These functions are R wrappers for the Slurm command line functions <code>squeue</code> and <code>scancel</code>, respectively.</p>
 <p>When <code>outtype = 'table'</code>, the outputs from each function evaluation are row-bound into a single data frame; this is an appropriate format when the function returns a simple vector. The default <code>outtype = 'raw'</code> combines the outputs into a list and can thus handle arbitrarily complex return objects.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'raw'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">res_raw</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></code></pre></div>
-<pre><code>## [[1]]
-##       s_mu       s_sd 
-## 1.00013690 0.09995552 
-## 
-## [[2]]
-##      s_mu      s_sd 
-## 2.0001445 0.1998817 
-## 
-## [[3]]
-##     s_mu     s_sd 
-## 2.999822 0.300301</code></pre>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_slurm_out.html">get_slurm_out</a></span><span class="op">(</span><span class="va">sjob</span>, outtype <span class="op">=</span> <span class="st">'raw'</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">res_raw</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##       s_mu       s_sd </span></span>
+<span><span class="co">## 1.00013690 0.09995552 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">##      s_mu      s_sd </span></span>
+<span><span class="co">## 2.0001445 0.1998817 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[3]]</span></span>
+<span><span class="co">##     s_mu     s_sd </span></span>
+<span><span class="co">## 2.999822 0.300301</span></span></code></pre>
 <p>The utility function <code>cleanup_files</code> deletes the temporary folder for the specified Slurm job.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cleanup_files.html">cleanup_files</a></span><span class="op">(</span><span class="va">sjob</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cleanup_files.html">cleanup_files</a></span><span class="op">(</span><span class="va">sjob</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="single-function-evaluation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#single-function-evaluation" class="anchor"></a>Single function evaluation</h2>
+<div class="section level2">
+<h2 id="single-function-evaluation">Single function evaluation<a class="anchor" aria-label="anchor" href="#single-function-evaluation"></a>
+</h2>
 <p>In addition to <code>slurm_apply</code>, rslurm also defines a <code>slurm_call</code> function, which sends a single function call to the cluster. It is analogous in syntax to the base R function <code>do.call</code>, accepting a function and a named list of parameters as arguments.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_call.html">slurm_call</a></span><span class="op">(</span><span class="va">test_func</span>, jobname <span class="op">=</span> <span class="st">'test_call'</span>,
-                   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">5</span>, par_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, submit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Submission scripts output in directory _rslurm_test_call</code></pre>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_call.html">slurm_call</a></span><span class="op">(</span><span class="va">test_func</span>, jobname <span class="op">=</span> <span class="st">'test_call'</span>,</span>
+<span>                   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">5</span>, par_sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, submit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Submission scripts output in directory _rslurm_test_call</span></span></code></pre>
 <p>Because <code>slurm_call</code> involves a single process on a single node, it does not recognize the <code>nodes</code> and <code>cpus_per_node</code> arguments; otherwise, it accepts the same additional arguments (detailed in the sections below) as <code>slurm_apply</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cleanup_files.html">cleanup_files</a></span><span class="op">(</span><span class="va">sjob</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cleanup_files.html">cleanup_files</a></span><span class="op">(</span><span class="va">sjob</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="applying-a-function-to-a-list-of-complex-objects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#applying-a-function-to-a-list-of-complex-objects" class="anchor"></a>Applying a function to a list of complex objects</h2>
+<div class="section level2">
+<h2 id="applying-a-function-to-a-list-of-complex-objects">Applying a function to a list of complex objects<a class="anchor" aria-label="anchor" href="#applying-a-function-to-a-list-of-complex-objects"></a>
+</h2>
 <p>The function passed to <code>slurm_apply</code> can only receive atomic parameters stored within a data frame. Suppose we want instead to apply a function <code>func</code> to a list of complex R objects, <code>obj_list</code>. In that case we can use the function <code>slurm_map</code>, which is similar in syntax to <code>lapply</code> from base R and <code>map</code> from the <code>purrr</code> package. Its first argument is a list which can contain objects of any type, and its second argument is a function that acts on a single element of the list.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_map.html">slurm_map</a></span><span class="op">(</span><span class="va">obj_list</span>,
-                  <span class="va">func</span>,
-                  nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_map.html">slurm_map</a></span><span class="op">(</span><span class="va">obj_list</span>,</span>
+<span>                  <span class="va">func</span>,</span>
+<span>                  nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>The output generated by <code>slurm_map</code> is structured the same way as <code>slurm_apply</code>. The procedures for checking the job status, extracting the results of the job, and cleaning up job files are also the same as described above.</p>
 </div>
-<div id="adding-auxiliary-data-and-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-auxiliary-data-and-functions" class="anchor"></a>Adding auxiliary data and functions</h2>
-<p>Each of the tasks started by <code>slurm_apply</code> and <code>slurm_map</code> begin by default in an “empty” R environment containing only the function to be evaluated and its parameters. If we want to pass additional arguments to the function that do not vary with each task, we can simply add them as additional arguments to <code>slurm_apply</code> or <code>slurm_map</code>, like in this example, where we want to take the logarithm of many integers but always use <code>log(x, base = 2)</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">log</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10000</span><span class="op">)</span>,
-                    base <span class="op">=</span> <span class="fl">2</span>,
-                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p>To pass additional objects to the jobs that aren’t explicitly included as arguments to the function passed to <code>slurm_apply</code> or <code>slurm_map</code>, we can use the argument <code>global_objects</code>. For example we might want to use an inline function that calls two other previously defined functions.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">func1</span><span class="op">(</span><span class="va">a</span><span class="op">)</span>,<span class="fu">func2</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span>, 
-                    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span>,
-                    global_objects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"func1"</span>, <span class="st">"func2"</span><span class="op">)</span>,
-                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="adding-auxiliary-data-and-functions">Adding auxiliary data and functions<a class="anchor" aria-label="anchor" href="#adding-auxiliary-data-and-functions"></a>
+</h2>
+<p>Each of the tasks started by <code>slurm_apply</code> and <code>slurm_map</code> begin by default in an "empty" R environment containing only the function to be evaluated and its parameters. If we want to pass additional arguments to the function that do not vary with each task, we can simply add them as additional arguments to <code>slurm_apply</code> or <code>slurm_map</code>, like in this example, where we want to take the logarithm of many integers but always use <code>log(x, base = 2)</code>.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">log</span>,</span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10000</span><span class="op">)</span>,</span>
+<span>                    base <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p>To pass additional objects to the jobs that aren't explicitly included as arguments to the function passed to <code>slurm_apply</code> or <code>slurm_map</code>, we can use the argument <code>global_objects</code>. For example we might want to use an inline function that calls two other previously defined functions.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">func1</span><span class="op">(</span><span class="va">a</span><span class="op">)</span>,<span class="fu">func2</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span>,</span>
+<span>                    global_objects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"func1"</span>, <span class="st">"func2"</span><span class="op">)</span>,</span>
+<span>                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>global_objects</code> argument specifies the names of any R objects (besides the parameters data frame) that must be accessed by the function passed to <code>slurm_apply</code>. These objects are saved to a <code>.RDS</code> file that is loaded on each cluster node prior to evaluating the function in parallel.</p>
 <p>By default, all R packages attached to the current R session will also be attached (with <code>library</code>) on each cluster node, though this can be modified with the optional <code>pkgs</code> argument.</p>
 </div>
-<div id="configuring-slurm-options" class="section level2">
-<h2 class="hasAnchor">
-<a href="#configuring-slurm-options" class="anchor"></a>Configuring Slurm options</h2>
-<p>Particular clusters may require the specification of additional Slurm options, such as time and memory limits for the job. The <code>slurm_options</code> argument allows you to set any of the command line options (<a href="http://slurm.schedmd.com/sbatch.html">view list</a>) recognized by the Slurm <code>sbatch</code> command. It should be formatted as a named list, using the long names of each option (e.g. “time” rather than “t”). Flags, i.e. command line options that are toggled rather than set to a particular value, should be set to <code>TRUE</code> in <code>slurm_options</code>. For example, the following code sets the command line options <code>--time=1:00:00 --share</code>.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sopt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>time <span class="op">=</span> <span class="st">'1:00:00'</span>, share <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, slurm_options <span class="op">=</span> <span class="va">sopt</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="configuring-slurm-options">Configuring Slurm options<a class="anchor" aria-label="anchor" href="#configuring-slurm-options"></a>
+</h2>
+<p>Particular clusters may require the specification of additional Slurm options, such as time and memory limits for the job. The <code>slurm_options</code> argument allows you to set any of the command line options (<a href="http://slurm.schedmd.com/sbatch.html" class="external-link">view list</a>) recognized by the Slurm <code>sbatch</code> command. It should be formatted as a named list, using the long names of each option (e.g. "time" rather than "t"). Flags, i.e. command line options that are toggled rather than set to a particular value, should be set to <code>TRUE</code> in <code>slurm_options</code>. For example, the following code sets the command line options <code>--time=1:00:00 --share</code>.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sopt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>time <span class="op">=</span> <span class="st">'1:00:00'</span>, share <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, slurm_options <span class="op">=</span> <span class="va">sopt</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="how-it-works-advanced-customization" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-it-works-advanced-customization" class="anchor"></a>How it works / advanced customization</h2>
+<div class="section level2">
+<h2 id="how-it-works-advanced-customization">How it works / advanced customization<a class="anchor" aria-label="anchor" href="#how-it-works-advanced-customization"></a>
+</h2>
 <p>As mentioned above, the <code>slurm_apply</code> function creates a job-specific folder. This folder contains the parameters as a RDS file and (if applicable) the objects specified as <code>global_objects</code> saved together in a RData file. The function also generates a R script (<code>slurm_run.R</code>) to be run on each cluster node, as well as a Bash script (<code>submit.sh</code>) to submit the job to Slurm.</p>
-<p>More specifically, the Bash script tells Slurm to create a job array and the R script takes advantage of the unique <code>SLURM\_ARRAY\_TASK\_ID</code> environment variable that Slurm will set on each cluster node. This variable is read by <code>slurm_run.R</code>, which allows each instance of the script to operate on a different parameter subset and write its output to a different results file. The R script calls <code><a href="https://rdrr.io/r/parallel/mclapply.html">parallel::mcMap</a></code> to parallelize calculations on each node.</p>
+<p>More specifically, the Bash script tells Slurm to create a job array and the R script takes advantage of the unique <code>SLURM\_ARRAY\_TASK\_ID</code> environment variable that Slurm will set on each cluster node. This variable is read by <code>slurm_run.R</code>, which allows each instance of the script to operate on a different parameter subset and write its output to a different results file. The R script calls <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mcMap</a></code> to parallelize calculations on each node.</p>
 <p>Additionally, the <code>--dependency</code> option can be utilized by taking the job ID from the <code>slurm_job</code> object returned by <code>slurm_apply</code>, <code>slurm_map</code>, and <code>slurm_call</code> functions.<br>
 The ID can be manually added to the slurm options. In the following example, the job ID of <code>sjob1</code> is used to ensure that <code>sjob2</code> does not begin running until after <code>sjob1</code> finishes.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Job1</span>
-<span class="va">sopt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>time <span class="op">=</span> <span class="st">'1:00:00'</span>, share <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">sjob1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, slurm_options <span class="op">=</span> <span class="va">sopt1</span><span class="op">)</span>
-
-<span class="co"># Job2 depends on Job1</span>
-<span class="va">pars2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">20</span>,
-                   par_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">2</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sopt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">sopt1</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>dependency<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"afterany:%s"</span>, <span class="va">sjob1</span><span class="op">$</span><span class="va">jobid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sjob2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func2</span>, <span class="va">pars2</span>, slurm_options <span class="op">=</span> <span class="va">sopt2</span><span class="op">)</span></code></pre></div>
-<p>Both <code>slurm_run.R</code> and <code>submit.sh</code> are generated from templates, using the <a href="https://cran.r-project.org/package=whisker"><code>whisker</code></a> package; these templates can be found in the <code>rslurm/templates</code> subfolder in your R package library. There are two templates for each script, one for <code>slurm_apply</code> and the other (with the word “single”" in its title) for <code>slurm_call</code>.</p>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Job1</span></span>
+<span><span class="va">sopt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>time <span class="op">=</span> <span class="st">'1:00:00'</span>, share <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">sjob1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, slurm_options <span class="op">=</span> <span class="va">sopt1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Job2 depends on Job1</span></span>
+<span><span class="va">pars2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>par_mu <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">20</span>,</span>
+<span>                   par_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">2</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sopt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sopt1</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dependency<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"afterany:%s"</span>, <span class="va">sjob1</span><span class="op">$</span><span class="va">jobid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sjob2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func2</span>, <span class="va">pars2</span>, slurm_options <span class="op">=</span> <span class="va">sopt2</span><span class="op">)</span></span></code></pre></div>
+<p>Both <code>slurm_run.R</code> and <code>submit.sh</code> are generated from templates, using the <a href="https://cran.r-project.org/package=whisker" class="external-link"><code>whisker</code></a> package; these templates can be found in the <code>rslurm/templates</code> subfolder in your R package library. There are two templates for each script, one for <code>slurm_apply</code> and the other (with the word "single"" in its title) for <code>slurm_call</code>.</p>
 <p>While you should avoid changing any existing lines in the template scripts, you may want to add <code>#SBATCH</code> lines to the <code>submit.sh</code> templates in order to permanently set certain Slurm command line options and thus customize the package to your particular cluster setup.</p>
 </div>
   </div>
@@ -237,11 +233,13 @@ The ID can be manually added to the slurm options. In the following example, the
 
 
       <footer><div class="copyright">
-  <p>Developed by Philippe Marchand, Ian Carroll, Mike Smorul, Rachael Blake, Quentin Read.</p>
+  <p></p>
+<p>Developed by Philippe Marchand, Ian Carroll, Mike Smorul, Rachael Blake, Quentin Read, Erick Verleye.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -249,6 +247,8 @@ The ID can be manually added to the slurm options. In the following example, the
 
   
 
+
+  
 
   </body>
 </html>

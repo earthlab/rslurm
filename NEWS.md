@@ -1,3 +1,8 @@
+# rslurm 0.6.2
+
+* rslurm was adopted by the University of Colorado Boulder's Earth Lab
+* All future maintenance will be done by Earth Lab
+
 # rslurm 0.6.1
 
 This is a patch release to initiate automatic generation of DOIs by Zenodo with each future release.
