@@ -2,9 +2,8 @@
 
 ## Test environments
 
-* local Ubuntu Linux 18.04.6, R 4.1.1, slurm 20.11.2
-* local MacOS Ventura 13.0.1, R 4.2.2
-* GitHub ubuntu 20.04, R 4.1.2
+* local Ubuntu Linux 18.04.6 LTS, R 3.6.3, slurm 22.05.8
+* Red Hat Enterprise Linux 7.9, R 4.1.3, slurm 22.05.2
 
 ## R CMD check results
 
