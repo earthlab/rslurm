@@ -24,8 +24,9 @@ Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com
              person('Rob', 'Gilmore', role = 'ctb'),
              person('Christopher', 'Barrington', role = 'ctb'),
              person('Se Jong', 'Cho', role = 'art'),
-             person('Erick Verleye', email='erve3705@colorado.edu', role = 'cre')
+             person('Erick Verleye', email='erve3705@colorado.edu', role = c('aut', 'cre'))
              )
+Maintainer: Erick Verleye <erve3705@colorado.edu>
 Depends:
     R (>= 3.5.0)
 Imports:
