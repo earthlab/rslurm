@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-<img src="logo_slurm.png" align="right" width=150px>  
+<img src="man/figures/logo_slurm.png" align="right" width=150px>  
 
 # rslurm: submit R code to a Slurm cluster
 

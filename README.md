@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="logo_slurm.png" align="right" width=150px>
+<img src="man/figures/logo_slurm.png" align="right" width=150px>
 
 # rslurm: submit R code to a Slurm cluster
 
