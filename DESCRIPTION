@@ -10,7 +10,7 @@ Acknowledgements: Development of this R package was supported by the National
 Version: 0.6.2
 Date: 2023-01-31
 License: GPL-3
-URL: https://www.earthdatascience.org/rslurm
+URL: https://www.earthdatascience.org/rslurm/
 BugReports: https://github.com/earthlab/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
@@ -30,7 +30,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     whisker (>= 0.3)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Suggests:
     parallel,
     testthat,

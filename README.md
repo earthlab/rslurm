@@ -54,7 +54,7 @@ devtools::install_github("earthlab/rslurm")
 ### Documentation
 
 Package documentation is accessible from the R console through
-`package?rslurm` and [online](https://earthlab.github.io/rslurm).
+`package?rslurm` and [online](https://www.earthdatascience.org/rslurm/).
 
 ### Example
 

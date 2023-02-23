@@ -10,7 +10,7 @@
 #' @seealso \code{\link{cleanup_files}}
 #' @export
 cancel_slurm <- function(slr_job) {
-    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
+    if (!(inherits(slr_job, "slurm_job"))) stop("input must be a slurm_job")
     system(paste("scancel -n", slr_job$jobname))
 }
 
@@ -35,7 +35,7 @@ cancel_slurm <- function(slr_job) {
 #' @seealso \code{\link{slurm_apply}}, \code{\link{slurm_call}}
 #' @export
 cleanup_files <- function(slr_job, wait = TRUE) {
-    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
+    if (!(inherits(slr_job, "slurm_job"))) stop("input must be a slurm_job")
     if (wait) wait_for_job(slr_job)
     tmpdir <- paste0("_rslurm_", slr_job$jobname)
     if (!(tmpdir %in% dir())) stop(paste("folder", tmpdir, "not found"))
