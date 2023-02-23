@@ -6,6 +6,7 @@
 ^release\.R
 ^revdep$
 ^README\.Rmd$
+^rslurm_.\.tar\.gz$
 
 # pkgdown directories and files:
 ^_pkgdown\.yaml$
@@ -16,3 +17,7 @@
 ^logo_slurm\.svg$
 ^logo_slurm\.png$
 ^\.github$
+^_pkgdown\.yml$
+^doc$
+^Meta$
+^CRAN-SUBMISSION$

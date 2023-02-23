@@ -10,7 +10,7 @@ Acknowledgements: Development of this R package was supported by the National
 Version: 0.6.2
 Date: 2023-01-31
 License: GPL-3
-URL: https://earthlab.github.io/rslurm/
+URL: https://www.earthdatascience.org/rslurm
 BugReports: https://github.com/earthlab/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
@@ -24,9 +24,8 @@ Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com
              person('Rob', 'Gilmore', role = 'ctb'),
              person('Christopher', 'Barrington', role = 'ctb'),
              person('Se Jong', 'Cho', role = 'art'),
-             person('Erick Verleye', email='erve3705@colorado.edu', role = c('aut', 'cre'))
+             person('Erick Verleye', email='erve3705@colorado.edu', role = 'cre')
              )
-Maintainer: Erick Verleye <erve3705@colorado.edu>
 Depends:
     R (>= 3.5.0)
 Imports:

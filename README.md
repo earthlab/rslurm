@@ -27,7 +27,7 @@ Socio-Environmental Synthesis Center (SESYNC) under funding received
 from the National Science Foundation grants DBI-1052875 and DBI-1639145.
 
 The package was developed by Philippe Marchand and Ian Carroll, with
-Mike Smorul and Rachael Blake contributing. Quentin Read is the current
+Mike Smorul and Rachael Blake contributing. Erick Verleye is the current
 maintainer.
 
 As of January 2023 the University of Colorado Boulder’s Earth Lab
@@ -96,5 +96,5 @@ pieces of information (job name, job ID, and the number of nodes) needed
 to retrieve the job’s output.
 
 See [Get
-started](https://sesync-ci.github.io/rslurm/articles/rslurm.html) for
-more information.
+started](https://www.earthdatascience.org/rslurm/articles/rslurm.html)
+for more information.

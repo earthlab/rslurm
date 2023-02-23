@@ -1,5 +1,5 @@
 title: rslurm  
-url: https://sesync-ci.github.io/rslurm/
+url: https://earthlab.github.io/rslurm/
 template:  
   params:  
     bootswatch: darkly
@@ -24,4 +24,4 @@ reference:
       - '`slurm_job`'
       - '`local_slurm_array`'
 navbar:  
-  type: standard  
+  type: standard
