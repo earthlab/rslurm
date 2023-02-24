@@ -31,7 +31,7 @@ get_slurm_out <- function(slr_job, outtype = "raw", wait = TRUE,
                           ncores = NULL) {
     
     # Check arguments
-    if (!(class(slr_job) == "slurm_job")) {
+    if (!(inherits(slr_job, "slurm_job"))) {
         stop("slr_job must be a slurm_job")
     }
     outtypes <- c("table", "raw")

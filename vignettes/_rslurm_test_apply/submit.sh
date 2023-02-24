@@ -4,4 +4,4 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --job-name=test_apply
 #SBATCH --output=slurm_%a.out
-/usr/lib64/R/bin/Rscript --vanilla slurm_run.R
+/usr/lib/R/bin/Rscript --vanilla slurm_run.R

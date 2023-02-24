@@ -27,7 +27,7 @@ NULL
 print_job_status <- function(slr_job) {
     .Deprecated("get_job_status")
     
-    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")  
+    if (!(inherits(slr_job, "slurm_job"))) stop("input must be a slurm_job")  
     stat <- suppressWarnings(
         system(paste("squeue -n", slr_job$jobname), intern = TRUE))
     if (length(stat) > 1) {

@@ -7,29 +7,30 @@ Description: Functions that simplify submitting R scripts to a 'Slurm'
 Acknowledgements: Development of this R package was supported by the National 
     Socio-Environmental Synthesis Center (SESYNC) under funding received from 
     the National Science Foundation grants DBI-1052875 and DBI-1639145.
-Version: 0.6.1
-Date: 2021-11-12
+Version: 0.6.2
+Date: 2023-01-31
 License: GPL-3
-URL: https://sesync-ci.github.io/rslurm/
-BugReports: https://github.com/SESYNC-ci/rslurm/issues
+URL: https://www.earthdatascience.org/rslurm/
+BugReports: https://github.com/earthlab/rslurm/issues
 Authors@R: c(person('Philippe', 'Marchand', email = "marchand.philippe@gmail.com", role = 'aut'),
              person('Ian', 'Carroll', role = 'aut'),
              person('Mike', 'Smorul', role = 'aut'),
              person('Rachael', 'Blake', role = 'aut'),
-             person('Quentin', 'Read', email = 'quentin.read@usda.gov', role = c('aut', 'cre')),
+             person('Quentin', 'Read', email = 'quentin.read@usda.gov', role = 'aut'),
              person('Dayne', 'Filer', role = 'ctb'),
              person('Ben', 'Fasoli', role = 'ctb'),
              person('Pol', 'van Rijn', role = 'ctb'),
              person('Sebastian', 'Schubert', role = 'ctb'),
              person('Rob', 'Gilmore', role = 'ctb'),
              person('Christopher', 'Barrington', role = 'ctb'),
-             person('Se Jong', 'Cho', role = 'art')
+             person('Se Jong', 'Cho', role = 'art'),
+             person('Erick Verleye', email='erve3705@colorado.edu', role = 'cre')
              )
 Depends:
     R (>= 3.5.0)
 Imports:
     whisker (>= 0.3)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Suggests:
     parallel,
     testthat,

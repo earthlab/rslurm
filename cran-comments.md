@@ -1,3 +1,18 @@
+# Version 0.6.2 notes, 31 January 2023
+
+## Changes
+CU Boulder Earth Lab adopted this package, so updating github / docs URLs and 
+maintainer
+
+## Test environments
+
+* local Ubuntu Linux 18.04.6 LTS, R 3.6.3, slurm 22.05.8
+* Red Hat Enterprise Linux 7.9, R 4.1.3, slurm 22.05.2
+
+## R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
 # Version 0.6.1 notes, 12 November 2021
 
 ## Test environments

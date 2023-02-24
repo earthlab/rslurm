@@ -1,45 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//index.html</loc>
+    <loc>https://earthlab.github.io/rslurm/404.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/cancel_slurm.html</loc>
+    <loc>https://earthlab.github.io/rslurm/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/cleanup_files.html</loc>
+    <loc>https://earthlab.github.io/rslurm/articles/rslurm.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/get_job_status.html</loc>
+    <loc>https://earthlab.github.io/rslurm/authors.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/get_slurm_out.html</loc>
+    <loc>https://earthlab.github.io/rslurm/index.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/local_slurm_array.html</loc>
+    <loc>https://earthlab.github.io/rslurm/news/index.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/print_job_status-deprecated.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/cancel_slurm.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/rslurm-deprecated.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/cleanup_files.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/rslurm-package.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/get_job_status.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/slurm_apply.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/get_slurm_out.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/slurm_call.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/slurm_job.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/local_slurm_array.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//reference/slurm_map.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/print_job_status-deprecated.html</loc>
   </url>
   <url>
-    <loc>https://sesync-ci.github.io/rslurm//articles/rslurm.html</loc>
+    <loc>https://earthlab.github.io/rslurm/reference/rslurm-deprecated.html</loc>
+  </url>
+  <url>
+    <loc>https://earthlab.github.io/rslurm/reference/rslurm-package.html</loc>
+  </url>
+  <url>
+    <loc>https://earthlab.github.io/rslurm/reference/slurm_apply.html</loc>
+  </url>
+  <url>
+    <loc>https://earthlab.github.io/rslurm/reference/slurm_call.html</loc>
+  </url>
+  <url>
+    <loc>https://earthlab.github.io/rslurm/reference/slurm_job.html</loc>
+  </url>
+  <url>
+    <loc>https://earthlab.github.io/rslurm/reference/slurm_map.html</loc>
   </url>
 </urlset>

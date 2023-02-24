@@ -1,24 +1,23 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="logo_slurm.png" align="right" width=150px>
+<img src="man/figures/logo_slurm.png" align="right" width=150px>
 
 # rslurm: submit R code to a Slurm cluster
 
 <!-- badges: start -->
 
-[![cran
-checks](https://cranchecks.info/badges/worst/rslurm)](https://CRAN.R-project.org/web/checks/check_results_rslurm.html)
 [![rstudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://CRAN.R-project.org/package=rslurm)
-[![R build
-status](https://github.com/SESYNC-ci/rslurm/workflows/R-CMD-check/badge.svg)](https://github.com/SESYNC-ci/rslurm/actions)
+[\[R build
+status\]https://github.com/earthlab/rslurm/workflows/R-CMD-check/badge.svg)](https://github.com/earthlab/rslurm/actions)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org/package=rslurm)
 [![DOI](https://zenodo.org/badge/37485241.svg)](https://zenodo.org/badge/latestdoi/37485241)
+[![R-CMD-check](https://github.com/earthlab/rslurm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/earthlab/rslurm/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ### About
@@ -28,8 +27,11 @@ Socio-Environmental Synthesis Center (SESYNC) under funding received
 from the National Science Foundation grants DBI-1052875 and DBI-1639145.
 
 The package was developed by Philippe Marchand and Ian Carroll, with
-Mike Smorul and Rachael Blake contributing. Quentin Read is the current
+Mike Smorul and Rachael Blake contributing. Erick Verleye is the current
 maintainer.
+
+As of January 2023 the University of Colorado Boulder’s Earth Lab
+adopted rslurm and is responsible for all future maintenance.
 
 ### Installation
 
@@ -42,17 +44,17 @@ install.packages("rslurm")
 ```
 
 And the development version from
-[GitHub](https://github.com/SESYNC-ci/rslurm) with:
+[GitHub](https://github.com/earthlab/rslurm) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("SESYNC-ci/rslurm")
+devtools::install_github("earthlab/rslurm")
 ```
 
 ### Documentation
 
 Package documentation is accessible from the R console through
-`package?rslurm` and [online](https://sesync-ci.github.io/rslurm).
+`package?rslurm` and [online](https://www.earthdatascience.org/rslurm/).
 
 ### Example
 
@@ -94,5 +96,5 @@ pieces of information (job name, job ID, and the number of nodes) needed
 to retrieve the job’s output.
 
 See [Get
-started](https://sesync-ci.github.io/rslurm/articles/rslurm.html) for
-more information.
+started](https://www.earthdatascience.org/rslurm/articles/rslurm.html)
+for more information.

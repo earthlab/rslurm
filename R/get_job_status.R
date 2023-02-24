@@ -18,7 +18,7 @@
 #' @export
 get_job_status <- function(slr_job) {
     
-    if (!(class(slr_job) == "slurm_job")) stop("input must be a slurm_job")
+    if (!(inherits(slr_job, "slurm_job"))) stop("input must be a slurm_job")
     
     # Get queue info
     squeue_out <- suppressWarnings(
