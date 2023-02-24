@@ -72,7 +72,12 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><img src="reference/figures/logo_slurm.png" align="right" width="150px"></p>
+<hr>
+<div class="section level2">
+<h2 id="output-github_document">output: github_document<a class="anchor" aria-label="anchor" href="#output-github_document"></a>
+</h2>
+<!-- README.md is generated from README.Rmd. Please edit that file --><p><img src="reference/figures/logo_slurm.png" align="right" width="150px"></p>
+</div>
 <div class="section level1">
 <div class="page-header"><h1 id="rslurm-submit-r-code-to-a-slurm-cluster">rslurm: submit R code to a Slurm cluster<a class="anchor" aria-label="anchor" href="#rslurm-submit-r-code-to-a-slurm-cluster"></a>
 </h1></div>
@@ -81,7 +86,7 @@
 <h3 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
 </h3>
 <p>Development of this R package was supported by the National Socio-Environmental Synthesis Center (SESYNC) under funding received from the National Science Foundation grants DBI-1052875 and DBI-1639145.</p>
-<p>The package was developed by Philippe Marchand and Ian Carroll, with Mike Smorul and Rachael Blake contributing. Erick Verleye is the current maintainer.</p>
+<p>The package was developed by Philippe Marchand, Ian Carroll, and Quentin Read, with Mike Smorul and Rachael Blake contributing. Erick Verleye is the current maintainer.</p>
 <p>As of January 2023 the University of Colorado Boulder’s Earth Lab adopted rslurm and is responsible for all future maintenance.</p>
 </div>
 <div class="section level3">
@@ -98,7 +103,7 @@
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h3>
-<p>Package documentation is accessible from the R console through <code><a href="reference/rslurm-package.html">package?rslurm</a></code> and <a href="https://earthlab.github.io/rslurm">online</a>.</p>
+<p>Package documentation is accessible from the R console through <code><a href="reference/rslurm-package.html">package?rslurm</a></code> and <a href="https://www.earthdatascience.org/rslurm/" class="external-link">online</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -116,11 +121,11 @@
 <span>                   par_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We can now pass that function and the parameters data frame to <code>slurm_apply</code>, specifying the number of cluster nodes to use and the number of CPUs per node.</p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://earthlab.github.io/rslurm/">rslurm</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.earthdatascience.org/rslurm/" class="external-link">rslurm</a></span><span class="op">)</span></span>
 <span><span class="va">sjob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/slurm_apply.html">slurm_apply</a></span><span class="op">(</span><span class="va">test_func</span>, <span class="va">pars</span>, jobname <span class="op">=</span> <span class="st">'test_apply'</span>,</span>
 <span>                    nodes <span class="op">=</span> <span class="fl">2</span>, cpus_per_node <span class="op">=</span> <span class="fl">2</span>, submit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>The output of <code>slurm_apply</code> is a <code>slurm_job</code> object that stores a few pieces of information (job name, job ID, and the number of nodes) needed to retrieve the job’s output.</p>
-<p>See <a href="https://earthlab.github.io/rslurm/articles/rslurm.html">Get started</a> for more information.</p>
+<p>See <a href="https://www.earthdatascience.org/rslurm/articles/rslurm.html" class="external-link">Get started</a> for more information.</p>
 </div>
 </div>
 
@@ -159,7 +164,7 @@
 <li>Mike Smorul <br><small class="roles"> Author </small>  </li>
 <li>Rachael Blake <br><small class="roles"> Author </small>  </li>
 <li>Quentin Read <br><small class="roles"> Author </small>  </li>
-<li>Erick Verleye <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Erick Verleye <br><small class="roles"> Maintainer </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>

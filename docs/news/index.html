@@ -51,7 +51,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.6.2" id="rslurm-0-6-2">rslurm 0.6.2<a class="anchor" aria-label="anchor" href="#rslurm-0-6-2"></a></h2>
+<h2 class="page-header" data-toc-text="0.6.2" id="rslurm-0-6-2">rslurm 0.6.2<small>2023-02-24</small><a class="anchor" aria-label="anchor" href="#rslurm-0-6-2"></a></h2>
 <ul><li>rslurm was adopted by the University of Colorado Boulder’s Earth Lab</li>
 <li>All future maintenance will be done by Earth Lab</li>
 </ul></div>
@@ -60,31 +60,31 @@
 <p>This is a patch release to initiate automatic generation of DOIs by Zenodo with each future release.</p>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-6-1">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-6-1"></a></h3>
-<ul><li><p>Argument <code>job_array_task_limit</code> included in <code>slurm_*()</code> functions to allow the user to set <code>JobArrayTaskLimit</code> (<a href="https://github.com/SESYNC-ci/rslurm/issues/70" class="external-link">#70</a>).</p></li>
-<li><p><code><a href="../reference/get_job_status.html">get_job_status()</a></code> now checks whether <code>slurm_*.out</code> files exist before attempting to open them, avoiding an error (<a href="https://github.com/SESYNC-ci/rslurm/issues/72" class="external-link">#72</a>).</p></li>
+<ul><li><p>Argument <code>job_array_task_limit</code> included in <code>slurm_*()</code> functions to allow the user to set <code>JobArrayTaskLimit</code> (<a href="https://github.com/earthlab/rslurm/issues/70" class="external-link">#70</a>).</p></li>
+<li><p><code><a href="../reference/get_job_status.html">get_job_status()</a></code> now checks whether <code>slurm_*.out</code> files exist before attempting to open them, avoiding an error (<a href="https://github.com/earthlab/rslurm/issues/72" class="external-link">#72</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="rslurm-0-6-0">rslurm 0.6.0<small>2021-04-22</small><a class="anchor" aria-label="anchor" href="#rslurm-0-6-0"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-6-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-6-0"></a></h3>
-<ul><li><p>New function <code><a href="../reference/slurm_map.html">slurm_map()</a></code> with similar syntax to <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> (<a href="https://github.com/SESYNC-ci/rslurm/pull/48" class="external-link">#48</a>).</p></li>
-<li><p>Better handling of additional arguments to <code>f</code> in <code><a href="../reference/slurm_apply.html">slurm_apply()</a></code>, and of how R objects are made available to the Slurm jobs (<a href="https://github.com/SESYNC-ci/rslurm/pull/48" class="external-link">#48</a>).</p></li>
-<li><p>Slurm jobID added to <code>slurm_job</code> objects (<a href="https://github.com/SESYNC-ci/rslurm/pull/55" class="external-link">#55</a>).</p></li>
-<li><p><code>processes_per_node</code> argument added to support hyperthreading (<a href="https://github.com/SESYNC-ci/rslurm/pull/57" class="external-link">#57</a>).</p></li>
-<li><p><code>get_slurm_out())</code> is now compatible with partitions that cannot accept interactive jobs and with newer releases of Slurm, though there is a potential incompatibility with versions of Slurm older than 16.05.0, which was released on May 2016 (<a href="https://github.com/SESYNC-ci/rslurm/pull/65" class="external-link">#65</a>).</p></li>
-<li><p>Miscellaneous minor bug fixes (<a href="https://github.com/SESYNC-ci/rslurm/pull/49" class="external-link">#49</a>, <a href="https://github.com/SESYNC-ci/rslurm/pull/51" class="external-link">#51</a>, <a href="https://github.com/SESYNC-ci/rslurm/issues/53" class="external-link">#53</a>).</p></li>
+<ul><li><p>New function <code><a href="../reference/slurm_map.html">slurm_map()</a></code> with similar syntax to <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> (<a href="https://github.com/earthlab/rslurm/pull/48" class="external-link">#48</a>).</p></li>
+<li><p>Better handling of additional arguments to <code>f</code> in <code><a href="../reference/slurm_apply.html">slurm_apply()</a></code>, and of how R objects are made available to the Slurm jobs (<a href="https://github.com/earthlab/rslurm/pull/48" class="external-link">#48</a>).</p></li>
+<li><p>Slurm jobID added to <code>slurm_job</code> objects (<a href="https://github.com/earthlab/rslurm/pull/55" class="external-link">#55</a>).</p></li>
+<li><p><code>processes_per_node</code> argument added to support hyperthreading (<a href="https://github.com/earthlab/rslurm/pull/57" class="external-link">#57</a>).</p></li>
+<li><p><code>get_slurm_out())</code> is now compatible with partitions that cannot accept interactive jobs and with newer releases of Slurm, though there is a potential incompatibility with versions of Slurm older than 16.05.0, which was released on May 2016 (<a href="https://github.com/earthlab/rslurm/pull/65" class="external-link">#65</a>).</p></li>
+<li><p>Miscellaneous minor bug fixes (<a href="https://github.com/earthlab/rslurm/pull/49" class="external-link">#49</a>, <a href="https://github.com/earthlab/rslurm/pull/51" class="external-link">#51</a>, <a href="https://github.com/earthlab/rslurm/issues/53" class="external-link">#53</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.0" id="rslurm-0-5-0">rslurm 0.5.0<small>2019-11-15</small><a class="anchor" aria-label="anchor" href="#rslurm-0-5-0"></a></h2>
 <div class="section level4">
 <h4 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h4>
-<ul><li><p>Improved status with <code>get_job_status</code>, deprecating <code>print_job_status</code> (<a href="https://github.com/SESYNC-ci/rslurm/pull/37" class="external-link">#37</a>).</p></li>
-<li><p>Use <code>mclapply</code> within <code>get_slurm_out</code> to gather results (<a href="https://github.com/SESYNC-ci/rslurm/pull/30" class="external-link">#30</a>).</p></li>
-<li><p>Allow user to provide custom .R and .sh templates (<a href="https://github.com/SESYNC-ci/rslurm/pull/47" class="external-link">#47</a>).</p></li>
-<li><p>Allow user to specify path to <code>Rscript</code> (<a href="https://github.com/sesync-ci/rslurm/pull/45" class="external-link">#45</a>) and number of CPUS per task (<a href="https://github.com/SESYNC-ci/rslurm/pull/36" class="external-link">#36</a>).</p></li>
-<li><p>Allow user to disable core prescheduling if tasks have high variance in completion time (<a href="https://github.com/SESYNC-ci/rslurm/commit/816b40e" class="external-link">816b40e</a>).</p></li>
+<ul><li><p>Improved status with <code>get_job_status</code>, deprecating <code>print_job_status</code> (<a href="https://github.com/earthlab/rslurm/pull/37" class="external-link">#37</a>).</p></li>
+<li><p>Use <code>mclapply</code> within <code>get_slurm_out</code> to gather results (<a href="https://github.com/earthlab/rslurm/pull/30" class="external-link">#30</a>).</p></li>
+<li><p>Allow user to provide custom .R and .sh templates (<a href="https://github.com/earthlab/rslurm/pull/47" class="external-link">#47</a>).</p></li>
+<li><p>Allow user to specify path to <code>Rscript</code> (<a href="https://github.com/earthlab/rslurm/pull/45" class="external-link">#45</a>) and number of CPUS per task (<a href="https://github.com/earthlab/rslurm/pull/36" class="external-link">#36</a>).</p></li>
+<li><p>Allow user to disable core prescheduling if tasks have high variance in completion time (<a href="https://github.com/earthlab/rslurm/commit/816b40e" class="external-link">816b40e</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -113,9 +113,9 @@
 <h2 class="page-header" data-toc-text="0.3.2" id="rslurm-0-3-2">rslurm 0.3.2<small>2017-04-07</small><a class="anchor" aria-label="anchor" href="#rslurm-0-3-2"></a></h2>
 <div class="section level4">
 <h4 id="new-features-and-fixes-0-3-2">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-3-2"></a></h4>
-<ul><li><p><code>wait</code> argument adds option to <code>slurm_apply</code> and <code>slurm_call</code> to block the calling script until the submitted job completes. This option can be used to allow immediate processing of a submitted job’s output (<a href="https://github.com/SESYNC-ci/rslurm/pull/2" class="external-link">#2</a>).</p></li>
-<li><p>Use “.RDS” file extension, rather than “.RData”, for serialized objects (<a href="https://github.com/SESYNC-ci/rslurm/pull/4" class="external-link">#4</a>).</p></li>
-<li><p>Minor bug fixes (<a href="https://github.com/SESYNC-ci/rslurm/pull/4" class="external-link">#4</a>).</p></li>
+<ul><li><p><code>wait</code> argument adds option to <code>slurm_apply</code> and <code>slurm_call</code> to block the calling script until the submitted job completes. This option can be used to allow immediate processing of a submitted job’s output (<a href="https://github.com/earthlab/rslurm/pull/2" class="external-link">#2</a>).</p></li>
+<li><p>Use “.RDS” file extension, rather than “.RData”, for serialized objects (<a href="https://github.com/earthlab/rslurm/pull/4" class="external-link">#4</a>).</p></li>
+<li><p>Minor bug fixes (<a href="https://github.com/earthlab/rslurm/pull/4" class="external-link">#4</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
