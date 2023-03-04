@@ -1,5 +1,11 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
+    md_extensions: -smart
+    pandoc_args:
+      - "--wrap"
+      - "preserve"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -19,7 +25,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/rslurm)](https://CRAN.R-project.org/package=rslurm)
-[![R build status]https://github.com/earthlab/rslurm/workflows/R-CMD-check/badge.svg)](https://github.com/earthlab/rslurm/actions)
+[![R build status](https://github.com/earthlab/rslurm/workflows/R-CMD-check/badge.svg)](https://github.com/earthlab/rslurm/actions)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN status](https://www.r-pkg.org/badges/version/rslurm)](https://CRAN.R-project.org/package=rslurm)
 [![DOI](https://zenodo.org/badge/37485241.svg)](https://zenodo.org/badge/latestdoi/37485241)
